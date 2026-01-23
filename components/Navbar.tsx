@@ -58,9 +58,14 @@ export default function Navbar({ bandName }: { bandName: string }) {
           aria-expanded={open}
           aria-controls="mobile-menu"
           onClick={() => setOpen((prev) => !prev)}
-          className="inline-flex items-center justify-center rounded-full border border-black/10 bg-paper px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink-800 transition hover:border-black/30 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:hidden"
+          className="inline-flex h-10 w-10 items-center justify-center bg-transparent transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:hidden"
         >
-          Menu
+          <span className="sr-only">Open menu</span>
+          <span className="flex flex-col items-center gap-1">
+            <span className="h-0.5 w-5 rounded-full bg-ink-900" />
+            <span className="h-0.5 w-5 rounded-full bg-ink-900" />
+            <span className="h-0.5 w-5 rounded-full bg-ink-900" />
+          </span>
         </button>
       </nav>
       <div
