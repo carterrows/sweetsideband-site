@@ -5,7 +5,7 @@ import MemberCard from "@/components/MemberCard";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Meet the members of NEON STATIC."
+  description: "Meet the members of Sweetside."
 };
 
 export default function AboutPage() {
@@ -18,7 +18,7 @@ export default function AboutPage() {
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-4">
             <SectionHeading title="About" subtitle="Built for the stage" />
-            <p className="max-w-3xl text-lg text-white/70">
+            <p className="max-w-3xl text-lg text-ink-600">
               {band.bio} We&apos;re a tight four-piece focused on high-energy shows and
               immersive production. Find us under the lights.
             </p>

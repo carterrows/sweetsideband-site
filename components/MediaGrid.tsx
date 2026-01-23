@@ -12,7 +12,7 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
             href={item.link}
             target="_blank"
             rel="noreferrer"
-            className="group relative overflow-hidden rounded-2xl border border-white/10 bg-night-800/40 transition hover:-translate-y-1 hover:border-accent/60"
+            className="group relative overflow-hidden rounded-2xl border border-black/10 bg-paper shadow-sm transition hover:-translate-y-1 hover:border-accent/60"
           >
             <div className="relative h-56 w-full">
               {imgSrc ? (
@@ -25,11 +25,11 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
                   unoptimized
                 />
               ) : (
-                <div className="h-full w-full bg-night-700" />
+                <div className="h-full w-full bg-haze" />
               )}
               {item.type === "video" && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-accent/60 bg-black/60 text-accent">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-accent/60 bg-paper/80 text-accent">
                     ▶
                   </div>
                 </div>
@@ -40,9 +40,9 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
                 <p className="text-sm uppercase tracking-[0.2em] text-accent">
                   {item.type === "video" ? "Video" : "Photo"}
                 </p>
-                <p className="text-base font-semibold text-white">{item.title}</p>
+                <p className="text-base font-semibold text-ink-900">{item.title}</p>
               </div>
-              <span className="text-xs text-white/60 group-hover:text-white">
+              <span className="text-xs text-ink-600 group-hover:text-ink-900">
                 Open
               </span>
             </div>

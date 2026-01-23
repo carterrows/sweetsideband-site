@@ -6,7 +6,7 @@ import ShowsList from "@/components/ShowsList";
 
 export const metadata: Metadata = {
   title: "Shows",
-  description: "Upcoming NEON STATIC tour dates and ticket links."
+  description: "Upcoming Sweetside tour dates and ticket links."
 };
 
 export default function ShowsPage() {
@@ -21,13 +21,13 @@ export default function ShowsPage() {
             <SectionHeading title="Shows" subtitle="Catch us live" />
             <Link
               href={`mailto:${band.email}`}
-              className="text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:text-white"
+              className="text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:text-ink-900"
             >
               Book the band →
             </Link>
           </div>
           <ShowsList shows={shows.upcoming} />
-          <div className="rounded-2xl border border-white/10 bg-night-800/40 p-6 text-sm text-white/70">
+          <div className="rounded-2xl border border-black/10 bg-paper p-6 text-sm text-ink-600 shadow-sm">
             Can&apos;t make a date? Email {band.email} for private events, festivals, and collaborations.
           </div>
         </div>

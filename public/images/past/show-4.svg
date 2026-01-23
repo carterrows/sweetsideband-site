@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-  <rect width="800" height="600" fill="#0f1118" />
-  <rect x="120" y="100" width="560" height="300" fill="#11151f" stroke="#c6ff1a" stroke-width="3" />
-  <rect x="180" y="160" width="440" height="180" fill="#0b0c10" stroke="#c6ff1a" stroke-width="2" />
-  <text x="80" y="520" fill="#c6ff1a" font-family="Arial, sans-serif" font-size="34" letter-spacing="6">RIOT GARDEN</text>
+  <rect width="800" height="600" fill="#f5f5f7" />
+  <rect x="120" y="100" width="560" height="300" fill="#ffffff" stroke="#0b0c10" stroke-width="2" />
+  <rect x="180" y="160" width="440" height="180" fill="#ffffff" stroke="#ff3b6b" stroke-width="2" />
+  <text x="80" y="520" fill="#0b0c10" font-family="Arial, sans-serif" font-size="34" letter-spacing="6">RIOT GARDEN</text>
 </svg>

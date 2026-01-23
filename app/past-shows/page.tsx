@@ -6,7 +6,7 @@ import MediaGrid from "@/components/MediaGrid";
 
 export const metadata: Metadata = {
   title: "Past Shows",
-  description: "Photos and video from recent NEON STATIC shows."
+  description: "Photos and video from recent Sweetside shows."
 };
 
 export default function PastShowsPage() {
@@ -19,7 +19,7 @@ export default function PastShowsPage() {
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-4">
             <SectionHeading title="Past Shows" subtitle="Lights, noise, memories" />
-            <p className="max-w-2xl text-white/70">
+            <p className="max-w-2xl text-ink-600">
               A snapshot of recent nights on the road. Swap in your real photos or
               video links in data/media.json.
             </p>

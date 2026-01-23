@@ -9,7 +9,7 @@ import ContactSection from "@/components/ContactSection";
 
 export const metadata: Metadata = {
   title: "Home",
-  description: "NEON STATIC - modern synth-rock with electric live shows."
+  description: "Sweetside - modern synth-rock with electric live shows."
 };
 
 export default function HomePage() {
@@ -22,13 +22,10 @@ export default function HomePage() {
       <section className="section hero-grid">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-accent">
-              {band.location}
-            </p>
-            <h1 className="mt-4 text-5xl leading-none text-white sm:text-6xl lg:text-7xl">
+            <h1 className="text-5xl leading-none text-ink-900 sm:text-6xl lg:text-7xl">
               {band.name}
             </h1>
-            <p className="mt-4 max-w-xl text-lg text-white/75 md:text-xl">
+            <p className="mt-4 max-w-xl text-lg text-ink-600 md:text-xl">
               {band.tagline}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -36,22 +33,22 @@ export default function HomePage() {
                 href={band.streaming.spotify}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-black transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 Listen
               </Link>
               <Link
                 href="/shows"
-                className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="inline-flex items-center justify-center rounded-full border border-black/10 px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink-800 transition hover:border-black/30 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 See Shows
               </Link>
             </div>
           </div>
-          <div className="relative h-72 w-full overflow-hidden rounded-3xl border border-white/10 md:h-96">
+          <div className="relative h-72 w-full overflow-hidden rounded-3xl border border-black/10 bg-haze md:h-96">
             <Image
               src="/images/hero-band.svg"
-              alt="NEON STATIC live"
+              alt="Sweetside live"
               fill
               priority
               className="object-cover"
@@ -64,7 +61,7 @@ export default function HomePage() {
       <section className="section">
         <div className="mx-auto w-full max-w-6xl px-6">
           <SectionHeading title="About" subtitle="Fast, luminous, and loud." />
-          <p className="mt-6 max-w-3xl text-lg text-white/70">
+          <p className="mt-6 max-w-3xl text-lg text-ink-600">
             {band.bio}
           </p>
         </div>
@@ -77,7 +74,7 @@ export default function HomePage() {
               <SectionHeading title="Upcoming" subtitle="Next shows" />
               <Link
                 href="/shows"
-                className="text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:text-white"
+                className="text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:text-ink-900"
               >
                 Full schedule →
               </Link>

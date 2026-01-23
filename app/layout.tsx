@@ -18,14 +18,15 @@ const body = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: {
-    default: "NEON STATIC",
-    template: "%s | NEON STATIC"
+    default: "Sweetside",
+    template: "%s | Sweetside"
   },
   description:
-    "NEON STATIC is a modern synth-rock band with electric live shows and cinematic hooks.",
+    "Sweetside is a modern synth-rock band with electric live shows and cinematic hooks.",
   openGraph: {
-    title: "NEON STATIC",
+    title: "Sweetside",
     description:
       "Electric riffs. Midnight grooves. New city energy.",
     type: "website",

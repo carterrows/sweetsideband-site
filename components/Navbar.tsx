@@ -19,14 +19,14 @@ export default function Navbar({ bandName }: { bandName: string }) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-night-900/80 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-black/10 bg-paper/80 backdrop-blur">
       <nav
         aria-label="Primary"
         className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 py-4"
       >
         <Link
           href="/"
-          className="font-display text-2xl tracking-[0.2em] text-white transition hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="font-display text-2xl tracking-[0.2em] text-ink-900 transition hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {bandName}
         </Link>
@@ -40,7 +40,7 @@ export default function Navbar({ bandName }: { bandName: string }) {
                 className={`rounded-full px-3 py-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                   active
                     ? "text-accent shadow-glow"
-                    : "text-white/70 hover:text-white"
+                    : "text-ink-700 hover:text-ink-900"
                 }`}
                 aria-current={active ? "page" : undefined}
               >

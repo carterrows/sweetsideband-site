@@ -4,16 +4,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        night: {
+        paper: "#ffffff",
+        haze: "#f5f5f7",
+        mist: "#e6e8ee",
+        ink: {
           900: "#0b0c10",
-          800: "#12141b",
-          700: "#1a1f2a",
-          600: "#232a3a"
+          800: "#1a1f2a",
+          700: "#2d3340",
+          600: "#4b5563"
         },
-        accent: "#c6ff1a"
+        accent: "#ff3b6b"
       },
       boxShadow: {
-        glow: "0 0 25px rgba(198, 255, 26, 0.35)"
+        glow: "0 10px 30px rgba(255, 59, 107, 0.25)"
       },
       fontFamily: {
         display: ["var(--font-display)", "system-ui", "sans-serif"],

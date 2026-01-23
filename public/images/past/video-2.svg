@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-  <rect width="800" height="600" fill="#12141b" />
-  <rect x="100" y="100" width="600" height="320" fill="#0b0c10" stroke="#c6ff1a" stroke-width="3" />
-  <polygon points="360,230 360,310 450,270" fill="#c6ff1a" />
-  <text x="80" y="520" fill="#c6ff1a" font-family="Arial, sans-serif" font-size="34" letter-spacing="6">ENCORE</text>
+  <rect width="800" height="600" fill="#f5f5f7" />
+  <rect x="100" y="100" width="600" height="320" fill="#ffffff" stroke="#0b0c10" stroke-width="2" />
+  <polygon points="360,230 360,310 450,270" fill="#ff3b6b" />
+  <text x="80" y="520" fill="#0b0c10" font-family="Arial, sans-serif" font-size="34" letter-spacing="6">ENCORE</text>
 </svg>

@@ -11,7 +11,7 @@ export default function SectionHeading({
         {title}
       </p>
       {subtitle && (
-        <h2 className="text-3xl font-semibold text-white md:text-4xl">
+        <h2 className="text-3xl font-semibold text-ink-900 md:text-4xl">
           {subtitle}
         </h2>
       )}

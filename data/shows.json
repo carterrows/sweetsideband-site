@@ -5,7 +5,7 @@
       "date": "2026-02-14",
       "city": "Dallas, TX",
       "venue": "The Voltage Hall",
-      "ticketUrl": "https://tickets.example.com/neon-static-dallas",
+      "ticketUrl": "https://tickets.example.com/sweetside-dallas",
       "notes": "with Sky Circuit"
     },
     {
@@ -13,7 +13,7 @@
       "date": "2026-03-01",
       "city": "Houston, TX",
       "venue": "Neon Reef",
-      "ticketUrl": "https://tickets.example.com/neon-static-houston",
+      "ticketUrl": "https://tickets.example.com/sweetside-houston",
       "notes": "all-ages"
     },
     {
@@ -21,7 +21,7 @@
       "date": "2026-03-22",
       "city": "San Antonio, TX",
       "venue": "The Signal Room",
-      "ticketUrl": "https://tickets.example.com/neon-static-san-antonio",
+      "ticketUrl": "https://tickets.example.com/sweetside-san-antonio",
       "notes": "support: Night Circuit"
     }
   ],

@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0b0c10" />
-      <stop offset="100%" stop-color="#202634" />
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f5f5f7" />
     </linearGradient>
     <radialGradient id="flare" cx="20%" cy="20%" r="70%">
-      <stop offset="0%" stop-color="#c6ff1a" stop-opacity="0.35" />
-      <stop offset="100%" stop-color="#0b0c10" stop-opacity="0" />
+      <stop offset="0%" stop-color="#ff3b6b" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
     </radialGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)" />
   <rect width="1200" height="630" fill="url(#flare)" />
-  <text x="80" y="260" fill="#c6ff1a" font-family="Arial, sans-serif" font-size="80" letter-spacing="10">NEON STATIC</text>
-  <text x="80" y="340" fill="#ffffff" font-family="Arial, sans-serif" font-size="32" letter-spacing="6">Electric riffs. Midnight grooves.</text>
+  <text x="80" y="260" fill="#0b0c10" font-family="Arial, sans-serif" font-size="80" letter-spacing="10">SWEETSIDE</text>
+  <text x="80" y="340" fill="#4b5563" font-family="Arial, sans-serif" font-size="32" letter-spacing="6">Electric riffs. Midnight grooves.</text>
 </svg>
