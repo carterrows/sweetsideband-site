@@ -56,4 +56,3 @@ The content loader lives in `lib/content.ts`. When you want a database, swap the
 
 - Social media links in About Us
 - Add photos & video to pages
-- Change name to Sweetsideband
