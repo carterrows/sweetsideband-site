@@ -1,0 +1,30 @@
+[
+  {
+    "id": "member-avery",
+    "name": "Avery Holt",
+    "role": "Vocals / Synths",
+    "bio": "Writes the cinematic hooks and pulls the crowd into the glow.",
+    "image": "/images/members/avery.svg"
+  },
+  {
+    "id": "member-juno",
+    "name": "Juno Vega",
+    "role": "Guitar / Backing Vocals",
+    "bio": "Riffs, textures, and the grit behind the shimmer.",
+    "image": "/images/members/juno.svg"
+  },
+  {
+    "id": "member-marco",
+    "name": "Marco Lin",
+    "role": "Bass",
+    "bio": "Locks the low end with groove-first lines.",
+    "image": "/images/members/marco.svg"
+  },
+  {
+    "id": "member-sloane",
+    "name": "Sloane Park",
+    "role": "Drums",
+    "bio": "Pulse-heavy drums that keep the lights in motion.",
+    "image": "/images/members/sloane.svg"
+  }
+]
