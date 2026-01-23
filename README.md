@@ -1,4 +1,4 @@
-# NEON STATIC - Band Site Prototype
+# Sweetside Band Website
 
 Modern, mobile-first band website built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Content lives in local JSON files for easy editing, and Docker is ready for Raspberry Pi 5.
 
