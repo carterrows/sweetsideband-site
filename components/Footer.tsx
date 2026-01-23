@@ -44,16 +44,6 @@ export default function Footer({ band }: { band: Band }) {
               YouTube
             </Link>
           )}
-          {band.social.bandcamp && (
-            <Link
-              href={band.social.bandcamp}
-              target="_blank"
-              rel="noreferrer"
-              className="transition hover:text-ink-900"
-            >
-              Bandcamp
-            </Link>
-          )}
         </div>
       </div>
     </footer>
