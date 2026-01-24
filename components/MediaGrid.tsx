@@ -11,7 +11,7 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
             key={item.id}
             href={item.link}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="group relative overflow-hidden rounded-2xl border border-black/10 bg-paper shadow-sm transition hover:-translate-y-1 hover:border-accent/60"
           >
             <div className="relative h-56 w-full">

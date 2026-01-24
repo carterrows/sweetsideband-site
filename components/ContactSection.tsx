@@ -26,7 +26,7 @@ export default function ContactSection({ band }: { band: Band }) {
               <Link
                 href={band.social.instagram}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="transition hover:text-ink-900"
               >
                 Instagram
@@ -36,7 +36,7 @@ export default function ContactSection({ band }: { band: Band }) {
               <Link
                 href={band.social.youtube}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="transition hover:text-ink-900"
               >
                 YouTube
