@@ -13,7 +13,7 @@ export default function ContactSection({ band }: { band: Band }) {
             Let&apos;s make noise together.
           </h2>
           <p className="mt-4 text-ink-600">
-            Booking, press, collaborations — drop a line and we&apos;ll get back fast.
+            Reach out for booking/collaborations!
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-ink-600">
             <Link
