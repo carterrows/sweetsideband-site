@@ -1,15 +1,15 @@
 {
   "upcoming": [
     {
-      "id": "ns-2026-02-14",
-      "date": "2026-02-14",
-      "city": "Dallas, TX",
-      "venue": "The Voltage Hall",
+      "id": "ss-2026-06-10",
+      "date": "2026-06-10",
+      "city": "Toronto, ON",
+      "venue": "TBD",
       "ticketUrl": "https://tickets.example.com/sweetside-dallas",
-      "notes": "with Sky Circuit"
+      "notes": "NXNE Music Festival"
     },
     {
-      "id": "ns-2026-03-01",
+      "id": "ss-2026-03-01",
       "date": "2026-03-01",
       "city": "Houston, TX",
       "venue": "Neon Reef",
@@ -17,7 +17,7 @@
       "notes": "all-ages"
     },
     {
-      "id": "ns-2026-03-22",
+      "id": "ss-2026-03-22",
       "date": "2026-03-22",
       "city": "San Antonio, TX",
       "venue": "The Signal Room",
@@ -27,42 +27,42 @@
   ],
   "past": [
     {
-      "id": "ns-2025-12-18",
+      "id": "ss-2025-12-18",
       "date": "2025-12-18",
       "city": "Austin, TX",
       "venue": "Static Room",
       "notes": "sold out"
     },
     {
-      "id": "ns-2025-11-02",
+      "id": "ss-2025-11-02",
       "date": "2025-11-02",
       "city": "Fort Worth, TX",
       "venue": "Lumen Loft",
       "notes": "w/ Brightline"
     },
     {
-      "id": "ns-2025-10-15",
+      "id": "ss-2025-10-15",
       "date": "2025-10-15",
       "city": "Waco, TX",
       "venue": "Signal Yard",
       "notes": "fall mini tour"
     },
     {
-      "id": "ns-2025-09-20",
+      "id": "ss-2025-09-20",
       "date": "2025-09-20",
       "city": "Austin, TX",
       "venue": "Circuit Stage",
       "notes": "festival set"
     },
     {
-      "id": "ns-2025-08-08",
+      "id": "ss-2025-08-08",
       "date": "2025-08-08",
       "city": "El Paso, TX",
       "venue": "Riot Garden",
       "notes": "late show"
     },
     {
-      "id": "ns-2025-07-12",
+      "id": "ss-2025-07-12",
       "date": "2025-07-12",
       "city": "Dallas, TX",
       "venue": "Afterglow Hall",

@@ -1,30 +1,30 @@
 [
   {
-    "id": "member-avery",
-    "name": "Avery Holt",
-    "role": "Vocals / Synths",
-    "bio": "Writes the cinematic hooks and pulls the crowd into the glow.",
+    "id": "member-nathan",
+    "name": "Nathan Bugiardini",
+    "role": "Vocals / Guitar",
+    "bio": "",
     "image": "/images/members/avery.svg"
   },
   {
-    "id": "member-juno",
-    "name": "Juno Vega",
-    "role": "Guitar / Backing Vocals",
-    "bio": "Riffs, textures, and the grit behind the shimmer.",
+    "id": "member-oreilly",
+    "name": "Nathan O'Reilly",
+    "role": "Lead Guitar",
+    "bio": "",
     "image": "/images/members/juno.svg"
   },
   {
-    "id": "member-marco",
-    "name": "Marco Lin",
-    "role": "Bass",
-    "bio": "Locks the low end with groove-first lines.",
+    "id": "member-ryan",
+    "name": "Ryan Barr",
+    "role": "Drums",
+    "bio": "",
     "image": "/images/members/marco.svg"
   },
   {
-    "id": "member-sloane",
-    "name": "Sloane Park",
-    "role": "Drums",
-    "bio": "Pulse-heavy drums that keep the lights in motion.",
+    "id": "member-joe",
+    "name": "Joe Mcginley",
+    "role": "Bass",
+    "bio": "",
     "image": "/images/members/sloane.svg"
   }
 ]
