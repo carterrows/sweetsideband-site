@@ -16,6 +16,9 @@ export default function HomePage() {
   const band = getBand();
   const shows = getShows();
   const upcoming = shows.upcoming.slice(0, 3);
+  const spotifyLink = band.streaming.spotify;
+  const isSpotifyUrl = (link: typeof spotifyLink): link is string =>
+    typeof link === "string";
 
   return (
     <div>
@@ -29,14 +32,20 @@ export default function HomePage() {
               {band.tagline}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link
-                href={band.streaming.spotify}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                Listen
-              </Link>
+              {isSpotifyUrl(spotifyLink) ? (
+                <Link
+                  href={spotifyLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  Listen
+                </Link>
+              ) : (
+                <span className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white">
+                  Coming Soon
+                </span>
+              )}
               <Link
                 href="/shows"
                 className="inline-flex items-center justify-center rounded-full border border-black/10 px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink-800 transition hover:border-black/30 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"

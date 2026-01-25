@@ -1,3 +1,5 @@
+export type StreamingLink = string | { status: "coming-soon" };
+
 export type Band = {
   name: string;
   tagline: string;
@@ -11,8 +13,8 @@ export type Band = {
     bandcamp?: string;
   };
   streaming: {
-    spotify: string;
-    appleMusic: string;
+    spotify: StreamingLink;
+    appleMusic: StreamingLink;
   };
 };
 

@@ -35,6 +35,32 @@ Edit the JSON files under `data/`:
 - `data/members.json` - band member cards
 - `data/media.json` - past show photos/videos
 
+### Streaming links (Spotify / Apple Music)
+
+Streaming buttons are driven by `data/band.json` → `streaming`.
+
+- To show a clickable button, set the value to a URL string:
+
+```json
+{
+  "streaming": {
+    "spotify": "https://open.spotify.com/artist/REAL_ID",
+    "appleMusic": "https://music.apple.com/artist/REAL_ID"
+  }
+}
+```
+
+- To show a non-clickable "Coming Soon" label, set the value to:
+
+```json
+{
+  "streaming": {
+    "spotify": { "status": "coming-soon" },
+    "appleMusic": { "status": "coming-soon" }
+  }
+}
+```
+
 ## Images and media
 
 Place images in `public/images/` and reference them by absolute path in JSON, e.g.

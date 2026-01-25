@@ -10,7 +10,11 @@
     "youtube": "https://youtube.com/@sweetside"
   },
   "streaming": {
-    "spotify": "https://open.spotify.com/artist/placeholder",
-    "appleMusic": "https://music.apple.com/artist/placeholder"
+    "spotify": {
+      "status": "coming-soon"
+    },
+    "appleMusic": {
+      "status": "coming-soon"
+    }
   }
 }
