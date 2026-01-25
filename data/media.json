@@ -10,45 +10,10 @@
   },
   {
     "id": "media-2",
-    "type": "image",
-    "title": "Lumen Loft, Fort Worth",
-    "src": "/images/past/show-2.svg",
-    "alt": "Crowd shot at Lumen Loft",
-    "link": "/images/past/show-2.svg",
-    "showId": "ss-2025-11-02"
-  },
-  {
-    "id": "media-3",
     "type": "video",
     "title": "Live at Voltage Hall",
     "thumbnail": "/images/past/video-1.svg",
     "link": "https://www.youtube.com/watch?v=5NV6Rdv1a3I",
     "showId": "ss-2025-10-15"
-  },
-  {
-    "id": "media-4",
-    "type": "image",
-    "title": "Circuit Stage Festival",
-    "src": "/images/past/show-3.svg",
-    "alt": "Festival lights behind the band",
-    "link": "/images/past/show-3.svg",
-    "showId": "ss-2025-09-20"
-  },
-  {
-    "id": "media-5",
-    "type": "video",
-    "title": "Afterglow Hall Encore",
-    "thumbnail": "/images/past/video-2.svg",
-    "link": "https://vimeo.com/148751763",
-    "showId": "ss-2025-07-12"
-  },
-  {
-    "id": "media-6",
-    "type": "image",
-    "title": "Riot Garden, El Paso",
-    "src": "/images/past/show-4.svg",
-    "alt": "Band silhouette in neon haze",
-    "link": "/images/past/show-4.svg",
-    "showId": "ss-2025-08-08"
   }
 ]
