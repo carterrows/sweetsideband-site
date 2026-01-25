@@ -20,8 +20,7 @@ export default function PastShowsPage() {
           <div className="flex flex-col gap-4">
             <SectionHeading title="Past Shows" subtitle="Lights, noise, memories" />
             <p className="max-w-2xl text-ink-600">
-              A snapshot of recent nights on the road. Swap in your real photos or
-              video links in data/media.json.
+              A snapshot of recent nights on the road.
             </p>
           </div>
           <ShowsList shows={shows.past} />
