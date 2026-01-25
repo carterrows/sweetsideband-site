@@ -5,67 +5,58 @@
       "date": "2026-06-10",
       "city": "Toronto, ON",
       "venue": "TBD",
-      "venueUrl": "https://tickets.example.com/sweetside-dallas",
+      "venueUrl": "https://www.nxne.com/",
       "notes": "NXNE Music Festival"
-    },
-    {
-      "id": "ss-2026-03-01",
-      "date": "2026-03-01",
-      "city": "Houston, TX",
-      "venue": "Neon Reef",
-      "venueUrl": "https://tickets.example.com/sweetside-houston",
-      "notes": "all-ages"
-    },
-    {
-      "id": "ss-2026-03-22",
-      "date": "2026-03-22",
-      "city": "San Antonio, TX",
-      "venue": "The Signal Room",
-      "venueUrl": "https://tickets.example.com/sweetside-san-antonio",
-      "notes": "support: Night Circuit"
     }
   ],
   "past": [
     {
-      "id": "ss-2025-12-18",
-      "date": "2025-12-18",
-      "city": "Austin, TX",
-      "venue": "Static Room",
-      "notes": "sold out"
+      "id": "ss-2025-06-11",
+      "date": "2025-06-11",
+      "city": "London, ON",
+      "venue": "McCabe's Irish Pub",
+      "notes": ""
     },
     {
-      "id": "ss-2025-11-02",
-      "date": "2025-11-02",
-      "city": "Fort Worth, TX",
-      "venue": "Lumen Loft",
-      "notes": "w/ Brightline"
+      "id": "ss-2025-07-09",
+      "date": "2025-07-09",
+      "city": "Oakville, ON",
+      "venue": "Easy on Fourth",
+      "notes": ""
     },
     {
-      "id": "ss-2025-10-15",
-      "date": "2025-10-15",
-      "city": "Waco, TX",
-      "venue": "Signal Yard",
-      "notes": "fall mini tour"
+      "id": "ss-2025-07-26",
+      "date": "2025-07-26",
+      "city": "Oakville, ON",
+      "venue": "TD Music Series",
+      "notes": ""
     },
     {
-      "id": "ss-2025-09-20",
-      "date": "2025-09-20",
-      "city": "Austin, TX",
-      "venue": "Circuit Stage",
-      "notes": "festival set"
+      "id": "ss-2025-08-02",
+      "date": "2025-08-02",
+      "city": "Sauble Beach, ON",
+      "venue": "Beach Burger",
+      "notes": ""
     },
     {
-      "id": "ss-2025-08-08",
-      "date": "2025-08-08",
-      "city": "El Paso, TX",
-      "venue": "Riot Garden",
-      "notes": "late show"
+      "id": "ss-2025-08-09",
+      "date": "2025-08-09",
+      "city": "Prescott, ON",
+      "venue": "O'Heaphy's Irish Pub",
+      "notes": ""
     },
     {
-      "id": "ss-2025-07-12",
-      "date": "2025-07-12",
-      "city": "Dallas, TX",
-      "venue": "Afterglow Hall",
+      "id": "ss-2025-12-30",
+      "date": "2025-12-30",
+      "city": "Toronto, ON",
+      "venue": "Horseshoe Tavern",
+      "notes": ""
+    },
+    {
+      "id": "ss-2026-01-24",
+      "date": "2026-01-24",
+      "city": "Burlington, ON",
+      "venue": "The Port House Social",
       "notes": "summer debut"
     }
   ]

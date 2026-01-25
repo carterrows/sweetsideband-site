@@ -28,7 +28,7 @@ export default function ShowsPage() {
           </div>
           <ShowsList shows={shows.upcoming} />
           <div className="rounded-2xl border border-black/10 bg-paper p-6 text-sm text-ink-600 shadow-sm">
-            Can&apos;t make a date? Email {band.email} for private events, festivals, and collaborations.
+            Can&apos;t make a date? Email {band.email} for booking/collaborations.
           </div>
         </div>
       </div>

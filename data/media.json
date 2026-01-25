@@ -6,7 +6,7 @@
     "src": "/images/past/show-1.svg",
     "alt": "Sweetside live at Static Room",
     "link": "/images/past/show-1.svg",
-    "showId": "ns-2025-12-18"
+    "showId": "ss-2025-12-18"
   },
   {
     "id": "media-2",
@@ -15,7 +15,7 @@
     "src": "/images/past/show-2.svg",
     "alt": "Crowd shot at Lumen Loft",
     "link": "/images/past/show-2.svg",
-    "showId": "ns-2025-11-02"
+    "showId": "ss-2025-11-02"
   },
   {
     "id": "media-3",
@@ -23,7 +23,7 @@
     "title": "Live at Voltage Hall",
     "thumbnail": "/images/past/video-1.svg",
     "link": "https://www.youtube.com/watch?v=5NV6Rdv1a3I",
-    "showId": "ns-2025-10-15"
+    "showId": "ss-2025-10-15"
   },
   {
     "id": "media-4",
@@ -32,7 +32,7 @@
     "src": "/images/past/show-3.svg",
     "alt": "Festival lights behind the band",
     "link": "/images/past/show-3.svg",
-    "showId": "ns-2025-09-20"
+    "showId": "ss-2025-09-20"
   },
   {
     "id": "media-5",
@@ -40,7 +40,7 @@
     "title": "Afterglow Hall Encore",
     "thumbnail": "/images/past/video-2.svg",
     "link": "https://vimeo.com/148751763",
-    "showId": "ns-2025-07-12"
+    "showId": "ss-2025-07-12"
   },
   {
     "id": "media-6",
@@ -49,6 +49,6 @@
     "src": "/images/past/show-4.svg",
     "alt": "Band silhouette in neon haze",
     "link": "/images/past/show-4.svg",
-    "showId": "ns-2025-08-08"
+    "showId": "ss-2025-08-08"
   }
 ]
