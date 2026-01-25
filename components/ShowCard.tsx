@@ -19,7 +19,7 @@ export default function ShowCard({ show }: { show: Show }) {
         <Link
           href={show.ticketUrl}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           Tickets

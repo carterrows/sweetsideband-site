@@ -3,8 +3,12 @@ import path from "path";
 import type { Band, ShowsData, Member, MediaItem } from "./types";
 
 const dataDir = path.join(process.cwd(), "data");
+const allowedFiles = new Set(["band.json", "shows.json", "members.json", "media.json"]);
 
 function readJson<T>(fileName: string): T {
+  if (!allowedFiles.has(fileName)) {
+    throw new Error(`Unsupported data file: ${fileName}`);
+  }
   const filePath = path.join(dataDir, fileName);
   const raw = fs.readFileSync(filePath, "utf-8");
   return JSON.parse(raw) as T;

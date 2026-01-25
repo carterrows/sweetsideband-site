@@ -18,7 +18,7 @@ export default function Footer({ band }: { band: Band }) {
             <Link
               href={band.social.instagram}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="transition hover:text-ink-900"
             >
               Instagram
@@ -28,7 +28,7 @@ export default function Footer({ band }: { band: Band }) {
             <Link
               href={band.social.tiktok}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="transition hover:text-ink-900"
             >
               TikTok
@@ -38,7 +38,7 @@ export default function Footer({ band }: { band: Band }) {
             <Link
               href={band.social.youtube}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="transition hover:text-ink-900"
             >
               YouTube
