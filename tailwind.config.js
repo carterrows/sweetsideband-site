@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        paper: "#ffffff",
+        paper: "#fffff7",
         haze: "#f5f5f7",
         mist: "#e6e8ee",
         ink: {
@@ -13,10 +13,10 @@ module.exports = {
           700: "#2d3340",
           600: "#4b5563"
         },
-        accent: "#ff3b6b"
+        accent: "#ca0012"
       },
       boxShadow: {
-        glow: "0 10px 30px rgba(255, 59, 107, 0.25)"
+        glow: "0 10px 30px rgba(202, 0, 18, 0.25)"
       },
       fontFamily: {
         display: ["var(--font-display)", "system-ui", "sans-serif"],
