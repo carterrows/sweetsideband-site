@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-  <rect width="800" height="600" fill="#f5f5f7" />
-  <circle cx="250" cy="250" r="160" fill="#ff3b6b" opacity="0.2" />
-  <rect x="420" y="120" width="300" height="260" fill="#ffffff" stroke="#0b0c10" stroke-width="2" />
-  <text x="80" y="520" fill="#0b0c10" font-family="Arial, sans-serif" font-size="34" letter-spacing="6">LUMEN LOFT</text>
-</svg>

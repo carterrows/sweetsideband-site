@@ -28,7 +28,7 @@ export default function Navbar({ bandName }: { bandName: string }) {
       >
         <Link
           href="/"
-          className="font-display text-2xl tracking-[0.2em] text-ink-900 transition hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="font-display text-2xl tracking-[0.2em] text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
           onClick={() => setOpen(false)}
         >
           {bandName}
@@ -40,11 +40,7 @@ export default function Navbar({ bandName }: { bandName: string }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-full px-3 py-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                  active
-                    ? "text-accent shadow-glow"
-                    : "text-ink-700 hover:text-ink-900"
-                }`}
+                className="px-3 py-2 font-semibold text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                 aria-current={active ? "page" : undefined}
               >
                 {item.label}
@@ -80,11 +76,7 @@ export default function Navbar({ bandName }: { bandName: string }) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className={`rounded-full px-3 py-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                  active
-                    ? "text-accent shadow-glow"
-                    : "text-ink-700 hover:text-ink-900"
-                }`}
+                className="px-3 py-2 font-semibold text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                 aria-current={active ? "page" : undefined}
               >
                 {item.label}
