@@ -15,14 +15,14 @@ export default function ShowCard({ show }: { show: Show }) {
         <p className="text-ink-600">{show.venue}</p>
         {show.notes && <p className="mt-2 text-sm text-ink-600">{show.notes}</p>}
       </div>
-      {show.ticketUrl ? (
+      {show.venueUrl ? (
         <Link
-          href={show.ticketUrl}
+          href={show.venueUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
-          Tickets
+          See Venue
         </Link>
       ) : (
         <span className="inline-flex items-center justify-center rounded-full border border-black/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">

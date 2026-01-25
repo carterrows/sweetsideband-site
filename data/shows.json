@@ -5,7 +5,7 @@
       "date": "2026-06-10",
       "city": "Toronto, ON",
       "venue": "TBD",
-      "ticketUrl": "https://tickets.example.com/sweetside-dallas",
+      "venueUrl": "https://tickets.example.com/sweetside-dallas",
       "notes": "NXNE Music Festival"
     },
     {
@@ -13,7 +13,7 @@
       "date": "2026-03-01",
       "city": "Houston, TX",
       "venue": "Neon Reef",
-      "ticketUrl": "https://tickets.example.com/sweetside-houston",
+      "venueUrl": "https://tickets.example.com/sweetside-houston",
       "notes": "all-ages"
     },
     {
@@ -21,7 +21,7 @@
       "date": "2026-03-22",
       "city": "San Antonio, TX",
       "venue": "The Signal Room",
-      "ticketUrl": "https://tickets.example.com/sweetside-san-antonio",
+      "venueUrl": "https://tickets.example.com/sweetside-san-antonio",
       "notes": "support: Night Circuit"
     }
   ],

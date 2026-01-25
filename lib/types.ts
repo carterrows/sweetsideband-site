@@ -23,7 +23,7 @@ export type Show = {
   date: string;
   city: string;
   venue: string;
-  ticketUrl?: string;
+  venueUrl?: string;
   notes?: string;
 };
 
