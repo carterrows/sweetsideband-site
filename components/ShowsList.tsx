@@ -7,10 +7,10 @@ export default function ShowsList({
   shows: Show[];
 }) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <ul className="flex flex-col divide-y divide-black/10">
       {shows.map((show) => (
         <ShowCard key={show.id} show={show} />
       ))}
-    </div>
+    </ul>
   );
 }
