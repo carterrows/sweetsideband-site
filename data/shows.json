@@ -1,20 +1,20 @@
 {
   "upcoming": [
     {
+      "id": "ss-2026-02-14",
+      "date": "2026-02-14",
+      "city": "Burlington, ON",
+      "venue": "The Dickens",
+      "venueUrl": "https://www.thedickens.ca/",
+      "notes": ""
+    },
+    {
       "id": "ss-2026-06-10",
       "date": "2026-06-10",
       "city": "Toronto, ON",
       "venue": "NXNE Music Festival",
       "venueUrl": "https://www.nxne.com/",
       "notes": "Venue TBD"
-    },
-    {
-      "id": "ss-2026-07-07",
-      "date": "2026-07-07",
-      "city": "Burlington, ON",
-      "venue": "Sick Ends",
-      "venueUrl": "https://www.nxne.com/",
-      "notes": "Example Show"
     }
   ],
   "past": [
