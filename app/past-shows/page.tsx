@@ -23,8 +23,8 @@ export default function PastShowsPage() {
               A snapshot of recent nights on the road.
             </p>
           </div>
-          <ShowsList shows={shows.past} />
           <MediaGrid items={media} />
+          <ShowsList shows={shows.past} />
         </div>
       </div>
     </section>
