@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getBand, getShows } from "@/lib/content";
+import { getBand, getMembers, getShows } from "@/lib/content";
 import SectionHeading from "@/components/SectionHeading";
 import ShowsList from "@/components/ShowsList";
 import StreamingLinks from "@/components/StreamingLinks";
 import ContactSection from "@/components/ContactSection";
+import MemberCard from "@/components/MemberCard";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const band = getBand();
+  const members = getMembers();
   const shows = getShows();
   const upcoming = shows.upcoming.slice(0, 3);
   const spotifyLink = band.streaming.spotify;
@@ -96,9 +98,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section">
+      <section id="contact" className="section">
         <div className="mx-auto w-full max-w-6xl px-6">
-          <ContactSection band={band} />
+          <div className="flex flex-col gap-10">
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {members.map((member) => (
+                <MemberCard key={member.id} member={member} />
+              ))}
+            </div>
+            <ContactSection band={band} />
+          </div>
         </div>
       </section>
     </div>
