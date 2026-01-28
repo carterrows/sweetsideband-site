@@ -13,7 +13,7 @@ export default function ContactSection({ band }: { band: Band }) {
             Contact
           </p>
           <h2 className="mt-3 text-3xl font-semibold text-ink-900 md:text-4xl">
-            Let&apos;s make noise together.
+            Get in touch.
           </h2>
           <p className="mt-4 text-ink-600">
             Reach out for booking/collaborations!
