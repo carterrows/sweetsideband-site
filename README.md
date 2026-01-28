@@ -70,6 +70,28 @@ Place images in `public/images/` and reference them by absolute path in JSON, e.
 
 Videos should use external links (YouTube/Vimeo) in `data/media.json`.
 
+- Example JSON in `media.json`:
+
+```json
+{
+  "id": "media-1",
+  "type": "image",
+  "title": "Static Room, Austin",
+  "src": "/images/past/show-1.svg",
+  "alt": "Sweetside live at Static Room",
+  "link": "/images/past/show-1.svg",
+  "showId": "ss-2025-12-18"
+},
+{
+  "id": "media-2",
+  "type": "video",
+  "title": "Live at Voltage Hall",
+  "thumbnail": "/images/past/video-1.svg",
+  "link": "https://www.youtube.com/watch?v=5NV6Rdv1a3I",
+  "showId": "ss-2025-10-15"
+}
+```
+
 Pull YouTube thumbnails using: http://img.youtube.com/vi/VIDEOID/maxresdefault.jpg
 
 ## Environment config
