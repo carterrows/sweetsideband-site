@@ -10,6 +10,7 @@ export type Band = {
     instagram?: string;
     tiktok?: string;
     youtube?: string;
+    facebook?: string;
     bandcamp?: string;
   };
   streaming: {

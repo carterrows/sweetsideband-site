@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Instagram, Youtube } from "lucide-react";
 import type { Band } from "@/lib/types";
 
 export default function ContactSection({ band }: { band: Band }) {
@@ -30,9 +31,10 @@ export default function ContactSection({ band }: { band: Band }) {
                 href={band.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition hover:text-ink-900"
+                aria-label="Instagram"
+                className="inline-flex items-center justify-center transition hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                Instagram
+                <Instagram className="h-5 w-5" aria-hidden="true" />
               </Link>
             )}
             {band.social.youtube && (
@@ -40,9 +42,10 @@ export default function ContactSection({ band }: { band: Band }) {
                 href={band.social.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition hover:text-ink-900"
+                aria-label="YouTube"
+                className="inline-flex items-center justify-center transition hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                YouTube
+                <Youtube className="h-5 w-5" aria-hidden="true" />
               </Link>
             )}
           </div>
