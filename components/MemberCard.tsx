@@ -3,8 +3,8 @@ import type { Member } from "@/lib/types";
 
 export default function MemberCard({ member }: { member: Member }) {
   return (
-    <article className="flex flex-col gap-4 rounded-2xl border border-black/10 bg-paper p-6 shadow-sm transition hover:-translate-y-1 hover:border-accent/60">
-      <div className="relative h-56 w-full overflow-hidden rounded-xl border border-black/10 bg-haze">
+    <article className="flex flex-col gap-3">
+      <div className="relative w-full overflow-hidden bg-haze aspect-[8/10]">
         <Image
           src={member.image}
           alt={member.name}
@@ -14,9 +14,9 @@ export default function MemberCard({ member }: { member: Member }) {
           unoptimized
         />
       </div>
-      <div>
-        <h3 className="text-xl font-semibold text-ink-900">{member.name}</h3>
-        <p className="text-sm uppercase tracking-[0.2em] text-accent">
+      <div className="text-center">
+        <h3 className="text-lg font-bold text-accent">{member.name}</h3>
+        <p className="text-xs font-semibold tracking-[0.18em] text-ink-900">
           {member.role}
         </p>
         <p className="mt-3 text-sm text-ink-600">{member.bio}</p>

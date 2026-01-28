@@ -5,7 +5,7 @@ export default function ContactSection({ band }: { band: Band }) {
   return (
     <section
       id="contact"
-      className="rounded-3xl border border-black/10 bg-paper p-8 shadow-sm md:p-12"
+      className="rounded-3xl border border-black/10 bg-[#fffff7] p-8 shadow-sm md:p-12"
     >
       <div className="grid gap-10 md:grid-cols-[1.2fr_1fr]">
         <div>

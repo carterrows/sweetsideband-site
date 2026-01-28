@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getBand, getMembers, getShows } from "@/lib/content";
@@ -25,7 +24,7 @@ export default function HomePage() {
   return (
     <div>
       <section className="section hero-grid">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6">
           <div>
             <h1 className="text-5xl leading-none text-ink-900 sm:text-6xl lg:text-7xl">
               {band.name}
@@ -48,23 +47,7 @@ export default function HomePage() {
                   Coming Soon
                 </span>
               )}
-              <Link
-                href="/shows"
-                className="inline-flex items-center justify-center rounded-full border border-black/10 px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink-800 transition hover:border-black/30 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              >
-                See Shows
-              </Link>
             </div>
-          </div>
-          <div className="relative h-72 w-full overflow-hidden rounded-3xl border border-black/10 bg-haze md:h-96">
-            <Image
-              src="/images/hero-band.svg"
-              alt="Sweetside live"
-              fill
-              priority
-              className="object-cover"
-              unoptimized
-            />
           </div>
         </div>
       </section>
