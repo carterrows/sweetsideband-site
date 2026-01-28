@@ -7,8 +7,9 @@ import { useState } from "react";
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/shows", label: "Shows" },
-  { href: "/past-shows", label: "Past Shows" },
-  { href: "/about", label: "About" }
+  { href: "/video", label: "Video" },
+  { href: "/merch", label: "Merch" },
+  { href: "/#contact", label: "Contact" }
 ];
 
 function isActivePath(pathname: string, href: string) {

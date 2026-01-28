@@ -30,6 +30,15 @@ export default function ShowsPage() {
           <div className="rounded-2xl border border-black/10 bg-paper p-6 text-sm text-ink-600 shadow-sm">
             Can&apos;t make a date? Email {band.email} for booking/collaborations.
           </div>
+          <div className="flex flex-col gap-12 pt-6">
+            <div className="flex flex-col gap-4">
+              <SectionHeading title="Past Shows" subtitle="Lights, noise, memories" />
+              <p className="max-w-2xl text-ink-600">
+                A snapshot of recent nights on the road.
+              </p>
+            </div>
+            <ShowsList shows={shows.past} />
+          </div>
         </div>
       </div>
     </section>

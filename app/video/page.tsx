@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import { getShows, getMedia } from "@/lib/content";
+import { getMedia } from "@/lib/content";
 import SectionHeading from "@/components/SectionHeading";
-import ShowsList from "@/components/ShowsList";
 import MediaGrid from "@/components/MediaGrid";
 
 export const metadata: Metadata = {
-  title: "Past Shows",
-  description: "Photos and video from recent Sweetside shows."
+  title: "Video",
+  description: "Live clips and photos from Sweetside shows."
 };
 
-export default function PastShowsPage() {
-  const shows = getShows();
+export default function VideoPage() {
   const media = getMedia();
 
   return (
@@ -18,13 +16,12 @@ export default function PastShowsPage() {
       <div className="mx-auto w-full max-w-6xl px-6">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-4">
-            <SectionHeading title="Past Shows" subtitle="Lights, noise, memories" />
+            <SectionHeading title="Video" subtitle="Live clips + backstage snaps" />
             <p className="max-w-2xl text-ink-600">
-              A snapshot of recent nights on the road.
+              Photos and video pulled from recent shows.
             </p>
           </div>
           <MediaGrid items={media} />
-          <ShowsList shows={shows.past} />
         </div>
       </div>
     </section>
