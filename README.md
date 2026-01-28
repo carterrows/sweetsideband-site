@@ -70,6 +70,8 @@ Place images in `public/images/` and reference them by absolute path in JSON, e.
 
 Videos should use external links (YouTube/Vimeo) in `data/media.json`.
 
+Pull YouTube thumbnails using: http://img.youtube.com/vi/VIDEOID/maxresdefault.jpg
+
 ## Environment config
 
 Copy `.env.example` to `.env` if you want to set `NEXT_PUBLIC_SITE_URL`.
