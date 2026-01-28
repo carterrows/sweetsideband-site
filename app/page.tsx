@@ -19,7 +19,7 @@ export default function HomePage() {
   const upcoming = shows.upcoming.slice(0, 3);
   const spotifyLink = band.streaming.spotify;
   const isSpotifyUrl = (link: typeof spotifyLink): link is string =>
-    typeof link === "string";
+    typeof link === "string" && link.trim().toLowerCase() !== "coming soon";
 
   return (
     <div>

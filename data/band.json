@@ -6,15 +6,12 @@
   "email": "sweetsideband@gmail.com",
   "social": {
     "instagram": "https://instagram.com/sweetside",
+    "facebook": "https://facebook.com/sweetside",
     "tiktok": "https://tiktok.com/@sweetside",
     "youtube": "https://youtube.com/@sweetside"
   },
   "streaming": {
-    "spotify": {
-      "status": "coming-soon"
-    },
-    "appleMusic": {
-      "status": "coming-soon"
-    }
+    "spotify": "https://open.spotify.com/artist/0EGdsGv4BjNjAWDl4Xa6p6",
+    "appleMusic": "https://music.apple.com/artist/1544842479"
   }
 }
