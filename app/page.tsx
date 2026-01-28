@@ -98,7 +98,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="contact" className="section">
+      <section className="section">
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="flex flex-col gap-10">
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">

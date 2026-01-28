@@ -3,7 +3,10 @@ import type { Band } from "@/lib/types";
 
 export default function ContactSection({ band }: { band: Band }) {
   return (
-    <section className="rounded-3xl border border-black/10 bg-paper p-8 shadow-sm md:p-12">
+    <section
+      id="contact"
+      className="rounded-3xl border border-black/10 bg-paper p-8 shadow-sm md:p-12"
+    >
       <div className="grid gap-10 md:grid-cols-[1.2fr_1fr]">
         <div>
           <p className="text-xs uppercase tracking-[0.35em] text-accent">
