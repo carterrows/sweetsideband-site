@@ -101,8 +101,3 @@ Copy `.env.example` to `.env` if you want to set `NEXT_PUBLIC_SITE_URL`.
 ## Upgrade path: SQLite
 
 The content loader lives in `lib/content.ts`. When you want a database, swap the JSON reads for SQLite queries and keep the same return types (see `lib/types.ts`). Components won’t need changes.
-
-## Future Ideas
-
-- Social media links in About Us
-- Add photos & video to pages
