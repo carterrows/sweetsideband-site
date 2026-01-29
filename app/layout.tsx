@@ -48,7 +48,7 @@ export default function RootLayout({
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen">
         <div className="flex min-h-screen flex-col">
-          <Navbar bandName={band.name} />
+          <Navbar band={band} />
           <main className="flex-1">{children}</main>
           <Footer band={band} />
         </div>
