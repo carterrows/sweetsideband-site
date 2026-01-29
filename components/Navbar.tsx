@@ -24,6 +24,22 @@ export default function Navbar({ bandName }: { bandName: string }) {
   const [open, setOpen] = useState(false);
   const isHome = !pathname || pathname === "/";
 
+  const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    setOpen(false);
+    if (isHome) {
+      event.preventDefault();
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (window.location.hash) {
+          window.history.replaceState(null, "", "/");
+        }
+      }
+      return;
+    }
+    event.preventDefault();
+    router.push("/");
+  };
+
   const handleContactClick = (event: MouseEvent<HTMLAnchorElement>) => {
     setOpen(false);
     if (isHome) {
@@ -50,13 +66,26 @@ export default function Navbar({ bandName }: { bandName: string }) {
         <Link
           href="/"
           className="font-display text-2xl tracking-[0.2em] text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
-          onClick={() => setOpen(false)}
+          onClick={handleHomeClick}
         >
           {bandName}
         </Link>
         <div className="hidden items-center gap-4 text-sm uppercase tracking-[0.2em] md:flex">
           {navItems.map((item) => {
             const active = pathname ? isActivePath(pathname, item.href) : false;
+            if (item.href === "/") {
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={handleHomeClick}
+                  className="px-3 py-2 font-semibold text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                  aria-current={active ? "page" : undefined}
+                >
+                  {item.label}
+                </Link>
+              );
+            }
             if (item.href === "/#contact") {
               return (
                 <Link
@@ -105,6 +134,19 @@ export default function Navbar({ bandName }: { bandName: string }) {
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-6 py-4 text-sm uppercase tracking-[0.2em]">
           {navItems.map((item) => {
             const active = pathname ? isActivePath(pathname, item.href) : false;
+            if (item.href === "/") {
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={handleHomeClick}
+                  className="px-3 py-2 font-semibold text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                  aria-current={active ? "page" : undefined}
+                >
+                  {item.label}
+                </Link>
+              );
+            }
             if (item.href === "/#contact") {
               return (
                 <Link
