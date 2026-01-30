@@ -1,8 +1,29 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { Instagram, Youtube } from "lucide-react";
 import type { Band } from "@/lib/types";
 
 export default function ContactSection({ band }: { band: Band }) {
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const trimmedSubject = subject.trim();
+  const trimmedMessage = message.trim();
+  const isValid = trimmedSubject.length > 0 && trimmedMessage.length > 0;
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!isValid) {
+      return;
+    }
+
+    const mailtoHref = `mailto:${band.email}?subject=${encodeURIComponent(
+      trimmedSubject
+    )}&body=${encodeURIComponent(message)}`;
+    window.location.href = mailtoHref;
+  };
+
   return (
     <section
       id="contact"
@@ -50,35 +71,24 @@ export default function ContactSection({ band }: { band: Band }) {
             )}
           </div>
         </div>
-        <form
-          action={`mailto:${band.email}`}
-          method="post"
-          encType="text/plain"
-          className="flex flex-col gap-4"
-        >
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <label className="flex flex-col gap-2 text-sm text-ink-600">
-            Name
+            Subject
             <input
-              name="name"
+              name="subject"
+              value={subject}
+              onChange={(event) => setSubject(event.target.value)}
               required
               className="rounded-lg border border-black/10 bg-paper px-4 py-2 text-ink-900 outline-none transition focus:border-accent"
-              placeholder="Your name"
-            />
-          </label>
-          <label className="flex flex-col gap-2 text-sm text-ink-600">
-            Email
-            <input
-              type="email"
-              name="email"
-              required
-              className="rounded-lg border border-black/10 bg-paper px-4 py-2 text-ink-900 outline-none transition focus:border-accent"
-              placeholder="you@email.com"
+              placeholder="Booking inquiry"
             />
           </label>
           <label className="flex flex-col gap-2 text-sm text-ink-600">
             Message
             <textarea
               name="message"
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
               required
               rows={4}
               className="rounded-lg border border-black/10 bg-paper px-4 py-2 text-ink-900 outline-none transition focus:border-accent"
@@ -87,7 +97,8 @@ export default function ContactSection({ band }: { band: Band }) {
           </label>
           <button
             type="submit"
-            className="mt-2 inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            disabled={!isValid}
+            className="mt-2 inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60"
           >
             Send via Email Client
           </button>
