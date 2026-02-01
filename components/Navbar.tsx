@@ -67,10 +67,14 @@ export default function Navbar({ band }: { band: Band }) {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="font-display text-2xl tracking-[0.2em] text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+            className="inline-flex items-center text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
             onClick={handleHomeClick}
           >
-            {band.name}
+            <img
+              src="/sweetside.svg"
+              alt="Sweetside"
+              className="h-8 w-auto -mt-1.5"
+            />
           </Link>
         </div>
         <div className="hidden items-center gap-4 text-sm uppercase tracking-[0.2em] md:flex md:absolute md:left-1/2 md:-translate-x-1/2">
