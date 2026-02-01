@@ -11,7 +11,6 @@ export type Band = {
     tiktok?: string;
     youtube?: string;
     facebook?: string;
-    bandcamp?: string;
   };
   streaming: {
     spotify: StreamingLink;
