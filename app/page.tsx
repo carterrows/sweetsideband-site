@@ -27,7 +27,11 @@ export default function HomePage() {
         <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6">
           <div>
             <h1 className="text-5xl leading-none text-ink-900 sm:text-6xl lg:text-7xl">
-              {band.name}
+              <img
+                src="/sweetside_black.svg"
+                alt={band.name}
+                className="inline-block h-[1em] w-auto align-baseline"
+              />
             </h1>
             <p className="mt-4 max-w-xl text-lg text-ink-600 md:text-xl">
               {band.tagline}
