@@ -6,7 +6,6 @@ module.exports = {
       colors: {
         paper: "#f4f1de",
         haze: "#efe6d4",
-        mist: "#e4d7c1",
         ink: {
           900: "#262322",
           800: "#3b3634",
