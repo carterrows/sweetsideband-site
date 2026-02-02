@@ -4,8 +4,7 @@
     "type": "video",
     "title": "Daft Punk - Get Lucky",
     "thumbnail": "/images/past/getlucky_thumb.jpg",
-    "link": "https://www.youtube.com/watch?v=5NV6Rdv1a3I",
-    "showId": "ss-2025-10-15"
+    "link": "https://www.youtube.com/watch?v=5NV6Rdv1a3I"
   },
   {
     "id": "media-2",
@@ -13,7 +12,6 @@
     "title": "Pink Floyd",
     "src": "/images/past/pinkfloyd.jpg",
     "alt": "Pink Floyd Photo",
-    "link": "/images/past/pinkfloyd.jpg",
-    "showId": "ss-2025-12-18"
+    "link": "/images/past/pinkfloyd.jpg"
   }
 ]
