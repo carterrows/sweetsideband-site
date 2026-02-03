@@ -8,6 +8,27 @@ export default function HomeHeroObserver() {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    const main = document.querySelector("main");
+    const header = document.querySelector("header");
+    if (!main || !header) {
+      return;
+    }
+
+    const updateNavHeight = () => {
+      const height = header.getBoundingClientRect().height;
+      main.style.setProperty("--nav-height", `${height}px`);
+    };
+
+    updateNavHeight();
+    window.addEventListener("resize", updateNavHeight);
+
+    return () => {
+      window.removeEventListener("resize", updateNavHeight);
+      main.style.removeProperty("--nav-height");
+    };
+  }, []);
+
+  useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) {
       return;

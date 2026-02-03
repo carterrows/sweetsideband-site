@@ -106,14 +106,6 @@ export default function Navbar({ band }: { band: Band }) {
           : "border-black/10 bg-paper/80 backdrop-blur"
       }`}
     >
-      {isHome && (
-        <div
-          aria-hidden="true"
-          className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 via-black/30 to-transparent transition-opacity duration-300 ${
-            heroActive ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      )}
       <nav
         aria-label="Primary"
         className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 py-4"
