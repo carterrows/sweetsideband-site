@@ -2,16 +2,15 @@
   {
     "id": "media-1",
     "type": "video",
-    "title": "Daft Punk - Get Lucky",
-    "thumbnail": "/images/past/getlucky_thumb.jpg",
-    "link": "https://www.youtube.com/watch?v=5NV6Rdv1a3I"
+    "title": "Superstar - Music Video",
+    "thumbnail": "/images/thumbnails/superstar.png",
+    "link": "https://www.youtube.com/watch?v=CpWk9A1H4UI"
   },
   {
     "id": "media-2",
-    "type": "image",
-    "title": "Pink Floyd",
-    "src": "/images/past/pinkfloyd.jpg",
-    "alt": "Pink Floyd Photo",
-    "link": "/images/past/pinkfloyd.jpg"
+    "type": "video",
+    "title": "Money Man - Music Video",
+    "thumbnail": "/images/thumbnails/money_man.jpg",
+    "link": "https://www.youtube.com/watch?v=B1ZfdS2NSL0"
   }
 ]
