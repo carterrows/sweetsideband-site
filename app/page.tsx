@@ -31,14 +31,14 @@ export default function HomePage() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="object-cover object-top"
         />
         <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center sm:gap-6">
           <img
             src="/sweetside_white.svg"
             alt={band.name}
-            className="w-44 max-w-[80vw] drop-shadow-2xl sm:w-60 md:w-80 lg:w-96"
+            className="w-56 max-w-[85vw] drop-shadow-2xl sm:w-72 md:w-[26rem] lg:w-[32rem]"
           />
           <div className="flex flex-wrap justify-center gap-4">
             {isSpotifyUrl(spotifyLink) ? (
