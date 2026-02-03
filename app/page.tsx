@@ -7,6 +7,7 @@ import ShowsList from "@/components/ShowsList";
 import StreamingLinks from "@/components/StreamingLinks";
 import ContactSection from "@/components/ContactSection";
 import MemberCard from "@/components/MemberCard";
+import HomeHeroObserver from "@/components/HomeHeroObserver";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -71,6 +72,7 @@ export default function HomePage() {
             )}
           </div>
         </div>
+        <HomeHeroObserver />
       </section>
 
       <section className="section relative z-10 bg-paper" id="content">
