@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getBand, getMembers, getShows } from "@/lib/content";
@@ -23,37 +24,42 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="section hero-grid">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6">
-          <div>
-            <h1 className="text-5xl leading-none text-ink-900 sm:text-6xl lg:text-7xl">
-              <img
-                src="/sweetside_black.svg"
-                alt={band.name}
-                className="inline-block h-[1em] w-auto align-baseline"
-              />
-            </h1>
-            <div className="mt-8 flex flex-wrap gap-4">
-              {isSpotifyUrl(spotifyLink) ? (
-                <Link
-                  href={spotifyLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  Listen
-                </Link>
-              ) : (
-                <span className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white">
-                  Coming Soon
-                </span>
-              )}
-            </div>
+      <section className="relative min-h-[calc(100vh-4rem)] min-h-[calc(100svh-4rem)] overflow-hidden">
+        <Image
+          src="/background.jpeg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center sm:gap-6">
+          <img
+            src="/sweetside_white.svg"
+            alt={band.name}
+            className="w-44 max-w-[80vw] drop-shadow-2xl sm:w-60 md:w-80 lg:w-96"
+          />
+          <div className="flex flex-wrap justify-center gap-4">
+            {isSpotifyUrl(spotifyLink) ? (
+              <Link
+                href={spotifyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-5 py-2.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:px-6 sm:py-3 sm:text-xs"
+              >
+                Listen
+              </Link>
+            ) : (
+              <span className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-5 py-2.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white sm:px-6 sm:py-3 sm:text-xs">
+                Coming Soon
+              </span>
+            )}
           </div>
         </div>
       </section>
 
-      <section className="section">
+      <section className="section" id="content">
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
