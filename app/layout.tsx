@@ -4,6 +4,7 @@ import { Bebas_Neue, Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getBand } from "@/lib/content";
+import { NavbarHeroProvider } from "@/components/NavbarHeroContext";
 
 const display = Bebas_Neue({
   weight: "400",
@@ -47,11 +48,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen">
-        <div className="flex min-h-screen flex-col">
-          <Navbar band={band} />
-          <main className="flex-1">{children}</main>
-          <Footer band={band} />
-        </div>
+        <NavbarHeroProvider>
+          <div className="flex min-h-screen flex-col">
+            <Navbar band={band} />
+            <main className="flex-1">{children}</main>
+            <Footer band={band} />
+          </div>
+        </NavbarHeroProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ import type { MouseEvent } from "react";
 import { useState } from "react";
 import type { Band } from "@/lib/types";
 import SocialLinks from "@/components/SocialLinks";
+import { useNavbarHero } from "@/components/NavbarHeroContext";
 
 const navItems = [
   { href: "/shows", label: "Shows" },
@@ -25,6 +26,20 @@ export default function Navbar({ band }: { band: Band }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const isHome = !pathname || pathname === "/";
+  const { isHeroActive } = useNavbarHero();
+  const heroActive = isHome && isHeroActive;
+
+  const focusRingClass = heroActive
+    ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+    : "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper";
+
+  const navLinkClassName = `px-3 py-2 font-semibold transition duration-150 ease-in-out hover:opacity-80 ${heroActive ? "text-white" : "text-accent"} ${focusRingClass}`;
+  const socialLinkClassName = `inline-flex items-center justify-center transition duration-150 ease-in-out hover:opacity-80 ${heroActive ? "text-white" : "text-accent"} ${focusRingClass}`;
+  const logoLinkClassName = `inline-flex items-center transition duration-150 ease-in-out hover:opacity-80 ${heroActive ? "text-white" : "text-accent"} ${focusRingClass}`;
+  const mobileMenuClassName = `${open ? "block" : "hidden"} border-t ${heroActive ? "border-white/10 bg-ink-900/85 backdrop-blur" : "border-black/10 bg-paper"} md:hidden`;
+  const menuButtonClassName = `inline-flex h-10 w-10 items-center justify-center bg-transparent transition ${heroActive ? "text-white" : "text-ink-900"} ${focusRingClass} md:hidden`;
+  const menuLineClassName = `transition-colors duration-300 ${heroActive ? "bg-white" : "bg-ink-900"}`;
+  const logoSrc = heroActive ? "/sweetside_white.svg" : "/sweetside.svg";
 
   const scrollToContactCard = () => {
     const contactCard = document.getElementById("contact");
@@ -84,19 +99,33 @@ export default function Navbar({ band }: { band: Band }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/10 bg-paper/80 backdrop-blur">
+    <header
+      className={`sticky top-0 z-50 relative border-b transition-colors duration-300 ${
+        heroActive
+          ? "border-transparent bg-transparent"
+          : "border-black/10 bg-paper/80 backdrop-blur"
+      }`}
+    >
+      {isHome && (
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 via-black/30 to-transparent transition-opacity duration-300 ${
+            heroActive ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      )}
       <nav
         aria-label="Primary"
-        className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 py-4"
+        className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 py-4"
       >
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="inline-flex items-center text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+            className={logoLinkClassName}
             onClick={handleHomeClick}
           >
             <img
-              src="/sweetside.svg"
+              src={logoSrc}
               alt="Sweetside"
               className="h-8 w-auto -mt-1.5"
             />
@@ -111,7 +140,7 @@ export default function Navbar({ band }: { band: Band }) {
                   key={item.href}
                   href={item.href}
                   onClick={handleContactClick}
-                  className="px-3 py-2 font-semibold text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                  className={navLinkClassName}
                   aria-current={active ? "page" : undefined}
                 >
                   {item.label}
@@ -122,7 +151,7 @@ export default function Navbar({ band }: { band: Band }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-3 py-2 font-semibold text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                className={navLinkClassName}
                 aria-current={active ? "page" : undefined}
               >
                 {item.label}
@@ -134,7 +163,7 @@ export default function Navbar({ band }: { band: Band }) {
           <div className="flex items-center gap-4">
             <SocialLinks
               social={band.social}
-              linkClassName="inline-flex items-center justify-center text-accent transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+              linkClassName={socialLinkClassName}
             />
           </div>
           <button
@@ -143,20 +172,20 @@ export default function Navbar({ band }: { band: Band }) {
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((prev) => !prev)}
-            className="inline-flex h-10 w-10 items-center justify-center bg-transparent transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:hidden"
+            className={menuButtonClassName}
           >
             <span className="sr-only">Open menu</span>
             <span className="flex flex-col items-center gap-1">
-              <span className="h-0.5 w-5 rounded-full bg-ink-900" />
-              <span className="h-0.5 w-5 rounded-full bg-ink-900" />
-              <span className="h-0.5 w-5 rounded-full bg-ink-900" />
+              <span className={`h-0.5 w-5 rounded-full ${menuLineClassName}`} />
+              <span className={`h-0.5 w-5 rounded-full ${menuLineClassName}`} />
+              <span className={`h-0.5 w-5 rounded-full ${menuLineClassName}`} />
             </span>
           </button>
         </div>
       </nav>
       <div
         id="mobile-menu"
-        className={`${open ? "block" : "hidden"} border-t border-black/10 bg-paper md:hidden`}
+        className={mobileMenuClassName}
       >
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-6 py-4 text-sm uppercase tracking-[0.2em]">
           {navItems.map((item) => {
@@ -167,7 +196,7 @@ export default function Navbar({ band }: { band: Band }) {
                   key={item.href}
                   href={item.href}
                   onClick={handleContactClick}
-                  className="px-3 py-2 font-semibold text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                  className={navLinkClassName}
                   aria-current={active ? "page" : undefined}
                 >
                   {item.label}
@@ -179,7 +208,7 @@ export default function Navbar({ band }: { band: Band }) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="px-3 py-2 font-semibold text-accent transition-opacity duration-150 ease-in-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                className={navLinkClassName}
                 aria-current={active ? "page" : undefined}
               >
                 {item.label}
