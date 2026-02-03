@@ -23,8 +23,8 @@ export default function HomePage() {
     typeof link === "string" && link.trim().toLowerCase() !== "coming soon";
 
   return (
-    <div>
-      <section className="relative min-h-[calc(100vh-4rem)] min-h-[calc(100svh-4rem)] overflow-hidden">
+    <div className="relative">
+      <div className="pointer-events-none fixed inset-0 -z-10">
         <Image
           src="/background_mobile.jpg"
           alt=""
@@ -41,7 +41,13 @@ export default function HomePage() {
           sizes="(min-width: 768px) 100vw, 0px"
           className="hidden object-cover object-top md:block"
         />
-        <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
+      </div>
+
+      <section className="relative z-10 min-h-[calc(100vh-4rem)] min-h-[calc(100svh-4rem)]">
+        <div
+          className="pointer-events-none absolute inset-0 bg-black/30"
+          aria-hidden="true"
+        />
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center sm:gap-6">
           <img
             src="/sweetside_white.svg"
@@ -67,7 +73,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section" id="content">
+      <section className="section relative z-10 bg-paper" id="content">
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -84,7 +90,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section relative z-10 bg-paper">
         <div className="mx-auto w-full max-w-6xl px-6">
           <SectionHeading title="Listen" subtitle="Stream the latest" />
           <div className="mt-6">
@@ -96,7 +102,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section relative z-10 bg-paper">
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="flex flex-col gap-10">
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
