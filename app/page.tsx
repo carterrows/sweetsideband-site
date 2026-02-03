@@ -44,11 +44,7 @@ export default function HomePage() {
         />
       </div>
 
-      <section className="relative z-10 min-h-[calc(100vh-4rem)] min-h-[calc(100svh-4rem)]">
-        <div
-          className="pointer-events-none absolute inset-0 bg-black/30"
-          aria-hidden="true"
-        />
+      <section className="relative z-10 min-h-[calc(100vh-var(--nav-height,0px))] min-h-[calc(100svh-var(--nav-height,0px))]">
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center sm:gap-6">
           <img
             src="/sweetside_white.svg"
