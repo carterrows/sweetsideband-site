@@ -2,7 +2,6 @@ export type StreamingLink = string | { status: "coming-soon" };
 
 export type Band = {
   name: string;
-  tagline: string;
   location: string;
   email: string;
   social: {
