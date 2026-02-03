@@ -26,12 +26,20 @@ export default function HomePage() {
     <div>
       <section className="relative min-h-[calc(100vh-4rem)] min-h-[calc(100svh-4rem)] overflow-hidden">
         <Image
+          src="/background_mobile.jpg"
+          alt=""
+          fill
+          priority
+          sizes="(min-width: 768px) 0px, 100vw"
+          className="block object-cover object-top md:hidden"
+        />
+        <Image
           src="/background.jpeg"
           alt=""
           fill
           priority
-          sizes="100vw"
-          className="object-cover object-top"
+          sizes="(min-width: 768px) 100vw, 0px"
+          className="hidden object-cover object-top md:block"
         />
         <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center sm:gap-6">
