@@ -14,6 +14,8 @@ const navItems = [
   { href: "/#contact", label: "Contact" }
 ];
 
+const MOBILE_MAX_WIDTH = 768;
+
 function isActivePath(pathname: string, href: string) {
   return pathname.startsWith(href);
 }
@@ -23,6 +25,31 @@ export default function Navbar({ band }: { band: Band }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const isHome = !pathname || pathname === "/";
+
+  const scrollToContactCard = () => {
+    const contactCard = document.getElementById("contact");
+    if (!contactCard) {
+      return;
+    }
+
+    const isMobile = window.innerWidth < MOBILE_MAX_WIDTH;
+    if (!isMobile) {
+      contactCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    const rect = contactCard.getBoundingClientRect();
+    const cardTop = rect.top + window.scrollY;
+    const cardHeight = rect.height;
+    const viewportHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const maxScroll = Math.max(0, documentHeight - viewportHeight);
+    const targetScrollY =
+      cardTop - viewportHeight / 2 + cardHeight / 2;
+    const clampedScrollY = Math.min(Math.max(0, targetScrollY), maxScroll);
+
+    window.scrollTo({ top: clampedScrollY, behavior: "smooth" });
+  };
 
   const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
     setOpen(false);
@@ -44,12 +71,11 @@ export default function Navbar({ band }: { band: Band }) {
     setOpen(false);
     if (isHome) {
       event.preventDefault();
-      const contactSection = document.getElementById("contact");
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
       if (typeof window !== "undefined") {
-        window.history.replaceState(null, "", "#contact");
+        window.requestAnimationFrame(() => {
+          scrollToContactCard();
+          window.history.replaceState(null, "", "#contact");
+        });
       }
       return;
     }
