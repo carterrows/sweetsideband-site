@@ -33,9 +33,6 @@ export default function HomePage() {
                 className="inline-block h-[1em] w-auto align-baseline"
               />
             </h1>
-            <p className="mt-4 max-w-xl text-lg text-ink-600 md:text-xl">
-              {band.tagline}
-            </p>
             <div className="mt-8 flex flex-wrap gap-4">
               {isSpotifyUrl(spotifyLink) ? (
                 <Link
