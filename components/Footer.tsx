@@ -6,9 +6,11 @@ export default function Footer({ band }: { band: Band }) {
     <footer className="border-t border-black/10 bg-accent text-paper">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="font-display text-xl tracking-[0.25em]">
-            {band.name}
-          </p>
+          <img
+            src="/sweetside_white.svg"
+            alt="Sweetside"
+            className="h-7 w-auto"
+          />
           <p className="mt-2 text-sm">
             {band.location} · {band.email}
           </p>
