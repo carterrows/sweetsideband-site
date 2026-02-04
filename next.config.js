@@ -34,15 +34,6 @@ const nextConfig = {
         headers: securityHeaders
       }
     ];
-  },
-  async redirects() {
-    return [
-      {
-        source: "/past-shows",
-        destination: "/video",
-        permanent: true
-      }
-    ];
   }
 };
 

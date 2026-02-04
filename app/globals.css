@@ -40,7 +40,4 @@
     @apply py-16 md:py-24;
   }
 
-  .hero-grid {
-    background-image: linear-gradient(135deg, rgba(238, 108, 77, 0.1), transparent 60%);
-  }
 }

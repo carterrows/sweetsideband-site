@@ -19,7 +19,9 @@ const body = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
+  metadataBase: process.env.SITE_URL
+    ? new URL(process.env.SITE_URL)
+    : undefined,
   title: {
     default: "Sweetside",
     template: "%s | Sweetside"

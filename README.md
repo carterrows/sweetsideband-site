@@ -30,7 +30,7 @@ Site runs at http://localhost:3000
 
 Edit the JSON files under `data/`:
 
-- `data/band.json` - name, bio, location, socials, streaming
+- `data/band.json` - name, location, socials, streaming
 - `data/shows.json` - upcoming and past shows
 - `data/members.json` - band member cards
 - `data/media.json` - past show photos/videos
@@ -50,7 +50,8 @@ Streaming buttons are driven by `data/band.json` → `streaming`.
 }
 ```
 
-- To show a non-clickable "Coming Soon" label, set the value to:
+- To show a non-clickable "Coming Soon" label, set the value to a URL string
+  that equals `coming soon` (case-insensitive), or to:
 
 ```json
 {
@@ -66,7 +67,7 @@ Streaming buttons are driven by `data/band.json` → `streaming`.
 Place images in `public/images/` and reference them by absolute path in JSON, e.g.
 
 - `/images/members/avery.svg`
-- `/images/past/show-1.svg`
+- `/images/thumbnails/superstar.png`
 
 Videos should use external links (YouTube/Vimeo) in `data/media.json`.
 
@@ -77,18 +78,16 @@ Videos should use external links (YouTube/Vimeo) in `data/media.json`.
   "id": "media-1",
   "type": "image",
   "title": "Static Room, Austin",
-  "src": "/images/past/show-1.svg",
+  "src": "/images/thumbnails/superstar.png",
   "alt": "Sweetside live at Static Room",
-  "link": "/images/past/show-1.svg",
-  "showId": "ss-2025-12-18"
+  "link": "/images/thumbnails/superstar.png"
 },
 {
   "id": "media-2",
   "type": "video",
   "title": "Live at Voltage Hall",
-  "thumbnail": "/images/past/video-1.svg",
-  "link": "https://www.youtube.com/watch?v=5NV6Rdv1a3I",
-  "showId": "ss-2025-10-15"
+  "thumbnail": "/images/thumbnails/money_man.jpg",
+  "link": "https://www.youtube.com/watch?v=5NV6Rdv1a3I"
 }
 ```
 
