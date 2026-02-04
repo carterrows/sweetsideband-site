@@ -23,15 +23,16 @@ export const metadata: Metadata = {
     ? new URL(process.env.SITE_URL)
     : undefined,
   title: {
-    default: "Sweetside",
+    default: "Sweetside | Official Site — Shows, Videos & Merch",
     template: "%s | Sweetside"
   },
   description:
-    "Sweetside is a modern synth-rock band with electric live shows and cinematic hooks.",
+    "Official Sweetside site: upcoming shows, live video, merch, and contact/booking. Catch the next date and stream the latest.",
   openGraph: {
-    title: "Sweetside",
+    siteName: "Sweetside",
+    title: "Sweetside | Official Site — Shows, Videos & Merch",
     description:
-      "Electric riffs. Midnight grooves. New city energy.",
+      "Official Sweetside site: upcoming shows, live video, merch, and contact/booking. Catch the next date and stream the latest.",
     type: "website",
     images: ["/og-image.png"]
   },
