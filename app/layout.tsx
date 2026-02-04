@@ -36,6 +36,9 @@ export const metadata: Metadata = {
     type: "website",
     images: ["/og-image.png"]
   },
+  verification: {
+    google: "1IV_3N6Od_bwECaPK9w8K3u8pYaBX2tRBSyMaB-0AoM"
+  },
   icons: {
     icon: "/favicon.svg"
   }
