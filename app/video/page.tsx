@@ -16,10 +16,7 @@ export default function VideoPage() {
       <div className="mx-auto w-full max-w-6xl px-6">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-4">
-            <SectionHeading title="Video" subtitle="Live clips + backstage snaps" />
-            <p className="max-w-2xl text-ink-600">
-              Photos and video pulled from recent shows.
-            </p>
+            <SectionHeading title="Video" subtitle="Gallery" />
           </div>
           <MediaGrid items={media} />
         </div>
