@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     description:
       "Electric riffs. Midnight grooves. New city energy.",
     type: "website",
-    images: ["/og-image.svg"]
+    images: ["/og-image.png"]
   },
   icons: {
     icon: "/favicon.svg"
