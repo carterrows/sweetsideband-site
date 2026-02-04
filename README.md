@@ -96,7 +96,7 @@ Pull YouTube thumbnails using: http://img.youtube.com/vi/VIDEOID/maxresdefault.j
 
 ## Environment config
 
-Copy `.env.example` to `.env` if you want to set `NEXT_PUBLIC_SITE_URL`.
+Copy `.env.example` to `.env` if you want to set `SITE_URL`.
 
 ## Upgrade path: SQLite
 
