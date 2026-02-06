@@ -4,27 +4,27 @@
     "name": "Nathan Bugiardini",
     "role": "Vocals / Guitar",
     "bio": "",
-    "image": "/images/members/avery.svg"
+    "image": "/images/members/nate_b.jpg"
   },
   {
     "id": "member-oreilly",
     "name": "Nathan O'Reilly Juarez",
     "role": "Lead Guitar",
     "bio": "",
-    "image": "/images/members/juno.svg"
+    "image": "/images/members/nate_j.jpg"
   },
   {
     "id": "member-ryan",
     "name": "Ryan Barr",
     "role": "Drums",
     "bio": "",
-    "image": "/images/members/marco.svg"
+    "image": "/images/members/ryan.jpg"
   },
   {
     "id": "member-joe",
     "name": "Joe Mcginley",
     "role": "Bass",
     "bio": "",
-    "image": "/images/members/sloane.svg"
+    "image": "/images/members/joe.jpg"
   }
 ]
