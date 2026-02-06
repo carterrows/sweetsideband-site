@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Bebas_Neue, Manrope } from "next/font/google";
+import { Bebas_Neue, Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getBand } from "@/lib/content";
@@ -12,7 +12,7 @@ const display = Bebas_Neue({
   variable: "--font-display"
 });
 
-const body = Manrope({
+const body = Inter({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-body"
