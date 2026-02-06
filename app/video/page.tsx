@@ -4,7 +4,7 @@ import SectionHeading from "@/components/SectionHeading";
 import MediaGrid from "@/components/MediaGrid";
 
 export const metadata: Metadata = {
-  title: "Video",
+  title: "Gallery",
   description: "Live clips and photos from Sweetside shows."
 };
 
