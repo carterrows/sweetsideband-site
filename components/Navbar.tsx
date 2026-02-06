@@ -10,7 +10,7 @@ import { useNavbarHero } from "@/components/NavbarHeroContext";
 
 const navItems = [
   { href: "/shows", label: "Shows" },
-  { href: "/video", label: "Video" },
+  { href: "/video", label: "Gallery" },
   { href: "/merch", label: "Merch" },
   { href: "/#contact", label: "Contact" }
 ];

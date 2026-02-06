@@ -1,16 +1,145 @@
 [
   {
-    "id": "media-1",
+    "id": "video-1",
     "type": "video",
     "title": "Superstar - Music Video",
-    "thumbnail": "/images/thumbnails/superstar.png",
+    "thumbnail": "/images/thumbnails/superstar.jpg",
     "link": "https://www.youtube.com/watch?v=CpWk9A1H4UI"
   },
   {
-    "id": "media-2",
+    "id": "video-2",
     "type": "video",
     "title": "Money Man - Music Video",
     "thumbnail": "/images/thumbnails/money_man.jpg",
     "link": "https://www.youtube.com/watch?v=TGiViL4BiaA"
+  },
+
+  {
+  "id": "photo-1",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 1",
+  "src": "/images/shows/DSC_7444.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7444.jpg"
+  },
+  {
+  "id": "photo-2",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 2",
+  "src": "/images/shows/DSC_7458.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7458.jpg"
+  },
+  {
+  "id": "photo-3",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 3",
+  "src": "/images/shows/DSC_7497.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7497.jpg"
+  },
+  {
+  "id": "photo-4",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 4",
+  "src": "/images/shows/DSC_7501.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7501.jpg"
+  },
+  {
+  "id": "photo-5",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 5",
+  "src": "/images/shows/DSC_7525.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7525.jpg"
+  },
+  {
+  "id": "photo-6",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 6",
+  "src": "/images/shows/DSC_7553.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7553.jpg"
+  },
+  {
+  "id": "photo-7",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 7",
+  "src": "/images/shows/DSC_7576.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7576.jpg"
+  },
+  {
+  "id": "photo-8",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 8",
+  "src": "/images/shows/DSC_7607.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7607.jpg"
+  },
+  {
+  "id": "photo-9",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 9",
+  "src": "/images/shows/DSC_7635.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7635.jpg"
+  },
+  {
+  "id": "photo-10",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 10",
+  "src": "/images/shows/DSC_7682.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7682.jpg"
+  },
+  {
+  "id": "photo-11",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 11",
+  "src": "/images/shows/DSC_7702.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7702.jpg"
+  },
+  {
+  "id": "photo-12",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 12",
+  "src": "/images/shows/DSC_7716.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7716.jpg"
+  },
+  {
+  "id": "photo-13",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 13",
+  "src": "/images/shows/DSC_7719.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7719.jpg"
+  },
+  {
+  "id": "photo-14",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 14",
+  "src": "/images/shows/DSC_7740.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7740.jpg"
+  },
+  {
+  "id": "photo-15",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 15",
+  "src": "/images/shows/DSC_7755.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7755.jpg"
+  },
+  {
+  "id": "photo-16",
+  "type": "image",
+  "title": "Horseshoe Tavern, Toronto - 16",
+  "src": "/images/shows/DSC_7805.jpg",
+  "alt": "Sweetside live at Horseshoe Tavern",
+  "link": "/images/shows/DSC_7805.jpg"
   }
 ]

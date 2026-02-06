@@ -2,10 +2,14 @@ import Image from "next/image";
 import type { MediaItem } from "@/lib/types";
 
 export default function MediaGrid({ items }: { items: MediaItem[] }) {
+  const videoItems = items.filter(
+    (item): item is MediaItem & { type: "video" } => item.type === "video"
+  );
+
   return (
     <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-      {items.map((item) => {
-        const imgSrc = item.type === "video" ? item.thumbnail : item.src;
+      {videoItems.map((item) => {
+        const imgSrc = item.thumbnail ?? item.src;
         return (
           <a
             key={item.id}
@@ -27,24 +31,20 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
               ) : (
                 <div className="h-full w-full bg-haze" />
               )}
-              {item.type === "video" && (
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-black/10 text-white/80 opacity-80 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 24 24"
-                      className="h-5 w-5 translate-x-[1px]"
-                    >
-                      <polygon points="9,7 19,12 9,17" fill="currentColor" />
-                    </svg>
-                  </div>
-                </div>
-              )}
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <Image
+                  src="/play.svg"
+                  alt=""
+                  width={70}
+                  height={70}
+                  className="translate-x-[1px] opacity-80 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+                />
+              </div>
             </div>
             <div className="flex flex-col gap-1 text-center">
               <p className="text-base font-bold text-accent">{item.title}</p>
               <span className="text-xs font-semibold tracking-[0.18em] text-ink-900 transition-opacity duration-200 group-hover:opacity-70 group-focus-visible:opacity-70">
-                {item.type === "video" ? "WATCH NOW" : "VIEW PHOTO"}
+                WATCH NOW
               </span>
             </div>
           </a>
