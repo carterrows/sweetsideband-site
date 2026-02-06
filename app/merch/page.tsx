@@ -16,7 +16,7 @@ export default function MerchPage() {
           Coming Soon
         </h1>
         <p className="max-w-xl text-lg text-ink-600">
-          Fresh drops, limited runs, and tour exclusives. Check back soon.
+          Something sweet in the making. Check back soon.
         </p>
       </div>
     </section>
