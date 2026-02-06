@@ -76,12 +76,6 @@ export default function HomePage() {
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <SectionHeading title="Upcoming" subtitle="Next shows" />
-              <Link
-                href="/shows"
-                className="text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:text-ink-900"
-              >
-                Full schedule →
-              </Link>
             </div>
             <ShowsList shows={upcoming} />
           </div>
