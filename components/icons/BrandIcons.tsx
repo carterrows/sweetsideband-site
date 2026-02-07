@@ -25,7 +25,7 @@ export function AppleMusicIcon({ className, ...props }: BrandIconProps) {
   return (
     <svg
       viewBox="0 0 24 24"
-      className={className}
+      className={`${className ?? ""} scale-[1.12]`}
       fill="currentColor"
       {...baseProps}
       {...props}

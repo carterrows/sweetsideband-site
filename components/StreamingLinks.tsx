@@ -44,7 +44,7 @@ export default function StreamingLinks({
           aria-label="Apple Music"
           className="inline-flex items-center justify-center rounded-full border border-black/10 px-6 py-3 text-ink-800 transition hover:border-black/20 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
-          <AppleMusicIcon className="h-5 w-5 scale-[1.12]" />
+          <AppleMusicIcon className="h-5 w-5" />
         </Link>
       ) : (
         <span
@@ -53,7 +53,7 @@ export default function StreamingLinks({
           role="img"
           className="inline-flex cursor-not-allowed items-center justify-center rounded-full border border-black/10 px-6 py-3 text-ink-800 opacity-40"
         >
-          <AppleMusicIcon className="h-5 w-5 scale-[1.08]" />
+          <AppleMusicIcon className="h-5 w-5" />
         </span>
       )}
     </div>

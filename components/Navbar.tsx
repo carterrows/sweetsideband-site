@@ -152,9 +152,10 @@ export default function Navbar({ band }: { band: Band }) {
           })}
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-4">
+          <div className="hidden items-center gap-4 md:flex">
             <SocialLinks
               social={band.social}
+              streaming={band.streaming}
               linkClassName={socialLinkClassName}
             />
           </div>
@@ -207,6 +208,13 @@ export default function Navbar({ band }: { band: Band }) {
               </Link>
             );
           })}
+          <div className="mt-2 flex items-center gap-4 pt-3 md:hidden">
+            <SocialLinks
+              social={band.social}
+              streaming={band.streaming}
+              linkClassName={socialLinkClassName}
+            />
+          </div>
         </div>
       </div>
     </header>
