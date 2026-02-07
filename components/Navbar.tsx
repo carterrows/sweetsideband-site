@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { MouseEvent } from "react";
@@ -116,9 +117,11 @@ export default function Navbar({ band }: { band: Band }) {
             className={logoLinkClassName}
             onClick={handleHomeClick}
           >
-            <img
+            <Image
               src={logoSrc}
               alt="Sweetside"
+              width={354}
+              height={92}
               className="h-8 w-auto -mt-1.5"
             />
           </Link>

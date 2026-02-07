@@ -83,13 +83,13 @@ export default function PhotoSlideshow({ items }: PhotoSlideshowProps) {
     };
   }, [isLightboxOpen, totalItems]);
 
-  if (totalItems === 0) {
-    return null;
-  }
-
-  const activeItem = items[activeIndex];
+  const activeItem = totalItems > 0 ? (items[activeIndex] ?? items[0]) : null;
 
   useEffect(() => {
+    if (!activeItem?.src) {
+      return;
+    }
+
     let isMounted = true;
     const image = new window.Image();
 
@@ -115,7 +115,11 @@ export default function PhotoSlideshow({ items }: PhotoSlideshowProps) {
     return () => {
       isMounted = false;
     };
-  }, [activeItem.src]);
+  }, [activeItem?.src]);
+
+  if (!activeItem) {
+    return null;
+  }
 
   const handlePointerDown = (event: PointerEvent<HTMLElement>) => {
     pointerStartX.current = event.clientX;
