@@ -46,9 +46,11 @@ export default function HomePage() {
 
       <section className="relative z-10 min-h-[calc(100vh-var(--nav-height,0px))] min-h-[calc(100svh-var(--nav-height,0px))]">
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-6 text-center sm:gap-6">
-          <img
+          <Image
             src="/sweetside_white.svg"
             alt={band.name}
+            width={354}
+            height={92}
             className="w-56 max-w-[85vw] drop-shadow-2xl sm:w-72 md:w-[26rem] lg:w-[32rem]"
           />
           <div className="flex flex-wrap justify-center gap-4">

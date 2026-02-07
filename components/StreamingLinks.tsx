@@ -27,14 +27,14 @@ export default function StreamingLinks({
           <SpotifyIcon className="h-5 w-5" />
         </Link>
       ) : (
-        <span
-          aria-label="Spotify (Coming soon)"
-          aria-disabled="true"
-          role="img"
+        <button
+          type="button"
+          disabled
           className="inline-flex cursor-not-allowed items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-white opacity-40"
         >
-          <SpotifyIcon className="h-5 w-5" />
-        </span>
+          <SpotifyIcon aria-hidden="true" className="h-5 w-5" />
+          <span className="sr-only">Spotify (Coming soon)</span>
+        </button>
       )}
       {appleUrl ? (
         <Link
@@ -47,14 +47,14 @@ export default function StreamingLinks({
           <AppleMusicIcon className="h-5 w-5" />
         </Link>
       ) : (
-        <span
-          aria-label="Apple Music (Coming soon)"
-          aria-disabled="true"
-          role="img"
+        <button
+          type="button"
+          disabled
           className="inline-flex cursor-not-allowed items-center justify-center rounded-full border border-black/10 px-6 py-3 text-ink-800 opacity-40"
         >
-          <AppleMusicIcon className="h-5 w-5" />
-        </span>
+          <AppleMusicIcon aria-hidden="true" className="h-5 w-5" />
+          <span className="sr-only">Apple Music (Coming soon)</span>
+        </button>
       )}
     </div>
   );
