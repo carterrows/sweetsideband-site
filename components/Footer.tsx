@@ -18,6 +18,7 @@ export default function Footer({ band }: { band: Band }) {
         <div className="flex flex-wrap items-center gap-4 text-sm">
           <SocialLinks
             social={band.social}
+            streaming={band.streaming}
             linkClassName="inline-flex items-center justify-center text-paper transition hover:text-paper/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper/70 focus-visible:ring-offset-2 focus-visible:ring-offset-accent"
           />
         </div>
