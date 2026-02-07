@@ -11,7 +11,7 @@ import HomeHeroObserver from "@/components/HomeHeroObserver";
 
 export const metadata: Metadata = {
   title: "Home",
-  description: "Sweetside - modern synth-rock with electric live shows."
+  description: "Official Sweetside site: upcoming shows, live video, merch, and contact/booking. Catch the next date and stream the latest."
 };
 
 export default function HomePage() {

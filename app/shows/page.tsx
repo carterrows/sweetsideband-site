@@ -6,7 +6,7 @@ import ShowsList from "@/components/ShowsList";
 
 export const metadata: Metadata = {
   title: "Shows",
-  description: "Upcoming Sweetside tour dates and ticket links."
+  description: "Upcoming and past Sweetside tour dates and venue links."
 };
 
 export default function ShowsPage() {
