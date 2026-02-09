@@ -21,9 +21,12 @@ export default function HomeHeroObserver() {
 
     updateNavHeight();
     window.addEventListener("resize", updateNavHeight);
+    const resizeObserver = new ResizeObserver(updateNavHeight);
+    resizeObserver.observe(header);
 
     return () => {
       window.removeEventListener("resize", updateNavHeight);
+      resizeObserver.disconnect();
       main.style.removeProperty("--nav-height");
     };
   }, []);
