@@ -22,7 +22,6 @@ export type Show = {
   city: string;
   venue: string;
   venueUrl?: string;
-  notes?: string;
 };
 
 export type ShowsData = {

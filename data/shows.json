@@ -5,32 +5,28 @@
       "date": "2026-02-14",
       "city": "Burlington, ON",
       "venue": "The Dickens",
-      "venueUrl": "https://www.thedickens.ca/",
-      "notes": ""
+      "venueUrl": "https://www.thedickens.ca/"
     },
     {
       "id": "ss-2026-02-21",
       "date": "2026-02-21",
       "city": "Burlington, ON",
       "venue": "The Port House Social",
-      "venueUrl": "https://theporthouse.ca/",
-      "notes": ""
+      "venueUrl": "https://theporthouse.ca/"
     },
     {
       "id": "ss-2026-03-14",
       "date": "2026-03-14",
       "city": "Burlington, ON",
       "venue": "The Port House Social",
-      "venueUrl": "https://theporthouse.ca/",
-      "notes": ""
+      "venueUrl": "https://theporthouse.ca/"
     },
     {
       "id": "ss-2026-06-10",
       "date": "2026-06-10",
       "city": "Toronto, ON",
       "venue": "NXNE Music Festival",
-      "venueUrl": "https://www.nxne.com/",
-      "notes": ""
+      "venueUrl": "https://www.nxne.com/"
     }
   ],
   "past": [
@@ -38,50 +34,43 @@
       "id": "ss-2026-01-24",
       "date": "2026-01-24",
       "city": "Burlington, ON",
-      "venue": "The Port House Social",
-      "notes": ""
+      "venue": "The Port House Social"
     },
     {
       "id": "ss-2025-12-30",
       "date": "2025-12-30",
       "city": "Toronto, ON",
-      "venue": "Horseshoe Tavern",
-      "notes": ""
+      "venue": "Horseshoe Tavern"
     },
     {
       "id": "ss-2025-08-09",
       "date": "2025-08-09",
       "city": "Prescott, ON",
-      "venue": "O'Heaphy's Irish Pub",
-      "notes": ""
+      "venue": "O'Heaphy's Irish Pub"
     },
     {
       "id": "ss-2025-08-02",
       "date": "2025-08-02",
       "city": "Sauble Beach, ON",
-      "venue": "Beach Burger",
-      "notes": ""
+      "venue": "Beach Burger"
     },
     {
       "id": "ss-2025-07-26",
       "date": "2025-07-26",
       "city": "Oakville, ON",
-      "venue": "TD Music Series",
-      "notes": ""
+      "venue": "TD Music Series"
     },
     {
       "id": "ss-2025-07-09",
       "date": "2025-07-09",
       "city": "Oakville, ON",
-      "venue": "Easy on Fourth",
-      "notes": ""
+      "venue": "Easy on Fourth"
     },
     {
       "id": "ss-2025-06-11",
       "date": "2025-06-11",
       "city": "London, ON",
-      "venue": "McCabe's Irish Pub",
-      "notes": ""
+      "venue": "McCabe's Irish Pub"
     }
   ]
 }
