@@ -46,8 +46,6 @@ export default function Navbar({ band }: { band: Band }) {
     window.scrollTo({ top: 0, left: 0, behavior });
   };
 
-  const isMobileViewport = () => window.innerWidth < MOBILE_MAX_WIDTH;
-
   useEffect(() => {
     if (!shouldForceTopOnPathChangeRef.current || typeof window === "undefined") {
       return;
@@ -98,7 +96,7 @@ export default function Navbar({ band }: { band: Band }) {
     }
     event.preventDefault();
     if (typeof window !== "undefined") {
-      shouldForceTopOnPathChangeRef.current = isMobileViewport();
+      shouldForceTopOnPathChangeRef.current = true;
     }
     router.push("/", { scroll: true });
   };
@@ -139,7 +137,7 @@ export default function Navbar({ band }: { band: Band }) {
 
     event.preventDefault();
     if (typeof window !== "undefined") {
-      shouldForceTopOnPathChangeRef.current = isMobileViewport();
+      shouldForceTopOnPathChangeRef.current = true;
     }
     router.push(targetPath, { scroll: true });
   };
