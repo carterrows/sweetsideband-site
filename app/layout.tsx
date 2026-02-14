@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
+import Script from "next/script";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getBand } from "@/lib/content";
@@ -54,6 +55,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen">
+        <Script
+          src="https://cloud.umami.is/script.js"
+          data-website-id="76fd866c-c6ee-44ab-9ef6-3150fce27238"
+          strategy="afterInteractive"
+        />
         <NavbarHeroProvider>
           <div className="flex min-h-screen flex-col">
             <Navbar band={band} />
