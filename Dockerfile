@@ -2,6 +2,9 @@ FROM node:24.13.0-alpine AS builder
 
 WORKDIR /app
 
+ARG SITE_URL
+ENV SITE_URL=$SITE_URL
+
 COPY package.json package-lock.json ./
 RUN npm ci
 
@@ -13,8 +16,10 @@ RUN npm prune --omit=dev
 FROM node:24.13.0-alpine AS runner
 
 WORKDIR /app
+ARG SITE_URL
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV SITE_URL=$SITE_URL
 
 COPY --from=builder --chown=node:node /app/package.json ./
 COPY --from=builder --chown=node:node /app/node_modules ./node_modules
