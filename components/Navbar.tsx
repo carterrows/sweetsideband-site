@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { MouseEvent } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Band } from "@/lib/types";
 import SocialLinks from "@/components/SocialLinks";
 import { useNavbarHero } from "@/components/NavbarHeroContext";
@@ -26,6 +26,7 @@ export default function Navbar({ band }: { band: Band }) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const shouldForceTopOnPathChangeRef = useRef(false);
   const isHome = !pathname || pathname === "/";
   const { isHeroActive } = useNavbarHero();
   const heroActive = isHome && isHeroActive;
@@ -41,6 +42,20 @@ export default function Navbar({ band }: { band: Band }) {
   const menuButtonClassName = `inline-flex h-10 w-10 items-center justify-center bg-transparent transition ${heroActive ? "text-paper" : "text-ink-900"} ${focusRingClass} md:hidden`;
   const menuLineClassName = `transition-colors duration-300 ${heroActive ? "bg-paper" : "bg-ink-900"}`;
   const logoSrc = heroActive ? "/sweetside_white.svg" : "/sweetside.svg";
+  const scrollToTop = (behavior: ScrollBehavior) => {
+    window.scrollTo({ top: 0, left: 0, behavior });
+  };
+
+  useEffect(() => {
+    if (!shouldForceTopOnPathChangeRef.current || typeof window === "undefined") {
+      return;
+    }
+
+    shouldForceTopOnPathChangeRef.current = false;
+    window.requestAnimationFrame(() => {
+      scrollToTop("instant");
+    });
+  }, [pathname]);
 
   const scrollToContactCard = () => {
     const contactCard = document.getElementById("contact");
@@ -72,7 +87,7 @@ export default function Navbar({ band }: { band: Band }) {
     if (isHome) {
       event.preventDefault();
       if (typeof window !== "undefined") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollToTop("smooth");
         if (window.location.hash) {
           window.history.replaceState(null, "", "/");
         }
@@ -80,7 +95,10 @@ export default function Navbar({ band }: { band: Band }) {
       return;
     }
     event.preventDefault();
-    router.push("/");
+    if (typeof window !== "undefined") {
+      shouldForceTopOnPathChangeRef.current = true;
+    }
+    router.push("/", { scroll: true });
   };
 
   const handleContactClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -97,6 +115,31 @@ export default function Navbar({ band }: { band: Band }) {
     }
     event.preventDefault();
     router.push("/#contact");
+  };
+
+  const handlePageClick = (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+    setOpen(false);
+
+    const targetPath = href.split("#")[0] || "/";
+    const currentPath = pathname || "/";
+    const isSamePath = currentPath === targetPath;
+
+    if (isSamePath) {
+      event.preventDefault();
+      if (typeof window !== "undefined") {
+        scrollToTop("smooth");
+        if (window.location.hash) {
+          window.history.replaceState(null, "", targetPath);
+        }
+      }
+      return;
+    }
+
+    event.preventDefault();
+    if (typeof window !== "undefined") {
+      shouldForceTopOnPathChangeRef.current = true;
+    }
+    router.push(targetPath, { scroll: true });
   };
 
   return (
@@ -146,6 +189,7 @@ export default function Navbar({ band }: { band: Band }) {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={handlePageClick(item.href)}
                 className={navLinkClassName}
                 aria-current={active ? "page" : undefined}
               >
@@ -203,7 +247,7 @@ export default function Navbar({ band }: { band: Band }) {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setOpen(false)}
+                onClick={handlePageClick(item.href)}
                 className={navLinkClassName}
                 aria-current={active ? "page" : undefined}
               >
