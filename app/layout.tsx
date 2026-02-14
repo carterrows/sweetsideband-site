@@ -55,7 +55,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen">
-        <script defer src="https://cloud.umami.is/script.js" data-website-id="76fd866c-c6ee-44ab-9ef6-3150fce27238"></script>
+        <Script
+          src="https://cloud.umami.is/script.js"
+          data-website-id="76fd866c-c6ee-44ab-9ef6-3150fce27238"
+          strategy="afterInteractive"
+        />
         <NavbarHeroProvider>
           <div className="flex min-h-screen flex-col">
             <Navbar band={band} />
