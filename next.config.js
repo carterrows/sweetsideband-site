@@ -8,7 +8,7 @@ const csp = [
   "font-src 'self'",
   "style-src 'self' 'unsafe-inline'",
   "script-src 'self' 'unsafe-inline' https://cloud.umami.is",
-  "connect-src 'self' https://cloud.umami.is",
+  "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev",
   "form-action 'self' mailto:"
 ].join("; ");
 
