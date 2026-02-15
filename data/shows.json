@@ -1,13 +1,6 @@
 {
   "upcoming": [
     {
-      "id": "ss-2026-02-14",
-      "date": "2026-02-14",
-      "city": "Burlington, ON",
-      "venue": "The Dickens",
-      "venueUrl": "https://www.thedickens.ca/"
-    },
-    {
       "id": "ss-2026-02-21",
       "date": "2026-02-21",
       "city": "Burlington, ON",
@@ -30,6 +23,12 @@
     }
   ],
   "past": [
+    {
+      "id": "ss-2026-02-14",
+      "date": "2026-02-14",
+      "city": "Burlington, ON",
+      "venue": "The Dickens"
+    },
     {
       "id": "ss-2026-01-24",
       "date": "2026-01-24",
