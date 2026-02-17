@@ -5,7 +5,7 @@ services:
       args:
         SITE_URL: ${SITE_URL:-http://localhost:3000}
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
       NEXT_TELEMETRY_DISABLED: "1"
       SITE_URL: ${SITE_URL:-http://localhost:3000}
