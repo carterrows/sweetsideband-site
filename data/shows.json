@@ -8,6 +8,20 @@
       "venueUrl": "https://theporthouse.ca/"
     },
     {
+      "id": "ss-2026-03-24",
+      "date": "2026-03-24",
+      "city": "Toronto, ON",
+      "venue": "Horseshoe Tavern",
+      "venueUrl": "https://www.horseshoetavern.com/"
+    },
+    {
+      "id": "ss-2026-05-22",
+      "date": "2026-05-22",
+      "city": "Hamilton, ON",
+      "venue": "The Doors Pub",
+      "venueUrl": "https://www.instagram.com/doorspubhamilton/"
+    },
+    {
       "id": "ss-2026-06-10",
       "date": "2026-06-10",
       "city": "Toronto, ON",

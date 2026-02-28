@@ -13,6 +13,13 @@
     "thumbnail": "/images/thumbnails/money_man.jpg",
     "link": "https://www.youtube.com/watch?v=TGiViL4BiaA"
   },
+  {
+    "id": "video-3",
+    "type": "video",
+    "title": "Northern Attitude - Cover",
+    "thumbnail": "/images/thumbnails/northern_attitude.jpg",
+    "link": "https://www.youtube.com/watch?v=RVYfIt_gdUM"
+  },
 
   {
   "id": "photo-1",
