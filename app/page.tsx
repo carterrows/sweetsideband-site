@@ -5,6 +5,7 @@ import { getBand, getMembers, getShows } from "@/lib/content";
 import SectionHeading from "@/components/SectionHeading";
 import ShowsList from "@/components/ShowsList";
 import StreamingLinks from "@/components/StreamingLinks";
+import SpotifyPreview from "@/components/SpotifyPreview";
 import ContactSection from "@/components/ContactSection";
 import MemberCard from "@/components/MemberCard";
 import HomeHeroObserver from "@/components/HomeHeroObserver";
@@ -87,7 +88,8 @@ export default function HomePage() {
       <section className="section py-12 md:py-16 relative z-10 bg-paper">
         <div className="mx-auto w-full max-w-6xl px-6">
           <SectionHeading title="Listen" subtitle="Stream the latest" />
-          <div className="mt-6">
+          <SpotifyPreview spotify={band.streaming.spotify} />
+          <div className="mt-5">
             <StreamingLinks
               spotify={band.streaming.spotify}
               appleMusic={band.streaming.appleMusic}

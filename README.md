@@ -50,6 +50,8 @@ Streaming buttons are driven by `data/band.json` → `streaming`.
 }
 ```
 
+When Spotify is set to a supported Spotify URL (`artist`, `album`, `track`, `playlist`, `show`, or `episode`), the home page also renders an embedded Spotify preview player under `Listen`.
+
 - To show a non-clickable "Coming Soon" label, set the value to a URL string
   that equals `coming soon` (case-insensitive), or to:
 
