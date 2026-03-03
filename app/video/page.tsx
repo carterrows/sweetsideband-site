@@ -20,10 +20,10 @@ export default function VideoPage() {
     <section className="section">
       <div className="mx-auto w-full max-w-6xl px-6">
         <div className="flex flex-col gap-12">
-          {photoItems.length > 0 && <PhotoSlideshow items={photoItems} />}
           <div className="pt-2 md:pt-4">
             <MediaGrid items={media} />
           </div>
+          {photoItems.length > 0 && <PhotoSlideshow items={photoItems} />}
         </div>
       </div>
     </section>
