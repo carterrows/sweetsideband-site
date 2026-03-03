@@ -73,7 +73,7 @@ export default function HomePage() {
         <HomeHeroObserver />
       </section>
 
-      <section className="section relative z-10 bg-paper" id="content">
+      <section className="section py-12 md:py-16 relative z-10 bg-paper" id="content">
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -84,7 +84,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section relative z-10 bg-paper">
+      <section className="section py-12 md:py-16 relative z-10 bg-paper">
         <div className="mx-auto w-full max-w-6xl px-6">
           <SectionHeading title="Listen" subtitle="Stream the latest" />
           <div className="mt-6">
@@ -96,7 +96,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section relative z-10 bg-paper">
+      <section className="section py-12 md:py-16 relative z-10 bg-paper">
+        <div className="mx-auto w-full max-w-6xl px-6">
+          <div>
+            <SectionHeading title="Bio" subtitle="Who we are" />
+            <p className="mt-6 text-base leading-relaxed text-ink-700 text-justify whitespace-pre-line md:text-lg">
+              {band.bio}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section py-12 md:py-16 relative z-10 bg-paper">
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="flex flex-col gap-10">
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
