@@ -12,7 +12,7 @@ export default function PhotoGalleryPage() {
   const media = getMedia();
 
   return (
-    <section className="section">
+    <section className="pb-16 pt-6 md:pb-24 md:pt-10">
       <div className="mx-auto flex w-full flex-col gap-8">
         <div className="px-6">
           <GalleryModeTabs active="photo" />

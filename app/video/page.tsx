@@ -12,7 +12,7 @@ export default function VideoGalleryPage() {
   const media = getMedia();
 
   return (
-    <section className="section">
+    <section className="pb-16 pt-6 md:pb-24 md:pt-10">
       <div className="mx-auto w-full max-w-6xl px-6">
         <div className="flex flex-col gap-8">
           <GalleryModeTabs active="video" />
