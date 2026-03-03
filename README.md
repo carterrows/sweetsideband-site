@@ -33,7 +33,7 @@ Edit the JSON files under `data/`:
 - `data/band.json` - name, location, socials, streaming
 - `data/shows.json` - upcoming and past shows
 - `data/members.json` - band member cards
-- `data/media.json` - past show photos/videos
+- `data/media.json` - video gallery cards
 
 ### Streaming links (Spotify / Apple Music)
 
@@ -66,7 +66,9 @@ When Spotify is set to a supported Spotify URL (`artist`, `album`, `track`, `pla
 
 ## Images and media
 
-Place images in `public/images/` and reference them by absolute path in JSON, e.g.
+Photos on `/video/photos` are loaded automatically from `public/images/shows/` and shuffled during site build/static generation (not on every request).
+
+Place other images in `public/images/` and reference them by absolute path in JSON, e.g.
 
 - `/images/members/avery.svg`
 - `/images/thumbnails/superstar.png`
@@ -76,14 +78,6 @@ Videos should use external links (YouTube/Vimeo) in `data/media.json`.
 - Example JSON in `media.json`:
 
 ```json
-{
-  "id": "media-1",
-  "type": "image",
-  "title": "Static Room, Austin",
-  "src": "/images/thumbnails/superstar.png",
-  "alt": "Sweetside live at Static Room",
-  "link": "/images/thumbnails/superstar.png"
-},
 {
   "id": "media-2",
   "type": "video",
