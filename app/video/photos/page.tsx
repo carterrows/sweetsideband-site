@@ -13,11 +13,11 @@ export default function PhotoGalleryPage() {
 
   return (
     <section className="section">
-      <div className="mx-auto w-full max-w-6xl px-6">
-        <div className="flex flex-col gap-8">
+      <div className="mx-auto flex w-full flex-col gap-8">
+        <div className="px-6">
           <GalleryModeTabs active="photo" />
-          <PhotoMasonryGrid items={media} />
         </div>
+        <PhotoMasonryGrid items={media} />
       </div>
     </section>
   );

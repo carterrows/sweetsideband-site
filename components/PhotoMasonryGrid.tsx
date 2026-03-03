@@ -135,7 +135,7 @@ export default function PhotoMasonryGrid({ items }: { items: MediaItem[] }) {
 
   return (
     <>
-      <div className="columns-1 gap-4 sm:columns-2 md:gap-5 xl:columns-3">
+      <div className="columns-1 gap-4 px-3 sm:columns-2 md:gap-5 md:px-6 2xl:columns-4">
         {photoItems.map((item, index) => (
           <button
             key={item.id}
