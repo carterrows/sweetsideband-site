@@ -28,7 +28,11 @@
   - Full upcoming + past show listings.
   - Booking mailto link.
 - `/video`:
-  - Photo slideshow (images) + video grid.
+  - Dedicated video gallery page with large video cards.
+  - Top pill selector to switch between `Video` and `Photo`.
+- `/video/photos`:
+  - Masonry-style photo gallery (mixed aspect ratios, spaced grid).
+  - In-page lightbox with blur backdrop, close button, and click-outside close.
 - `/merch`:
   - “Coming Soon” placeholder page.
 - `/contact`:
@@ -72,8 +76,12 @@
   - Navbar appearance changes over home hero (transparent/white on hero, paper/accent elsewhere).
   - Handles route navigation, top scroll behavior, and contact-anchor behavior.
   - On mobile, contact click scrolls to center-ish position of contact card.
-- `components/PhotoSlideshow.tsx`:
-  - Swipe, arrows, keyboard nav, lightbox, click-through handling.
+- `components/GalleryModeTabs.tsx`:
+  - Pill-style `Video`/`Photo` selector shared by gallery subpages.
+- `components/PhotoMasonryGrid.tsx`:
+  - Adaptive masonry photo layout + in-page lightbox interaction.
+- `components/MediaGrid.tsx`:
+  - Video card grid used on the default gallery route.
 - `components/ContactSection.tsx`:
   - Client-side form builds a `mailto:` URL (no backend API).
 
