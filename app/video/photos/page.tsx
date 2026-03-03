@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getMedia } from "@/lib/content";
+import { getShowPhotos } from "@/lib/content";
 import GalleryModeTabs from "@/components/GalleryModeTabs";
 import PhotoMasonryGrid from "@/components/PhotoMasonryGrid";
 
@@ -8,8 +8,10 @@ export const metadata: Metadata = {
   description: "Live photos from Sweetside shows."
 };
 
+export const dynamic = "force-static";
+
 export default function PhotoGalleryPage() {
-  const media = getMedia();
+  const media = getShowPhotos();
 
   return (
     <section className="pb-16 pt-6 md:pb-24 md:pt-10">

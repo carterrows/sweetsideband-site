@@ -47,6 +47,7 @@
   - `shows.json`
   - `members.json`
   - `media.json`
+- Show photos for `/video/photos` are loaded from `public/images/shows/` (filesystem scan), not from JSON.
 - Components/pages rely on these TypeScript types in `lib/types.ts`.
 - If moving to a DB later, keep return shapes unchanged and swap internals of `lib/content.ts`.
 
@@ -59,7 +60,10 @@
 - `data/members.json`:
   - member cards shown on home page.
 - `data/media.json`:
-  - mixed list of `video` and `image` items for gallery page.
+  - video items for the `/video` gallery page.
+- `public/images/shows/`:
+  - source of truth for the `/video/photos` masonry gallery.
+  - all supported image files in this folder are included automatically and shuffled during build/static generation.
 
 ## Streaming Link Rules
 - `spotify`/`appleMusic` accept:
@@ -140,6 +144,7 @@
 1. Read `README.md` and this file.
 2. Check `data/*.json` for the latest real content before making assumptions.
 3. If content-only change: edit JSON + ensure referenced files exist in `public/images/...`.
+   For show photos specifically, add/remove files in `public/images/shows/` instead of editing `data/media.json`.
 4. If UI change: inspect the specific page in `app/` and related component(s) in `components/`.
 5. Run `npm run lint` after code edits.
 6. If route/metadata/security behavior changes, review `app/layout.tsx`, `app/robots.ts`, `app/sitemap.ts`, and `next.config.js`.
