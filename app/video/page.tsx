@@ -1,29 +1,22 @@
 import type { Metadata } from "next";
 import { getMedia } from "@/lib/content";
-import type { MediaItem } from "@/lib/types";
+import GalleryModeTabs from "@/components/GalleryModeTabs";
 import MediaGrid from "@/components/MediaGrid";
-import PhotoSlideshow from "@/components/PhotoSlideshow";
 
 export const metadata: Metadata = {
-  title: "Gallery",
-  description: "Live clips and photos from Sweetside shows."
+  title: "Gallery | Videos",
+  description: "Live clips and music videos from Sweetside."
 };
 
-export default function VideoPage() {
+export default function VideoGalleryPage() {
   const media = getMedia();
-  const photoItems = media.filter(
-    (item): item is MediaItem & { type: "image"; src: string } =>
-      item.type === "image" && Boolean(item.src)
-  );
 
   return (
-    <section className="section">
+    <section className="pb-16 pt-6 md:pb-24 md:pt-10">
       <div className="mx-auto w-full max-w-6xl px-6">
-        <div className="flex flex-col gap-12">
-          {photoItems.length > 0 && <PhotoSlideshow items={photoItems} />}
-          <div className="pt-2 md:pt-4">
-            <MediaGrid items={media} />
-          </div>
+        <div className="flex flex-col gap-8">
+          <GalleryModeTabs active="video" />
+          <MediaGrid items={media} />
         </div>
       </div>
     </section>

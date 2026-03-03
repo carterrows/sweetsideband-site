@@ -9,6 +9,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "script-src 'self' 'unsafe-inline' https://cloud.umami.is",
   "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev",
+  "frame-src 'self' https://open.spotify.com",
   "form-action 'self' mailto:"
 ].join("; ");
 

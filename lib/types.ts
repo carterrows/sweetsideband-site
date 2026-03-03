@@ -4,6 +4,7 @@ export type Band = {
   name: string;
   location: string;
   email: string;
+  bio: string;
   social: {
     instagram?: string;
     tiktok?: string;

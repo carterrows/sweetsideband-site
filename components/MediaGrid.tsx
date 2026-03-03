@@ -7,7 +7,7 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
   );
 
   return (
-    <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-10 lg:grid-cols-2">
       {videoItems.map((item) => {
         const imgSrc = item.thumbnail ?? item.src;
         return (
@@ -16,7 +16,7 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-col gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent/70 focus-visible:outline-offset-4"
+            className="group flex flex-col gap-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent/70 focus-visible:outline-offset-4"
           >
             <div className="relative w-full overflow-hidden bg-haze aspect-[16/9]">
               {imgSrc ? (
@@ -24,7 +24,7 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
                   src={imgSrc}
                   alt={item.alt ?? item.title}
                   fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                   unoptimized
                 />
@@ -35,15 +35,15 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
                 <Image
                   src="/play.svg"
                   alt=""
-                  width={70}
-                  height={70}
+                  width={88}
+                  height={88}
                   className="translate-x-[1px] opacity-80 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
                 />
               </div>
             </div>
             <div className="flex flex-col gap-1 text-center">
-              <p className="text-base font-bold text-accent">{item.title}</p>
-              <span className="text-xs font-semibold tracking-[0.18em] text-ink-900 transition-opacity duration-200 group-hover:opacity-70 group-focus-visible:opacity-70">
+              <p className="text-lg font-bold text-accent md:text-xl">{item.title}</p>
+              <span className="text-sm font-semibold tracking-[0.18em] text-ink-900 transition-opacity duration-200 group-hover:opacity-70 group-focus-visible:opacity-70">
                 WATCH NOW
               </span>
             </div>
