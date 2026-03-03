@@ -9,12 +9,19 @@
   {
     "id": "video-2",
     "type": "video",
+    "title": "This Love - Cover",
+    "thumbnail": "/images/thumbnails/this_love.jpg",
+    "link": "https://www.youtube.com/watch?v=FJb0IgstFX0"
+  },
+  {
+    "id": "video-3",
+    "type": "video",
     "title": "Superstar - Music Video",
     "thumbnail": "/images/thumbnails/superstar.jpg",
     "link": "https://www.youtube.com/watch?v=CpWk9A1H4UI"
   },
   {
-    "id": "video-3",
+    "id": "video-4",
     "type": "video",
     "title": "Money Man - Music Video",
     "thumbnail": "/images/thumbnails/money_man.jpg",
