@@ -2,26 +2,33 @@
   {
     "id": "video-1",
     "type": "video",
+    "title": "Superstition - Cover",
+    "thumbnail": "/images/thumbnails/superstition.jpg",
+    "link": "https://www.youtube.com/watch?v=SP9AE8p6NLo"
+  },
+  {
+    "id": "video-2",
+    "type": "video",
     "title": "Northern Attitude - Cover",
     "thumbnail": "/images/thumbnails/northern_attitude.jpg",
     "link": "https://www.youtube.com/watch?v=RVYfIt_gdUM"
   },
   {
-    "id": "video-2",
+    "id": "video-3",
     "type": "video",
     "title": "This Love - Cover",
     "thumbnail": "/images/thumbnails/this_love.jpg",
     "link": "https://www.youtube.com/watch?v=FJb0IgstFX0"
   },
   {
-    "id": "video-3",
+    "id": "video-4",
     "type": "video",
     "title": "Superstar - Music Video",
     "thumbnail": "/images/thumbnails/superstar.jpg",
     "link": "https://www.youtube.com/watch?v=CpWk9A1H4UI"
   },
   {
-    "id": "video-4",
+    "id": "video-5",
     "type": "video",
     "title": "Money Man - Music Video",
     "thumbnail": "/images/thumbnails/money_man.jpg",
