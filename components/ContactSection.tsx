@@ -43,7 +43,7 @@ export default function ContactSection({ band }: { band: Band }) {
           <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-ink-600">
             <Link
               href={`mailto:${band.email}`}
-              className="rounded-full border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="rounded-none border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               {band.email}
             </Link>
@@ -79,7 +79,7 @@ export default function ContactSection({ band }: { band: Band }) {
               value={subject}
               onChange={(event) => setSubject(event.target.value)}
               required
-              className="rounded-lg border border-black/10 bg-paper px-4 py-2 text-ink-900 outline-none transition focus:border-accent"
+              className="rounded-none border border-black/10 bg-paper px-4 py-2 text-ink-900 outline-none transition focus:border-accent"
               placeholder="Booking inquiry"
             />
           </label>
@@ -91,14 +91,14 @@ export default function ContactSection({ band }: { band: Band }) {
               onChange={(event) => setMessage(event.target.value)}
               required
               rows={4}
-              className="rounded-lg border border-black/10 bg-paper px-4 py-2 text-ink-900 outline-none transition focus:border-accent"
+              className="rounded-none border border-black/10 bg-paper px-4 py-2 text-ink-900 outline-none transition focus:border-accent"
               placeholder="Tell us about the gig or idea."
             />
           </label>
           <button
             type="submit"
             disabled={!isValid}
-            className="mt-2 inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-2 inline-flex items-center justify-center rounded-none border border-accent bg-accent px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60"
           >
             Send via Email Client
           </button>
