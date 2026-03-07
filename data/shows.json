@@ -5,28 +5,40 @@
       "date": "2026-03-14",
       "city": "Burlington, ON",
       "venue": "The Port House Social",
-      "venueUrl": "https://theporthouse.ca/"
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2026-03-24",
       "date": "2026-03-24",
       "city": "Toronto, ON",
       "venue": "Horseshoe Tavern",
-      "venueUrl": "https://www.horseshoetavern.com/"
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2026-05-22",
       "date": "2026-05-22",
       "city": "Hamilton, ON",
       "venue": "The Doors Pub",
-      "venueUrl": "https://www.instagram.com/doorspubhamilton/"
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2026-06-10",
       "date": "2026-06-10",
       "city": "Toronto, ON",
       "venue": "NXNE Music Festival",
-      "venueUrl": "https://www.nxne.com/2026-artists/sweetside"
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     }
   ],
   "past": [
@@ -34,55 +46,91 @@
       "id": "ss-2026-02-21",
       "date": "2026-02-21",
       "city": "Burlington, ON",
-      "venue": "The Port House Social"
+      "venue": "The Port House Social",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2026-02-14",
       "date": "2026-02-14",
       "city": "Burlington, ON",
-      "venue": "The Dickens"
+      "venue": "The Dickens",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2026-01-24",
       "date": "2026-01-24",
       "city": "Burlington, ON",
-      "venue": "The Port House Social"
+      "venue": "The Port House Social",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2025-12-30",
       "date": "2025-12-30",
       "city": "Toronto, ON",
-      "venue": "Horseshoe Tavern"
+      "venue": "Horseshoe Tavern",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2025-08-09",
       "date": "2025-08-09",
       "city": "Prescott, ON",
-      "venue": "O'Heaphy's Irish Pub"
+      "venue": "O'Heaphy's Irish Pub",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2025-08-02",
       "date": "2025-08-02",
       "city": "Sauble Beach, ON",
-      "venue": "Beach Burger"
+      "venue": "Beach Burger",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2025-07-26",
       "date": "2025-07-26",
       "city": "Oakville, ON",
-      "venue": "TD Music Series"
+      "venue": "TD Music Series",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2025-07-09",
       "date": "2025-07-09",
       "city": "Oakville, ON",
-      "venue": "Easy on Fourth"
+      "venue": "Easy on Fourth",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     },
     {
       "id": "ss-2025-06-11",
       "date": "2025-06-11",
       "city": "London, ON",
-      "venue": "McCabe's Irish Pub"
+      "venue": "McCabe's Irish Pub",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": null
     }
   ]
 }

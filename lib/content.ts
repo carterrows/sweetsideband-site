@@ -1,11 +1,13 @@
 import fs from "fs";
 import path from "path";
-import type { Band, ShowsData, Member, MediaItem } from "./types";
+import type { Band, ShowsData, Member, MediaItem, Show } from "./types";
 
 const dataDir = path.join(process.cwd(), "data");
 const showsImagesDir = path.join(process.cwd(), "public", "images", "shows");
+const showPostersDir = path.join(process.cwd(), "public", "images", "posters");
 const allowedFiles = new Set(["band.json", "shows.json", "members.json", "media.json"]);
 const imageExtensions = new Set([".avif", ".gif", ".jpeg", ".jpg", ".png", ".webp"]);
+const posterExtensions = new Set([".jpeg", ".jpg", ".png"]);
 
 function readJson<T>(fileName: string): T {
   if (!allowedFiles.has(fileName)) {
@@ -22,7 +24,19 @@ export function getBand(): Band {
 }
 
 export function getShows(): ShowsData {
-  return readJson<ShowsData>("shows.json");
+  const shows = readJson<ShowsData>("shows.json");
+  const posters = getShowPosterLookup();
+
+  const withPosters = (items: Show[]) =>
+    items.map((show) => ({
+      ...show,
+      posterSrc: posters.get(show.id.toLowerCase())
+    }));
+
+  return {
+    upcoming: withPosters(shows.upcoming),
+    past: withPosters(shows.past)
+  };
 }
 
 export function getMembers(): Member[] {
@@ -48,6 +62,23 @@ function toTitle(fileName: string): string {
     .replace(/[-_]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function getShowPosterLookup(): Map<string, string> {
+  if (!fs.existsSync(showPostersDir)) {
+    return new Map();
+  }
+
+  return new Map(
+    fs
+      .readdirSync(showPostersDir, { withFileTypes: true })
+      .filter((entry) => entry.isFile())
+      .filter((entry) => posterExtensions.has(path.extname(entry.name).toLowerCase()))
+      .map((entry) => [
+        path.parse(entry.name).name.toLowerCase(),
+        `/images/posters/${encodeURIComponent(entry.name)}`
+      ])
+  );
 }
 
 export function getShowPhotos(): MediaItem[] {
