@@ -41,40 +41,44 @@ export default function ShowCard({
       {showDetails && isExpanded ? (
         <div
           id={detailsId}
-          className="mt-5 grid gap-6 rounded-2xl border border-black/10 bg-white p-5 shadow-sm md:grid-cols-[minmax(0,1fr)_18rem]"
+          className="mt-5 grid gap-8 md:grid-cols-[minmax(0,1fr)_24rem]"
         >
-          <dl className="grid gap-4 sm:grid-cols-2">
-            <div className="sm:col-span-2">
-              <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
+          <dl className="flex flex-col gap-5">
+            <div className="md:grid md:grid-cols-[12rem_minmax(0,1fr)] md:gap-x-6">
+              <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
                 Address
               </dt>
-              <dd className="mt-1 text-base text-ink-900">{show.venueAddress || "TBA"}</dd>
+              <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
+                {show.venueAddress || "TBA"}
+              </dd>
             </div>
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
+            <div className="md:grid md:grid-cols-[12rem_minmax(0,1fr)] md:gap-x-6">
+              <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
                 Show Time
               </dt>
-              <dd className="mt-1 text-base text-ink-900">{show.showTime || "TBA"}</dd>
+              <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
+                {show.showTime || "TBA"}
+              </dd>
             </div>
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
+            <div className="md:grid md:grid-cols-[12rem_minmax(0,1fr)] md:gap-x-6">
+              <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
                 Doors Open
               </dt>
-              <dd className="mt-1 text-base text-ink-900">
+              <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
                 {show.doorsOpenTime || "TBA"}
               </dd>
             </div>
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
+            <div className="md:grid md:grid-cols-[12rem_minmax(0,1fr)] md:gap-x-6">
+              <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
                 Cover Fee
               </dt>
-              <dd className="mt-1 text-base text-ink-900">
+              <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
                 {formatCoverFee(show.coverFee)}
               </dd>
             </div>
           </dl>
           {show.posterSrc ? (
-            <div className="overflow-hidden rounded-xl border border-black/10 bg-paper shadow-sm">
+            <div className="overflow-hidden">
               <Image
                 src={show.posterSrc}
                 alt={`${show.venue} show poster`}
