@@ -80,7 +80,7 @@ export default function HomePage() {
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <SectionHeading title="Upcoming" subtitle="Next shows" />
             </div>
-            <ShowsList shows={upcoming} />
+            <ShowsList shows={upcoming} showDetails />
           </div>
         </div>
       </section>
