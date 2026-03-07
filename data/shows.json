@@ -5,28 +5,44 @@
       "date": "2026-03-14",
       "city": "Burlington, ON",
       "venue": "The Port House Social",
-      "venueUrl": "https://theporthouse.ca/"
+      "venueUrl": "https://theporthouse.ca/",
+      "venueAddress": "2020 Lakeshore Rd",
+      "showTime": "10:00 pm",
+      "doorsOpenTime": "N/A",
+      "coverFee": "$0"
     },
     {
       "id": "ss-2026-03-24",
       "date": "2026-03-24",
       "city": "Toronto, ON",
       "venue": "Horseshoe Tavern",
-      "venueUrl": "https://www.horseshoetavern.com/"
+      "venueUrl": "https://www.horseshoetavern.com/",
+      "venueAddress": "370 Queen St W",
+      "showTime": "8:15 pm",
+      "doorsOpenTime": "8:00 pm",
+      "coverFee": "$0"
     },
     {
       "id": "ss-2026-05-22",
       "date": "2026-05-22",
       "city": "Hamilton, ON",
       "venue": "The Doors Pub",
-      "venueUrl": "https://www.instagram.com/doorspubhamilton/"
+      "venueUrl": "https://www.instagram.com/doorspubhamilton/",
+      "venueAddress": "56 Hess St S",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": "TBA"
     },
     {
       "id": "ss-2026-06-10",
       "date": "2026-06-10",
       "city": "Toronto, ON",
       "venue": "NXNE Music Festival",
-      "venueUrl": "https://www.nxne.com/2026-artists/sweetside"
+      "venueUrl": "https://www.nxne.com/2026-artists/sweetside",
+      "venueAddress": "TBA",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": "TBA"
     }
   ],
   "past": [

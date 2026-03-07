@@ -23,6 +23,11 @@ export type Show = {
   city: string;
   venue: string;
   venueUrl?: string;
+  venueAddress?: string;
+  showTime?: string;
+  doorsOpenTime?: string;
+  coverFee?: string;
+  posterSrc?: string;
 };
 
 export type ShowsData = {
