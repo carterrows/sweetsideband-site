@@ -22,6 +22,7 @@ export type Show = {
   date: string;
   city: string;
   venue: string;
+  venueUrl?: string;
   venueAddress?: string;
   showTime?: string;
   doorsOpenTime?: string;

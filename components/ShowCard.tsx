@@ -2,8 +2,12 @@
 
 import { useId, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import type { Show } from "@/lib/types";
 import { formatShowDate } from "@/lib/format";
+
+const infoButtonClassName =
+  "inline-flex min-w-40 items-center justify-center self-start rounded-sm border border-accent px-6 py-2 text-base uppercase text-accent transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:text-lg";
 
 export default function ShowCard({
   show,
@@ -32,7 +36,7 @@ export default function ShowCard({
             aria-expanded={isExpanded}
             aria-controls={detailsId}
             onClick={() => setIsExpanded((open) => !open)}
-            className="inline-flex min-w-40 items-center justify-center self-start rounded-sm border border-accent px-6 py-2 text-base uppercase text-accent transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:text-lg md:justify-self-end"
+            className={`${infoButtonClassName} md:justify-self-end`}
           >
             <span>{isExpanded ? "Less info" : "More info"}</span>
           </button>
@@ -78,9 +82,21 @@ export default function ShowCard({
                   </dd>
                 </div>
                 <div className="md:grid md:grid-cols-[12rem_minmax(0,1fr)] md:gap-x-6">
-                  <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
-                    Cover Fee
-                  </dt>
+                  <div className="flex flex-col items-start gap-3">
+                    <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
+                      Cover Fee
+                    </dt>
+                    {show.venueUrl ? (
+                      <Link
+                        href={show.venueUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${infoButtonClassName} justify-start`}
+                      >
+                        Venue
+                      </Link>
+                    ) : null}
+                  </div>
                   <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
                     {show.coverFee || "TBA"}
                   </dd>
