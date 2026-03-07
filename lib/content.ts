@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import type { Band, ShowsData, Member, MediaItem, Show } from "./types";
+import type { Band, ShowsData, Member, MediaItem } from "./types";
 
 const dataDir = path.join(process.cwd(), "data");
 const showsImagesDir = path.join(process.cwd(), "public", "images", "shows");
@@ -27,15 +27,12 @@ export function getShows(): ShowsData {
   const shows = readJson<ShowsData>("shows.json");
   const posters = getShowPosterLookup();
 
-  const withPosters = (items: Show[]) =>
-    items.map((show) => ({
+  return {
+    upcoming: shows.upcoming.map((show) => ({
       ...show,
       posterSrc: posters.get(show.id.toLowerCase())
-    }));
-
-  return {
-    upcoming: withPosters(shows.upcoming),
-    past: withPosters(shows.past)
+    })),
+    past: shows.past
   };
 }
 
