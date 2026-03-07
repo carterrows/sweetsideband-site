@@ -41,7 +41,11 @@ export default function Navbar({ band }: { band: Band }) {
   const mobileMenuClassName = `grid overflow-hidden transition-[grid-template-rows,opacity,border-color] duration-200 ease-out ${
     open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
   } border-t ${
-    heroActive ? "border-white/10 bg-transparent" : "border-black/10 bg-transparent"
+    open
+      ? heroActive
+        ? "border-white/10 bg-transparent"
+        : "border-black/10 bg-transparent"
+      : "border-transparent bg-transparent"
   } md:hidden`;
   const menuButtonClassName = `inline-flex h-10 w-10 items-center justify-center bg-transparent transition ${heroActive ? "text-paper" : "text-ink-900"} ${focusRingClass} md:hidden`;
   const menuLineClassName = `transition-colors duration-300 ${heroActive ? "bg-paper" : "bg-ink-900"}`;
@@ -235,33 +239,33 @@ export default function Navbar({ band }: { band: Band }) {
       >
         <div className="min-h-0">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-6 py-4 text-sm uppercase tracking-[0.2em]">
-          {navItems.map((item) => {
-            const active = pathname ? isActivePath(pathname, item.href) : false;
-            if (item.href === "/#contact") {
+            {navItems.map((item) => {
+              const active = pathname ? isActivePath(pathname, item.href) : false;
+              if (item.href === "/#contact") {
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={handleContactClick}
+                    className={navLinkClassName}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              }
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={handleContactClick}
+                  onClick={handlePageClick(item.href)}
                   className={navLinkClassName}
                   aria-current={active ? "page" : undefined}
                 >
                   {item.label}
                 </Link>
               );
-            }
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={handlePageClick(item.href)}
-                className={navLinkClassName}
-                aria-current={active ? "page" : undefined}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+            })}
             <div className="mt-2 flex items-center gap-4 pt-3 md:hidden">
               <SocialLinks
                 social={band.social}
