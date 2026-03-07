@@ -22,10 +22,10 @@ export type Show = {
   date: string;
   city: string;
   venue: string;
-  venueAddress: string;
-  showTime: string;
-  doorsOpenTime: string;
-  coverFee: number | null;
+  venueAddress?: string;
+  showTime?: string;
+  doorsOpenTime?: string;
+  coverFee?: string;
   posterSrc?: string;
 };
 

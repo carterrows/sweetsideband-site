@@ -82,7 +82,7 @@ export default function ShowCard({
                     Cover Fee
                   </dt>
                   <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
-                    {formatCoverFee(show.coverFee)}
+                    {show.coverFee || "TBA"}
                   </dd>
                 </div>
               </dl>
@@ -104,20 +104,4 @@ export default function ShowCard({
       ) : null}
     </li>
   );
-}
-
-function formatCoverFee(coverFee: Show["coverFee"]): string {
-  if (coverFee === 0) {
-    return "N/A";
-  }
-
-  if (coverFee == null) {
-    return "TBA";
-  }
-
-  return new Intl.NumberFormat("en-CA", {
-    style: "currency",
-    currency: "CAD",
-    maximumFractionDigits: Number.isInteger(coverFee) ? 0 : 2
-  }).format(coverFee);
 }

@@ -28,7 +28,7 @@
       "venueAddress": "56 Hess St S",
       "showTime": "TBA",
       "doorsOpenTime": "TBA",
-      "coverFee": null
+      "coverFee": "TBA"
     },
     {
       "id": "ss-2026-06-10",
@@ -38,7 +38,7 @@
       "venueAddress": "TBA",
       "showTime": "TBA",
       "doorsOpenTime": "TBA",
-      "coverFee": null
+      "coverFee": "TBA"
     }
   ],
   "past": [
