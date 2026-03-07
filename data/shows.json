@@ -6,7 +6,7 @@
       "city": "Burlington, ON",
       "venue": "The Port House Social",
       "venueAddress": "2020 Lakeshore Rd",
-      "showTime": "10pm - 1am",
+      "showTime": "10:00 pm",
       "doorsOpenTime": "N/A",
       "coverFee": "$0"
     },
@@ -16,9 +16,9 @@
       "city": "Toronto, ON",
       "venue": "Horseshoe Tavern",
       "venueAddress": "370 Queen St W",
-      "showTime": "TBA",
-      "doorsOpenTime": "TBA",
-      "coverFee": null
+      "showTime": "8:15 pm",
+      "doorsOpenTime": "8:00 pm",
+      "coverFee": "$0"
     },
     {
       "id": "ss-2026-05-22",
