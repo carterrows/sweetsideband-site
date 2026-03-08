@@ -82,23 +82,23 @@ export default function ShowCard({
                   </dd>
                 </div>
                 <div className="md:grid md:grid-cols-[12rem_minmax(0,1fr)] md:gap-x-6">
-                  <div className="flex flex-col items-start gap-3">
-                    <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
-                      Cover Fee
-                    </dt>
-                    {show.venueUrl ? (
-                      <Link
-                        href={show.venueUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`${infoButtonClassName} justify-start`}
-                      >
-                        Venue
-                      </Link>
-                    ) : null}
-                  </div>
+                  <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
+                    Cover Fee
+                  </dt>
                   <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
-                    {show.coverFee || "TBA"}
+                    <div className="flex flex-col items-start gap-3">
+                      <span>{show.coverFee || "TBA"}</span>
+                      {show.venueUrl ? (
+                        <Link
+                          href={show.venueUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`${infoButtonClassName} justify-start`}
+                        >
+                          Venue
+                        </Link>
+                      ) : null}
+                    </div>
                   </dd>
                 </div>
               </dl>
