@@ -82,11 +82,14 @@ export default function ShowCard({
                   </dd>
                 </div>
                 <div className="md:grid md:grid-cols-[12rem_minmax(0,1fr)] md:gap-x-6">
-                  <div className="flex flex-col items-start gap-3">
-                    <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
-                      Cover Fee
-                    </dt>
-                    {show.venueUrl ? (
+                  <dt className="text-lg font-bold uppercase text-ink-900 sm:text-xl">
+                    Cover Fee
+                  </dt>
+                  <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
+                    {show.coverFee || "TBA"}
+                  </dd>
+                  {show.venueUrl ? (
+                    <dd className="mt-3 md:col-start-1 md:mt-4">
                       <Link
                         href={show.venueUrl}
                         target="_blank"
@@ -95,11 +98,8 @@ export default function ShowCard({
                       >
                         Venue
                       </Link>
-                    ) : null}
-                  </div>
-                  <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
-                    {show.coverFee || "TBA"}
-                  </dd>
+                    </dd>
+                  ) : null}
                 </div>
               </dl>
               {show.posterSrc ? (
