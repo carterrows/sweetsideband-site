@@ -7,7 +7,7 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
   );
 
   return (
-    <div className="grid gap-10 lg:grid-cols-2">
+    <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       {videoItems.map((item) => {
         const imgSrc = item.thumbnail ?? item.src;
         return (
