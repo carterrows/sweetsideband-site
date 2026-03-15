@@ -12,6 +12,28 @@
       "coverFee": "$0"
     },
     {
+      "id": "ss-2026-04-18",
+      "date": "2026-04-18",
+      "city": "Burlington, ON",
+      "venue": "The Port House Social",
+      "venueUrl": "https://theporthouse.ca/",
+      "venueAddress": "2020 Lakeshore Rd",
+      "showTime": "10:00 pm",
+      "doorsOpenTime": "N/A",
+      "coverFee": "$0"
+    },
+    {
+      "id": "ss-2026-05-02",
+      "date": "2026-05-02",
+      "city": "Burlington, ON",
+      "venue": "The Dickens",
+      "venueUrl": "https://www.thedickens.ca/",
+      "venueAddress": "423 Elizabeth St",
+      "showTime": "TBA",
+      "doorsOpenTime": "TBA",
+      "coverFee": "TBA"
+    },
+    {
       "id": "ss-2026-05-22",
       "date": "2026-05-22",
       "city": "Hamilton, ON",
