@@ -2,7 +2,6 @@ import fs from "fs";
 import path from "path";
 
 const showPostersDir = path.join(process.cwd(), "public", "images", "posters");
-const legacyPosterExtensions = [".png", ".jpg", ".jpeg"];
 
 function ensurePosterDir() {
   fs.mkdirSync(showPostersDir, { recursive: true });
@@ -14,19 +13,6 @@ function normalizePosterFileName(fileName: string) {
 
 function getPosterPath(fileName: string) {
   return path.join(showPostersDir, normalizePosterFileName(fileName));
-}
-
-export function findLegacyPosterFileName(id: string): string | undefined {
-  for (const extension of legacyPosterExtensions) {
-    const fileName = `${id}${extension}`;
-    const filePath = path.join(showPostersDir, fileName);
-
-    if (fs.existsSync(filePath)) {
-      return fileName;
-    }
-  }
-
-  return undefined;
 }
 
 export function getShowPosterSrc(fileName?: string): string | undefined {
