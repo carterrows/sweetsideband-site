@@ -90,7 +90,14 @@ Pull YouTube thumbnails using: http://img.youtube.com/vi/VIDEOID/maxresdefault.j
 
 ## Environment config
 
-Copy `.env.example` to `.env` if you want to set `SITE_URL`.
+Copy `.env.example` to `.env` or `.env.local`.
+
+Available variables:
+
+- `SITE_URL` - canonical site URL used for metadata, sitemap, and robots
+- `ADMIN_PASSWORD_HASH` - salted scrypt hash for the fixed `admin` username
+- `ADMIN_SESSION_SECRET` - random secret for signing the admin session cookie
+- `SHOWS_DB_PATH` - optional override for the SQLite database path
 
 ## Shows storage
 
@@ -99,19 +106,16 @@ Shows load through `lib/shows-db.ts`.
 - Local default database path is `data/shows.sqlite`.
 - Docker stores the database in a named volume mounted at `/app/storage/shows.sqlite`.
 - Public pages still read through `lib/content.ts`, so the UI contracts stay the same.
-- Uploaded posters are stored in runtime storage and served from `/posters/:fileName`.
+- Uploaded posters are stored in runtime storage.
+- Local poster storage defaults to `storage/posters/`.
+- Docker poster storage lives beside the database inside the mounted `/app/storage` volume.
+- Posters are served through `/posters/:fileName`.
 
 ## Admin
 
 The admin UI lives at `/admin`.
 
 Use the admin UI for show management. JSON editing no longer applies to shows.
-
-Required environment variables:
-
-- `ADMIN_PASSWORD_HASH` - salted scrypt hash for the fixed `admin` username
-- `ADMIN_SESSION_SECRET` - random secret for signing the admin session cookie
-- `SHOWS_DB_PATH` - optional override for the SQLite file location
 
 The admin dashboard lets you:
 
@@ -120,3 +124,8 @@ The admin dashboard lets you:
 - add and delete shows
 - upload PNG posters only
 - sync the draft state and revalidate `/` and `/shows`
+
+Admin API protection:
+
+- login, logout, and sync endpoints are rate-limited per client IP
+- sync handles poster uploads and show writes in the same request

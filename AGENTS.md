@@ -23,10 +23,16 @@
 ## Routing and Page Behavior
 - `/` (`app/page.tsx`):
   - Hero with background image and CTA from Spotify status.
-  - Sections: upcoming shows (first 3), streaming links, members, contact form.
+  - Sections: upcoming shows (first 3 from the SQLite-backed upcoming list), streaming links, members, contact form.
 - `/shows`:
   - Full upcoming + past show listings.
   - Booking mailto link.
+- `/admin`:
+  - Admin dashboard for editing shows in SQLite.
+- `/admin/login`:
+  - Fixed-username admin login page.
+- `/posters/[fileName]`:
+  - Runtime route that serves uploaded poster PNGs from writable storage.
 - `/video`:
   - Dedicated video gallery page with large video cards.
   - Top pill selector to switch between `Video` and `Photo`.
@@ -47,6 +53,7 @@
   - `members.json`
   - `media.json`
 - Show data is loaded from SQLite through `lib/shows-db.ts`.
+- Public show lists are sorted by date descending within `upcoming` and `past`.
 - Show photos for `/video/photos` are loaded from `public/images/shows/` (filesystem scan), not from JSON.
 - Components/pages rely on these TypeScript types in `lib/types.ts`.
 
@@ -59,6 +66,11 @@
   - video items for the `/video` gallery page.
 - `data/shows.sqlite`:
   - local default SQLite database for shows during non-Docker development.
+- `storage/posters/`:
+  - local default writable poster storage outside `public/`.
+- Docker volume storage:
+  - `/app/storage/shows.sqlite`
+  - `/app/storage/posters/`
 - `public/images/shows/`:
   - source of truth for the `/video/photos` masonry gallery.
   - all supported image files in this folder are included automatically and shuffled during build/static generation.
@@ -109,6 +121,7 @@
   - `X-Content-Type-Options`
   - `Referrer-Policy`
   - `Permissions-Policy`
+- Admin APIs also use an in-memory per-IP rate limiter for login, logout, and sync requests.
 
 ## Environment Variables
 - `.env.example` contains:
@@ -119,6 +132,7 @@
   - `SHOWS_DB_PATH=`
 - `SITE_URL` influences metadata base URL, sitemap, and robots URLs.
 - Docker build/run also passes `SITE_URL`.
+- In Docker Compose, `SHOWS_DB_PATH` is set to `/app/storage/shows.sqlite`.
 
 ## Local Development
 - Install: `npm install`
@@ -139,6 +153,7 @@
 ## Known Caveats / Maintenance Notes
 - There are currently no automated tests in the repo.
 - Shows now exist only in SQLite, so local edits to show listings should go through the admin UI or direct DB changes.
+- The rate limiter is in-memory and assumes a single app instance.
 - Many `next/image` usages set `unoptimized`; keep this in mind before changing image optimization strategy.
 - `next-env.d.ts` is generated-style and should not be manually edited.
 - `node_modules`, `.next`, `.env*`, and `tsconfig.tsbuildinfo` are ignored by git.
@@ -149,6 +164,7 @@
 3. If content-only change: edit JSON + ensure referenced files exist in `public/images/...`.
    For show photos specifically, add/remove files in `public/images/shows/` instead of editing `data/media.json`.
    For show listings, inspect the admin flow and SQLite helpers.
+   For show posters, inspect `lib/show-posters.ts` and the `/posters/[fileName]` route instead of `public/`.
 4. If UI change: inspect the specific page in `app/` and related component(s) in `components/`.
 5. Run `npm run lint` after code edits.
 6. If route/metadata/security behavior changes, review `app/layout.tsx`, `app/robots.ts`, `app/sitemap.ts`, and `next.config.js`.
