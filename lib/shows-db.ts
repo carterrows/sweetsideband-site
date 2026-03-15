@@ -77,6 +77,10 @@ function normalizeNullableValue(value?: string) {
   return value ? value : null;
 }
 
+function sortShowsByDateDescending(shows: ManagedShow[]) {
+  return [...shows].sort((left, right) => right.date.localeCompare(left.date));
+}
+
 export function getManagedShows(): ManagedShow[] {
   const db = getDatabase();
   const rows = db
@@ -108,10 +112,12 @@ export function getManagedShows(): ManagedShow[] {
 
 export function getShowsFromDatabase(): ShowsData {
   const shows = getManagedShows();
+  const upcoming = shows.filter((show) => show.bucket === "upcoming");
+  const past = shows.filter((show) => show.bucket === "past");
 
   return {
-    upcoming: shows.filter((show) => show.bucket === "upcoming"),
-    past: shows.filter((show) => show.bucket === "past")
+    upcoming: sortShowsByDateDescending(upcoming),
+    past: sortShowsByDateDescending(past)
   };
 }
 
