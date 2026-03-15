@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { ADMIN_COOKIE_NAME } from "@/lib/admin-auth";
+import {
+  ADMIN_COOKIE_NAME,
+  getAdminSessionCookieOptions
+} from "@/lib/admin-auth";
 import {
   ADMIN_LOGOUT_RATE_LIMIT,
   applyRateLimitHeaders,
@@ -18,7 +21,8 @@ export async function POST(request: Request) {
 
   if (!rateLimit.limited) {
     response.cookies.set(ADMIN_COOKIE_NAME, "", {
-      path: "/",
+      ...getAdminSessionCookieOptions(),
+      expires: new Date(0),
       maxAge: 0
     });
   }
