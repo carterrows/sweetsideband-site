@@ -23,8 +23,5 @@ export async function POST(request: Request) {
     });
   }
 
-  return applyRateLimitHeaders(
-    response,
-    rateLimit.limited ? rateLimit.result : rateLimit.result
-  );
+  return applyRateLimitHeaders(response, rateLimit.result);
 }

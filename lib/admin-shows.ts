@@ -239,12 +239,10 @@ export function syncShows(
   for (const existingShow of existingShows) {
     const retainedShow = nextShowsByOriginalId.get(existingShow.id);
 
-    if (!retainedOriginalIds.has(existingShow.id)) {
-      deleteShowPoster(existingShow.posterFileName);
-      continue;
-    }
-
-    if (retainedShow?.bucket === "past") {
+    if (
+      !retainedOriginalIds.has(existingShow.id) ||
+      retainedShow?.bucket === "past"
+    ) {
       deleteShowPoster(existingShow.posterFileName);
     }
   }

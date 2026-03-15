@@ -19,8 +19,8 @@ export default async function AdminLoginPage() {
               Admin Access
             </h1>
             <p className="mt-6 max-w-md text-base leading-relaxed text-paper/80">
-              Manage upcoming and past shows, attach PNG posters, and push the
-              updated show list into SQLite when you are ready to sync.
+              Manage upcoming and past shows, attach PNG posters, and sync
+              updates when you are ready.
             </p>
           </div>
           <div className="px-8 py-10 sm:px-12 sm:py-14">
@@ -28,7 +28,7 @@ export default async function AdminLoginPage() {
               Secure Login
             </p>
             <h2 className="mt-3 font-display text-4xl uppercase text-ink-900">
-              One admin account
+              Admin login
             </h2>
             <div className="mt-8">
               <AdminLoginForm />

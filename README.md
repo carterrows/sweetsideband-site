@@ -26,7 +26,7 @@ docker compose up --build
 
 Site runs at http://localhost:3000
 
-## Content editing (no code changes)
+## JSON content editing
 
 Edit the JSON files under `data/`:
 
@@ -105,6 +105,8 @@ Shows load through `lib/shows-db.ts`.
 
 The admin UI lives at `/admin`.
 
+Use the admin UI for show management. JSON editing no longer applies to shows.
+
 Required environment variables:
 
 - `ADMIN_PASSWORD_HASH` - salted scrypt hash for the fixed `admin` username
@@ -117,4 +119,4 @@ The admin dashboard lets you:
 - edit any show fields
 - add and delete shows
 - upload PNG posters only
-- sync the draft state into SQLite and revalidate `/` and `/shows`
+- sync the draft state and revalidate `/` and `/shows`
