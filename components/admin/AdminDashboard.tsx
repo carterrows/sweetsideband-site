@@ -102,6 +102,7 @@ export default function AdminDashboard({
     setSelectedKey(clientKey);
     setFeedback(null);
     setError(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const updateShow = (clientKey: string, field: keyof EditableShow, value: string) => {
@@ -588,8 +589,7 @@ export default function AdminDashboard({
                     Poster
                   </p>
                   <p className="mt-2 text-sm text-ink-600">
-                    Upload any PNG file. Its original filename will be stored and
-                    reused even if the show date changes.
+                    Poster MUST be a .png file.
                   </p>
                   {selectedShow.posterFileName ? (
                     <p className="text-sm text-ink-600">
