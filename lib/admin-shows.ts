@@ -1,11 +1,15 @@
 import type { ManagedShow, ShowBucket } from "./types";
-import { deleteShowPoster, renameShowPoster, saveShowPoster } from "./show-posters";
+import {
+  deleteShowPoster,
+  saveShowPoster,
+  sanitizePosterFileName
+} from "./show-posters";
 import { getManagedShows, replaceShows } from "./shows-db";
+import { deriveShowId, isIsoShowDate } from "./show-id";
 
 export type ShowSyncInput = {
   clientKey: string;
   originalId: string | null;
-  id: string;
   bucket: ShowBucket;
   date: string;
   city: string;
@@ -17,10 +21,13 @@ export type ShowSyncInput = {
   coverFee?: string;
 };
 
-export type PosterUploadMap = Map<string, Uint8Array>;
-
-const showIdPattern = /^[a-z0-9][a-z0-9-]*$/;
-const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+export type PosterUploadMap = Map<
+  string,
+  {
+    bytes: Uint8Array;
+    fileName: string;
+  }
+>;
 
 function normalizeRequiredValue(value: string, field: string) {
   const normalized = value.trim();
@@ -60,22 +67,32 @@ function normalizeUrl(value?: string) {
 }
 
 function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedShow {
-  const id = normalizeRequiredValue(input.id, "Show ID").toLowerCase();
-
-  if (!showIdPattern.test(id)) {
-    throw new Error(
-      "Show ID may only contain lowercase letters, numbers, and hyphens."
-    );
-  }
-
   const date = normalizeRequiredValue(input.date, "Date");
-  if (!isoDatePattern.test(date)) {
+  if (!isIsoShowDate(date)) {
     throw new Error("Date must use YYYY-MM-DD.");
   }
 
   if (input.bucket !== "upcoming" && input.bucket !== "past") {
     throw new Error("Show bucket must be upcoming or past.");
   }
+
+  const id = deriveShowId(date);
+  const detailFields =
+    input.bucket === "upcoming"
+      ? {
+          venueUrl: normalizeUrl(input.venueUrl),
+          venueAddress: normalizeOptionalValue(input.venueAddress),
+          showTime: normalizeOptionalValue(input.showTime),
+          doorsOpenTime: normalizeOptionalValue(input.doorsOpenTime),
+          coverFee: normalizeOptionalValue(input.coverFee)
+        }
+      : {
+          venueUrl: undefined,
+          venueAddress: undefined,
+          showTime: undefined,
+          doorsOpenTime: undefined,
+          coverFee: undefined
+        };
 
   return {
     id,
@@ -84,11 +101,7 @@ function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedSho
     date,
     city: normalizeRequiredValue(input.city, "City"),
     venue: normalizeRequiredValue(input.venue, "Venue"),
-    venueUrl: normalizeUrl(input.venueUrl),
-    venueAddress: normalizeOptionalValue(input.venueAddress),
-    showTime: normalizeOptionalValue(input.showTime),
-    doorsOpenTime: normalizeOptionalValue(input.doorsOpenTime),
-    coverFee: normalizeOptionalValue(input.coverFee)
+    ...detailFields
   };
 }
 
@@ -150,38 +163,75 @@ export function syncShows(
   uploadsByClientKey: PosterUploadMap
 ) {
   const existingShows = getManagedShows();
-  const nextIds = new Set(shows.map((show) => show.id));
+  const existingShowsById = new Map(existingShows.map((show) => [show.id, show]));
+  const showsById = new Map(shows.map((show) => [show.id, show]));
+  const retainedOriginalIds = new Set(
+    [...originalIdsByClientKey.values()].filter(
+      (value): value is string => Boolean(value)
+    )
+  );
+  const assignedPosterFileNames = new Map<string, string>();
+  const pendingUploads: Array<{
+    existingPosterFileName?: string;
+    nextPosterFileName: string;
+    bytes: Uint8Array;
+  }> = [];
+
+  for (const [clientKey, nextId] of idsByClientKey) {
+    const show = showsById.get(nextId);
+    const originalId = originalIdsByClientKey.get(clientKey) ?? null;
+    const existingPosterFileName = originalId
+      ? existingShowsById.get(originalId)?.posterFileName
+      : undefined;
+    const upload = uploadsByClientKey.get(clientKey);
+
+    if (!show) {
+      continue;
+    }
+
+    if (upload) {
+      const sanitizedFileName = sanitizePosterFileName(upload.fileName);
+      show.posterFileName = sanitizedFileName;
+      pendingUploads.push({
+        existingPosterFileName,
+        nextPosterFileName: sanitizedFileName,
+        bytes: upload.bytes
+      });
+    } else {
+      show.posterFileName = existingPosterFileName;
+    }
+
+    if (show.posterFileName) {
+      const normalizedPosterKey = show.posterFileName.toLowerCase();
+      const assignedShowId = assignedPosterFileNames.get(normalizedPosterKey);
+
+      if (assignedShowId && assignedShowId !== show.id) {
+        throw new Error(
+          `Poster filename "${show.posterFileName}" is already assigned to another show.`
+        );
+      }
+
+      assignedPosterFileNames.set(normalizedPosterKey, show.id);
+    }
+  }
+
+  for (const upload of pendingUploads) {
+    if (
+      upload.existingPosterFileName &&
+      upload.existingPosterFileName.toLowerCase() !==
+        upload.nextPosterFileName.toLowerCase()
+    ) {
+      deleteShowPoster(upload.existingPosterFileName);
+    }
+
+    saveShowPoster(upload.nextPosterFileName, upload.bytes);
+  }
 
   replaceShows(shows);
 
-  for (const [clientKey, originalId] of originalIdsByClientKey) {
-    const nextId = idsByClientKey.get(clientKey);
-
-    if (!originalId || !nextId || originalId === nextId) {
-      continue;
-    }
-
-    if (uploadsByClientKey.has(clientKey)) {
-      deleteShowPoster(originalId);
-      continue;
-    }
-
-    renameShowPoster(originalId, nextId);
-  }
-
-  for (const [clientKey, bytes] of uploadsByClientKey) {
-    const nextId = idsByClientKey.get(clientKey);
-
-    if (!nextId) {
-      continue;
-    }
-
-    saveShowPoster(nextId, bytes);
-  }
-
   for (const existingShow of existingShows) {
-    if (!nextIds.has(existingShow.id)) {
-      deleteShowPoster(existingShow.id);
+    if (!retainedOriginalIds.has(existingShow.id)) {
+      deleteShowPoster(existingShow.posterFileName);
     }
   }
 

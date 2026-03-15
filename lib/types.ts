@@ -27,6 +27,7 @@ export type Show = {
   showTime?: string;
   doorsOpenTime?: string;
   coverFee?: string;
+  posterFileName?: string;
   posterSrc?: string;
 };
 

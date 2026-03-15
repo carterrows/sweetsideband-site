@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import Database from "better-sqlite3";
 import type { ManagedShow, ShowBucket, ShowsData } from "./types";
-import { getShowPosterSrc } from "./show-posters";
+import { findLegacyPosterFileName, getShowPosterSrc } from "./show-posters";
 
 type ShowRow = {
   id: string;
@@ -16,6 +16,7 @@ type ShowRow = {
   show_time: string | null;
   doors_open_time: string | null;
   cover_fee: string | null;
+  poster_file_name: string | null;
 };
 
 const dataDir = path.join(process.cwd(), "data");
@@ -25,6 +26,16 @@ const databasePath = process.env.SHOWS_DB_PATH?.trim()
 const seedPath = path.join(dataDir, "shows.json");
 
 let database: Database.Database | null = null;
+
+function ensurePosterFileNameColumn(db: Database.Database) {
+  const columns = db
+    .prepare("PRAGMA table_info(shows);")
+    .all() as Array<{ name: string }>;
+
+  if (!columns.some((column) => column.name === "poster_file_name")) {
+    db.exec("ALTER TABLE shows ADD COLUMN poster_file_name TEXT;");
+  }
+}
 
 function getDatabase() {
   if (database) {
@@ -47,9 +58,11 @@ function getDatabase() {
       venue_address TEXT,
       show_time TEXT,
       doors_open_time TEXT,
-      cover_fee TEXT
+      cover_fee TEXT,
+      poster_file_name TEXT
     );
   `);
+  ensurePosterFileNameColumn(database);
 
   seedDatabaseIfEmpty(database);
 
@@ -69,11 +82,13 @@ function seedDatabaseIfEmpty(db: Database.Database) {
   const incomingShows: ManagedShow[] = [
     ...seed.upcoming.map((show, index) => ({
       ...show,
+      posterFileName: findLegacyPosterFileName(show.id),
       bucket: "upcoming" as const,
       sortOrder: index
     })),
     ...seed.past.map((show, index) => ({
       ...show,
+      posterFileName: findLegacyPosterFileName(show.id),
       bucket: "past" as const,
       sortOrder: index
     }))
@@ -83,6 +98,8 @@ function seedDatabaseIfEmpty(db: Database.Database) {
 }
 
 function mapShowRow(row: ShowRow): ManagedShow {
+  const posterFileName = row.poster_file_name ?? findLegacyPosterFileName(row.id);
+
   return {
     id: row.id,
     bucket: row.bucket,
@@ -95,7 +112,8 @@ function mapShowRow(row: ShowRow): ManagedShow {
     showTime: row.show_time ?? undefined,
     doorsOpenTime: row.doors_open_time ?? undefined,
     coverFee: row.cover_fee ?? undefined,
-    posterSrc: getShowPosterSrc(row.id)
+    posterFileName: posterFileName ?? undefined,
+    posterSrc: getShowPosterSrc(posterFileName ?? undefined)
   };
 }
 
@@ -119,7 +137,8 @@ export function getManagedShows(): ManagedShow[] {
           venue_address,
           show_time,
           doors_open_time,
-          cover_fee
+          cover_fee,
+          poster_file_name
         FROM shows
         ORDER BY
           CASE bucket WHEN 'upcoming' THEN 0 ELSE 1 END,
@@ -154,8 +173,9 @@ export function replaceShows(shows: ManagedShow[]) {
       venue_address,
       show_time,
       doors_open_time,
-      cover_fee
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      cover_fee,
+      poster_file_name
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `);
 
   db.exec("BEGIN IMMEDIATE;");
@@ -175,7 +195,8 @@ export function replaceShows(shows: ManagedShow[]) {
         normalizeNullableValue(show.venueAddress),
         normalizeNullableValue(show.showTime),
         normalizeNullableValue(show.doorsOpenTime),
-        normalizeNullableValue(show.coverFee)
+        normalizeNullableValue(show.coverFee),
+        normalizeNullableValue(show.posterFileName)
       );
     }
 

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useMemo, useRef, useState, startTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { ManagedShow, ShowBucket } from "@/lib/types";
+import { deriveShowId } from "@/lib/show-id";
 
 type EditableShow = ManagedShow & {
   clientKey: string;
@@ -23,6 +24,7 @@ function createClientKey() {
 function toEditableShow(show: ManagedShow): EditableShow {
   return {
     ...show,
+    id: deriveShowId(show.date),
     clientKey: createClientKey(),
     originalId: show.id,
     pendingPosterFile: null,
@@ -35,12 +37,14 @@ function groupCount(shows: EditableShow[], bucket: ShowBucket) {
 }
 
 function createBlankShow(bucket: ShowBucket): EditableShow {
+  const id = deriveShowId("");
+
   return {
     clientKey: createClientKey(),
     originalId: null,
     bucket,
     sortOrder: 0,
-    id: "",
+    id,
     date: "",
     city: "",
     venue: "",
@@ -104,10 +108,18 @@ export default function AdminDashboard({
     setShows((currentShows) =>
       currentShows.map((show) =>
         show.clientKey === clientKey
-          ? {
-              ...show,
-              [field]: value
-            }
+          ? (() => {
+              const updatedShow = {
+                ...show,
+                [field]: value
+              };
+
+              if (field === "date") {
+                updatedShow.id = deriveShowId(value);
+              }
+
+              return updatedShow;
+            })()
           : show
       )
     );
@@ -121,7 +133,12 @@ export default function AdminDashboard({
         show.clientKey === clientKey
           ? {
               ...show,
-              bucket
+              bucket,
+              venueUrl: bucket === "past" ? undefined : show.venueUrl,
+              venueAddress: bucket === "past" ? undefined : show.venueAddress,
+              showTime: bucket === "past" ? undefined : show.showTime,
+              doorsOpenTime: bucket === "past" ? undefined : show.doorsOpenTime,
+              coverFee: bucket === "past" ? undefined : show.coverFee
             }
           : show
       );
@@ -207,12 +224,12 @@ export default function AdminDashboard({
     setShows((currentShows) =>
       currentShows.map((show) =>
         show.clientKey === selectedShow.clientKey
-          ? {
-              ...show,
-              pendingPosterFile: file,
-              pendingPosterName: file.name
-            }
-          : show
+            ? {
+                ...show,
+                pendingPosterFile: file,
+                pendingPosterName: file.name
+              }
+            : show
       )
     );
     setFeedback(null);
@@ -229,7 +246,6 @@ export default function AdminDashboard({
       const payload = shows.map((show) => ({
         clientKey: show.clientKey,
         originalId: show.originalId,
-        id: show.id,
         bucket: show.bucket,
         date: show.date,
         city: show.city,
@@ -250,7 +266,7 @@ export default function AdminDashboard({
       }
 
       try {
-        const currentSelectedId = selectedShow?.id ?? null;
+        const currentSelectedId = selectedShow ? deriveShowId(selectedShow.date) : null;
         const response = await fetch("/api/admin/sync", {
           method: "POST",
           body: formData
@@ -429,10 +445,8 @@ export default function AdminDashboard({
                   </span>
                   <input
                     value={selectedShow.id}
-                    onChange={(event) =>
-                      updateShow(selectedShow.clientKey, "id", event.target.value)
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
+                    readOnly
+                    className="w-full rounded-2xl border border-black/10 bg-haze/40 px-4 py-3 text-ink-600 outline-none"
                   />
                 </label>
                 <label className="space-y-2">
@@ -490,74 +504,82 @@ export default function AdminDashboard({
                     className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
                   />
                 </label>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    Venue URL
-                  </span>
-                  <input
-                    value={selectedShow.venueUrl ?? ""}
-                    onChange={(event) =>
-                      updateShow(selectedShow.clientKey, "venueUrl", event.target.value)
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                  />
-                </label>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    Venue Address
-                  </span>
-                  <input
-                    value={selectedShow.venueAddress ?? ""}
-                    onChange={(event) =>
-                      updateShow(
-                        selectedShow.clientKey,
-                        "venueAddress",
-                        event.target.value
-                      )
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                  />
-                </label>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    Show Time
-                  </span>
-                  <input
-                    value={selectedShow.showTime ?? ""}
-                    onChange={(event) =>
-                      updateShow(selectedShow.clientKey, "showTime", event.target.value)
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                  />
-                </label>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    Doors Open
-                  </span>
-                  <input
-                    value={selectedShow.doorsOpenTime ?? ""}
-                    onChange={(event) =>
-                      updateShow(
-                        selectedShow.clientKey,
-                        "doorsOpenTime",
-                        event.target.value
-                      )
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                  />
-                </label>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    Cover Fee
-                  </span>
-                  <input
-                    value={selectedShow.coverFee ?? ""}
-                    onChange={(event) =>
-                      updateShow(selectedShow.clientKey, "coverFee", event.target.value)
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                  />
-                </label>
+                {selectedShow.bucket === "upcoming" ? (
+                  <>
+                    <label className="space-y-2">
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
+                        Venue URL
+                      </span>
+                      <input
+                        value={selectedShow.venueUrl ?? ""}
+                        onChange={(event) =>
+                          updateShow(selectedShow.clientKey, "venueUrl", event.target.value)
+                        }
+                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
+                      />
+                    </label>
+                    <label className="space-y-2">
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
+                        Venue Address
+                      </span>
+                      <input
+                        value={selectedShow.venueAddress ?? ""}
+                        onChange={(event) =>
+                          updateShow(
+                            selectedShow.clientKey,
+                            "venueAddress",
+                            event.target.value
+                          )
+                        }
+                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
+                      />
+                    </label>
+                    <label className="space-y-2">
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
+                        Show Time
+                      </span>
+                      <input
+                        value={selectedShow.showTime ?? ""}
+                        onChange={(event) =>
+                          updateShow(selectedShow.clientKey, "showTime", event.target.value)
+                        }
+                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
+                      />
+                    </label>
+                    <label className="space-y-2">
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
+                        Doors Open
+                      </span>
+                      <input
+                        value={selectedShow.doorsOpenTime ?? ""}
+                        onChange={(event) =>
+                          updateShow(
+                            selectedShow.clientKey,
+                            "doorsOpenTime",
+                            event.target.value
+                          )
+                        }
+                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
+                      />
+                    </label>
+                    <label className="space-y-2">
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
+                        Cover Fee
+                      </span>
+                      <input
+                        value={selectedShow.coverFee ?? ""}
+                        onChange={(event) =>
+                          updateShow(selectedShow.clientKey, "coverFee", event.target.value)
+                        }
+                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
+                      />
+                    </label>
+                  </>
+                ) : (
+                  <div className="rounded-[1.5rem] border border-dashed border-black/10 px-4 py-5 text-sm text-ink-500 md:col-span-2">
+                    Past shows only keep date, city, and venue. Additional venue details are cleared automatically when a show is moved to past.
+                  </div>
+                )}
               </div>
 
               <div className="space-y-4 rounded-[1.5rem] border border-black/10 bg-white p-5">
@@ -566,12 +588,17 @@ export default function AdminDashboard({
                     Poster
                   </p>
                   <p className="mt-2 text-sm text-ink-600">
-                    Upload a PNG poster. It will be saved as{" "}
-                    <span className="font-semibold text-ink-900">
-                      {selectedShow.id || "show-id"}.png
-                    </span>
-                    .
+                    Upload any PNG file. Its original filename will be stored and
+                    reused even if the show date changes.
                   </p>
+                  {selectedShow.posterFileName ? (
+                    <p className="text-sm text-ink-600">
+                      Current poster file:{" "}
+                      <span className="font-semibold text-ink-900">
+                        {selectedShow.posterFileName}
+                      </span>
+                    </p>
+                  ) : null}
                 </div>
                 <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white">
                   Choose PNG

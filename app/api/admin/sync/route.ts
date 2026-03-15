@@ -6,7 +6,13 @@ import { syncShows, validateShowSyncPayload } from "@/lib/admin-shows";
 export const runtime = "nodejs";
 
 async function extractPosterUploads(formData: FormData) {
-  const uploads = new Map<string, Uint8Array>();
+  const uploads = new Map<
+    string,
+    {
+      bytes: Uint8Array;
+      fileName: string;
+    }
+  >();
 
   for (const [key, value] of formData.entries()) {
     if (!key.startsWith("poster:")) {
@@ -23,7 +29,10 @@ async function extractPosterUploads(formData: FormData) {
 
     uploads.set(
       key.slice("poster:".length),
-      new Uint8Array(await value.arrayBuffer())
+      {
+        bytes: new Uint8Array(await value.arrayBuffer()),
+        fileName: value.name
+      }
     );
   }
 

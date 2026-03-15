@@ -8,60 +8,64 @@ function ensurePosterDir() {
   fs.mkdirSync(showPostersDir, { recursive: true });
 }
 
-function getPosterPath(id: string) {
-  return path.join(showPostersDir, `${id}.png`);
+function normalizePosterFileName(fileName: string) {
+  return path.basename(fileName.trim());
 }
 
-export function getShowPosterSrc(id: string): string | undefined {
+function getPosterPath(fileName: string) {
+  return path.join(showPostersDir, normalizePosterFileName(fileName));
+}
+
+export function findLegacyPosterFileName(id: string): string | undefined {
   for (const extension of legacyPosterExtensions) {
     const fileName = `${id}${extension}`;
     const filePath = path.join(showPostersDir, fileName);
 
     if (fs.existsSync(filePath)) {
-      return `/images/posters/${encodeURIComponent(fileName)}`;
+      return fileName;
     }
   }
 
   return undefined;
 }
 
-export function saveShowPoster(id: string, bytes: Uint8Array) {
-  ensurePosterDir();
-  fs.writeFileSync(getPosterPath(id), bytes);
-}
-
-export function deleteShowPoster(id: string) {
-  for (const extension of legacyPosterExtensions) {
-    const filePath = path.join(showPostersDir, `${id}${extension}`);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
+export function getShowPosterSrc(fileName?: string): string | undefined {
+  if (!fileName) {
+    return undefined;
   }
+
+  const normalizedFileName = normalizePosterFileName(fileName);
+  const filePath = getPosterPath(normalizedFileName);
+
+  if (!fs.existsSync(filePath)) {
+    return undefined;
+  }
+
+  return `/images/posters/${encodeURIComponent(normalizedFileName)}`;
 }
 
-export function renameShowPoster(previousId: string, nextId: string) {
-  if (previousId === nextId) {
+export function saveShowPoster(fileName: string, bytes: Uint8Array) {
+  ensurePosterDir();
+  fs.writeFileSync(getPosterPath(fileName), bytes);
+}
+
+export function deleteShowPoster(fileName?: string) {
+  if (!fileName) {
     return;
   }
 
-  ensurePosterDir();
-
-  for (const extension of legacyPosterExtensions) {
-    const existingPath = path.join(showPostersDir, `${previousId}${extension}`);
-    if (!fs.existsSync(existingPath)) {
-      continue;
-    }
-
-    const nextPath = getPosterPath(nextId);
-    if (existingPath === nextPath) {
-      return;
-    }
-
-    if (fs.existsSync(nextPath)) {
-      fs.unlinkSync(nextPath);
-    }
-
-    fs.renameSync(existingPath, nextPath);
-    return;
+  const filePath = getPosterPath(fileName);
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
   }
+}
+
+export function sanitizePosterFileName(fileName: string) {
+  const normalizedFileName = normalizePosterFileName(fileName);
+
+  if (!normalizedFileName.toLowerCase().endsWith(".png")) {
+    throw new Error("Poster files must use the .png extension.");
+  }
+
+  return normalizedFileName;
 }
