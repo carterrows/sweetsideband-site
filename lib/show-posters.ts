@@ -1,10 +1,22 @@
 import fs from "fs";
 import path from "path";
 
-const showPostersDir = path.join(process.cwd(), "public", "images", "posters");
+function getShowPostersDir() {
+  const configuredDatabasePath = process.env.SHOWS_DB_PATH?.trim();
+
+  if (configuredDatabasePath) {
+    const absoluteDatabasePath = path.resolve(
+      process.cwd(),
+      configuredDatabasePath
+    );
+    return path.join(path.dirname(absoluteDatabasePath), "posters");
+  }
+
+  return path.join(process.cwd(), "storage", "posters");
+}
 
 function ensurePosterDir() {
-  fs.mkdirSync(showPostersDir, { recursive: true });
+  fs.mkdirSync(getShowPostersDir(), { recursive: true });
 }
 
 function normalizePosterFileName(fileName: string) {
@@ -12,7 +24,7 @@ function normalizePosterFileName(fileName: string) {
 }
 
 function getPosterPath(fileName: string) {
-  return path.join(showPostersDir, normalizePosterFileName(fileName));
+  return path.join(getShowPostersDir(), normalizePosterFileName(fileName));
 }
 
 export function getShowPosterSrc(fileName?: string): string | undefined {
@@ -27,7 +39,7 @@ export function getShowPosterSrc(fileName?: string): string | undefined {
     return undefined;
   }
 
-  return `/images/posters/${encodeURIComponent(normalizedFileName)}`;
+  return `/posters/${encodeURIComponent(normalizedFileName)}`;
 }
 
 export function saveShowPoster(fileName: string, bytes: Uint8Array) {
@@ -54,4 +66,15 @@ export function sanitizePosterFileName(fileName: string) {
   }
 
   return normalizedFileName;
+}
+
+export function readShowPoster(fileName: string) {
+  const normalizedFileName = sanitizePosterFileName(fileName);
+  const filePath = getPosterPath(normalizedFileName);
+
+  if (!fs.existsSync(filePath)) {
+    return null;
+  }
+
+  return fs.readFileSync(filePath);
 }

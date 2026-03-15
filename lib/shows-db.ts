@@ -23,53 +23,8 @@ const dataDir = path.join(process.cwd(), "data");
 const databasePath = process.env.SHOWS_DB_PATH?.trim()
   ? path.resolve(process.cwd(), process.env.SHOWS_DB_PATH.trim())
   : path.join(dataDir, "shows.sqlite");
-const seedPath = path.join(dataDir, "shows.json");
 
 let database: Database.Database | null = null;
-
-function readSeedShows() {
-  if (!fs.existsSync(seedPath)) {
-    return null;
-  }
-
-  return JSON.parse(fs.readFileSync(seedPath, "utf-8")) as ShowsData;
-}
-
-function ensurePosterFileNameColumn(db: Database.Database) {
-  const columns = db
-    .prepare("PRAGMA table_info(shows);")
-    .all() as Array<{ name: string }>;
-
-  if (!columns.some((column) => column.name === "poster_file_name")) {
-    db.exec("ALTER TABLE shows ADD COLUMN poster_file_name TEXT;");
-  }
-}
-
-function backfillPosterFileNamesFromSeed(db: Database.Database) {
-  const seedShows = readSeedShows();
-
-  if (!seedShows) {
-    return;
-  }
-
-  const seedPosterFileNames = new Map(
-    [...seedShows.upcoming, ...seedShows.past]
-      .filter((show) => show.posterFileName)
-      .map((show) => [show.id, show.posterFileName as string])
-  );
-
-  if (seedPosterFileNames.size === 0) {
-    return;
-  }
-
-  const update = db.prepare(
-    "UPDATE shows SET poster_file_name = ? WHERE id = ? AND poster_file_name IS NULL;"
-  );
-
-  for (const [id, posterFileName] of seedPosterFileNames) {
-    update.run(posterFileName, id);
-  }
-}
 
 function getDatabase() {
   if (database) {
@@ -96,43 +51,8 @@ function getDatabase() {
       poster_file_name TEXT
     );
   `);
-  ensurePosterFileNameColumn(database);
-  backfillPosterFileNamesFromSeed(database);
-
-  seedDatabaseIfEmpty(database);
 
   return database;
-}
-
-function seedDatabaseIfEmpty(db: Database.Database) {
-  const countRow = db.prepare("SELECT COUNT(*) AS count FROM shows;").get() as {
-    count: number;
-  };
-
-  if (countRow.count > 0 || !fs.existsSync(seedPath)) {
-    return;
-  }
-
-  const seed = readSeedShows();
-
-  if (!seed) {
-    return;
-  }
-
-  const incomingShows: ManagedShow[] = [
-    ...seed.upcoming.map((show, index) => ({
-      ...show,
-      bucket: "upcoming" as const,
-      sortOrder: index
-    })),
-    ...seed.past.map((show, index) => ({
-      ...show,
-      bucket: "past" as const,
-      sortOrder: index
-    }))
-  ];
-
-  replaceShows(incomingShows);
 }
 
 function mapShowRow(row: ShowRow): ManagedShow {

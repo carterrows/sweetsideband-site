@@ -305,7 +305,7 @@ export default function AdminDashboard({
 
   return (
     <div className="min-h-screen bg-haze/40">
-      <div className="mx-auto grid min-h-screen w-full max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[22rem_minmax(0,1fr)]">
+      <div className="mx-auto grid min-h-screen w-full max-w-[112rem] gap-8 px-6 py-8 lg:grid-cols-[24rem_minmax(0,1fr)]">
         <aside className="rounded-[2rem] border border-black/10 bg-paper p-6 shadow-sm">
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -438,7 +438,7 @@ export default function AdminDashboard({
           ) : null}
 
           {selectedShow ? (
-            <div className="mt-8 grid gap-8 xl:grid-cols-[minmax(0,1fr)_20rem]">
+            <div className="mt-8 grid gap-8 xl:grid-cols-[minmax(0,1.35fr)_22rem]">
               <div className="grid gap-5 md:grid-cols-2">
                 <label className="space-y-2">
                   <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
@@ -588,46 +588,62 @@ export default function AdminDashboard({
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
                     Poster
                   </p>
-                  <p className="mt-2 text-sm text-ink-600">
-                    Poster MUST be a .png file.
-                  </p>
-                  {selectedShow.posterFileName ? (
-                    <p className="text-sm text-ink-600">
-                      Current poster file:{" "}
-                      <span className="font-semibold text-ink-900">
-                        {selectedShow.posterFileName}
-                      </span>
+                  {selectedShow.bucket === "past" ? (
+                    <p className="mt-2 text-sm text-ink-600">
+                      Past shows do not use posters. Any existing poster will be deleted on sync.
                     </p>
-                  ) : null}
+                  ) : (
+                    <>
+                      <p className="mt-2 text-sm text-ink-600">
+                        Poster MUST be a .png file.
+                      </p>
+                      {selectedShow.posterFileName ? (
+                        <p className="text-sm text-ink-600">
+                          Current poster file:{" "}
+                          <span className="font-semibold text-ink-900">
+                            {selectedShow.posterFileName}
+                          </span>
+                        </p>
+                      ) : null}
+                    </>
+                  )}
                 </div>
-                <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white">
-                  Choose PNG
-                  <input
-                    type="file"
-                    accept=".png,image/png"
-                    className="sr-only"
-                    onChange={(event) => onPosterChange(event.target.files)}
-                  />
-                </label>
-                {selectedShow.pendingPosterName ? (
-                  <p className="text-sm text-ink-600">
-                    Pending upload: {selectedShow.pendingPosterName}
-                  </p>
-                ) : null}
-                {selectedShow.posterSrc ? (
-                  <div className="overflow-hidden rounded-[1.25rem] border border-black/10">
-                    <Image
-                      src={selectedShow.posterSrc}
-                      alt={`${selectedShow.venue || "Show"} poster`}
-                      width={900}
-                      height={1200}
-                      unoptimized
-                      className="h-auto w-full object-cover"
-                    />
-                  </div>
+                {selectedShow.bucket === "upcoming" ? (
+                  <>
+                    <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white">
+                      Choose PNG
+                      <input
+                        type="file"
+                        accept=".png,image/png"
+                        className="sr-only"
+                        onChange={(event) => onPosterChange(event.target.files)}
+                      />
+                    </label>
+                    {selectedShow.pendingPosterName ? (
+                      <p className="text-sm text-ink-600">
+                        Pending upload: {selectedShow.pendingPosterName}
+                      </p>
+                    ) : null}
+                    {selectedShow.posterSrc ? (
+                      <div className="overflow-hidden rounded-[1.25rem] border border-black/10">
+                        <Image
+                          src={selectedShow.posterSrc}
+                          alt={`${selectedShow.venue || "Show"} poster`}
+                          width={900}
+                          height={1200}
+                          unoptimized
+                          className="h-auto w-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="rounded-[1.25rem] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink-500">
+                        No poster uploaded yet.
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="rounded-[1.25rem] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink-500">
-                    No poster uploaded yet.
+                    Poster upload and preview are disabled for past shows.
                   </div>
                 )}
               </div>

@@ -1,6 +1,6 @@
 # Sweetside Band Website
 
-Modern, mobile-first band website built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Content lives in local JSON files for easy editing, and Docker is ready for Raspberry Pi 5.
+Modern, mobile-first band website built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Band, member, and media content live in local JSON files, while shows are stored in SQLite. Docker is ready for Raspberry Pi 5.
 
 ## Local development
 
@@ -31,7 +31,6 @@ Site runs at http://localhost:3000
 Edit the JSON files under `data/`:
 
 - `data/band.json` - name, location, socials, streaming
-- `data/shows.json` - initial seed for shows SQLite migration
 - `data/members.json` - band member cards
 - `data/media.json` - video gallery cards
 
@@ -93,15 +92,14 @@ Pull YouTube thumbnails using: http://img.youtube.com/vi/VIDEOID/maxresdefault.j
 
 Copy `.env.example` to `.env` if you want to set `SITE_URL`.
 
-## Upgrade path: SQLite
+## Shows storage
 
-Shows now load through `lib/shows-db.ts`.
+Shows load through `lib/shows-db.ts`.
 
-- On first run, the database is automatically seeded from `data/shows.json`.
 - Local default database path is `data/shows.sqlite`.
 - Docker stores the database in a named volume mounted at `/app/storage/shows.sqlite`.
 - Public pages still read through `lib/content.ts`, so the UI contracts stay the same.
-- Posters continue to live in `public/images/posters/`.
+- Uploaded posters are stored in runtime storage and served from `/posters/:fileName`.
 
 ## Admin
 

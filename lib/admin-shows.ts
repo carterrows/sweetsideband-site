@@ -165,6 +165,7 @@ export function syncShows(
   const existingShows = getManagedShows();
   const existingShowsById = new Map(existingShows.map((show) => [show.id, show]));
   const showsById = new Map(shows.map((show) => [show.id, show]));
+  const nextShowsByOriginalId = new Map<string, ManagedShow>();
   const retainedOriginalIds = new Set(
     [...originalIdsByClientKey.values()].filter(
       (value): value is string => Boolean(value)
@@ -189,7 +190,13 @@ export function syncShows(
       continue;
     }
 
-    if (upload) {
+    if (originalId) {
+      nextShowsByOriginalId.set(originalId, show);
+    }
+
+    if (show.bucket === "past") {
+      show.posterFileName = undefined;
+    } else if (upload) {
       const sanitizedFileName = sanitizePosterFileName(upload.fileName);
       show.posterFileName = sanitizedFileName;
       pendingUploads.push({
@@ -230,7 +237,14 @@ export function syncShows(
   replaceShows(shows);
 
   for (const existingShow of existingShows) {
+    const retainedShow = nextShowsByOriginalId.get(existingShow.id);
+
     if (!retainedOriginalIds.has(existingShow.id)) {
+      deleteShowPoster(existingShow.posterFileName);
+      continue;
+    }
+
+    if (retainedShow?.bucket === "past") {
       deleteShowPoster(existingShow.posterFileName);
     }
   }

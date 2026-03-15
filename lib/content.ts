@@ -5,7 +5,7 @@ import { getShowsFromDatabase } from "./shows-db";
 
 const dataDir = path.join(process.cwd(), "data");
 const showsImagesDir = path.join(process.cwd(), "public", "images", "shows");
-const allowedFiles = new Set(["band.json", "shows.json", "members.json", "media.json"]);
+const allowedFiles = new Set(["band.json", "members.json", "media.json"]);
 const imageExtensions = new Set([".avif", ".gif", ".jpeg", ".jpg", ".png", ".webp"]);
 
 function readJson<T>(fileName: string): T {
@@ -17,7 +17,6 @@ function readJson<T>(fileName: string): T {
   return JSON.parse(raw) as T;
 }
 
-// Swap these helpers for SQLite queries later without touching components.
 export function getBand(): Band {
   return readJson<Band>("band.json");
 }

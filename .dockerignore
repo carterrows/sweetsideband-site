@@ -4,5 +4,6 @@ node_modules
 .env.*
 !.env.example
 data/*.sqlite
+storage
 tsconfig.tsbuildinfo
 .DS_Store
