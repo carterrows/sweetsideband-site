@@ -30,9 +30,16 @@ export type Show = {
   posterSrc?: string;
 };
 
+export type ShowBucket = "upcoming" | "past";
+
 export type ShowsData = {
   upcoming: Show[];
   past: Show[];
+};
+
+export type ManagedShow = Show & {
+  bucket: ShowBucket;
+  sortOrder: number;
 };
 
 export type Member = {

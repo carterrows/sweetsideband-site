@@ -31,7 +31,7 @@ Site runs at http://localhost:3000
 Edit the JSON files under `data/`:
 
 - `data/band.json` - name, location, socials, streaming
-- `data/shows.json` - upcoming and past shows
+- `data/shows.json` - initial seed for shows SQLite migration
 - `data/members.json` - band member cards
 - `data/media.json` - video gallery cards
 
@@ -95,4 +95,28 @@ Copy `.env.example` to `.env` if you want to set `SITE_URL`.
 
 ## Upgrade path: SQLite
 
-The content loader lives in `lib/content.ts`. When you want a database, swap the JSON reads for SQLite queries and keep the same return types (see `lib/types.ts`). Components won’t need changes.
+Shows now load through `lib/shows-db.ts`.
+
+- On first run, the database is automatically seeded from `data/shows.json`.
+- Local default database path is `data/shows.sqlite`.
+- Docker stores the database in a named volume mounted at `/app/storage/shows.sqlite`.
+- Public pages still read through `lib/content.ts`, so the UI contracts stay the same.
+- Posters continue to live in `public/images/posters/`.
+
+## Admin
+
+The admin UI lives at `/admin`.
+
+Required environment variables:
+
+- `ADMIN_PASSWORD_HASH` - salted scrypt hash for the fixed `admin` username
+- `ADMIN_SESSION_SECRET` - random secret for signing the admin session cookie
+- `SHOWS_DB_PATH` - optional override for the SQLite file location
+
+The admin dashboard lets you:
+
+- review upcoming and past shows
+- edit any show fields
+- add and delete shows
+- upload PNG posters only
+- sync the draft state into SQLite and revalidate `/` and `/shows`

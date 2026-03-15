@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   description: "Official Sweetside site: upcoming shows, live video, merch, and contact/booking. Catch the next date and stream the latest."
 };
 
+export const dynamic = "force-static";
+
 export default function HomePage() {
   const band = getBand();
   const members = getMembers();
