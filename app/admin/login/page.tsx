@@ -30,9 +30,6 @@ export default async function AdminLoginPage() {
             <h2 className="mt-3 font-display text-4xl uppercase text-ink-900">
               One admin account
             </h2>
-            <p className="mt-4 text-sm text-ink-600">
-              The username is fixed as <span className="font-semibold">admin</span>.
-            </p>
             <div className="mt-8">
               <AdminLoginForm />
             </div>

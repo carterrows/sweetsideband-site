@@ -54,22 +54,24 @@ export default function AdminLoginForm() {
         >
           Password
         </label>
-        <div className="flex items-center gap-3">
+        <div className="relative">
           <input
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
-            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base text-ink-900 outline-none transition focus:border-accent"
+            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 pr-14 text-base text-ink-900 outline-none transition focus:border-accent"
           />
           <button
             type="button"
             onClick={() => setShowPassword((current) => !current)}
-            className="shrink-0 rounded-full border border-black/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink-700 transition hover:border-accent hover:text-accent"
+            className="absolute right-2 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-ink-500 transition hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             aria-pressed={showPassword}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {showPassword ? "Hide" : "Show"}
+            <span className="material-symbols-outlined text-[22px]" aria-hidden="true">
+              {showPassword ? "visibility_off" : "visibility"}
+            </span>
           </button>
         </div>
       </div>
