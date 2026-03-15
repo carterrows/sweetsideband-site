@@ -2,6 +2,7 @@
 
 import type { FormEvent } from "react";
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function AdminLoginForm() {
   const [pending, setPending] = useState(false);
@@ -69,9 +70,11 @@ export default function AdminLoginForm() {
             aria-pressed={showPassword}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            <span className="material-symbols-outlined text-[22px]" aria-hidden="true">
-              {showPassword ? "visibility_off" : "visibility"}
-            </span>
+            {showPassword ? (
+              <EyeOff aria-hidden="true" size={20} strokeWidth={2} />
+            ) : (
+              <Eye aria-hidden="true" size={20} strokeWidth={2} />
+            )}
           </button>
         </div>
       </div>
