@@ -2,6 +2,11 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { ADMIN_COOKIE_NAME, verifyAdminSessionToken } from "@/lib/admin-auth";
 import { syncShows, validateShowSyncPayload } from "@/lib/admin-shows";
+import {
+  ADMIN_SYNC_RATE_LIMIT,
+  applyRateLimitHeaders,
+  enforceRateLimit
+} from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -40,13 +45,21 @@ async function extractPosterUploads(formData: FormData) {
 }
 
 export async function POST(request: Request) {
+  const rateLimit = enforceRateLimit(request, ADMIN_SYNC_RATE_LIMIT);
+  if (rateLimit.limited) {
+    return rateLimit.response;
+  }
+
   const tokenMatch = request.headers
     .get("cookie")
     ?.match(new RegExp(`(?:^|;\\s*)${ADMIN_COOKIE_NAME}=([^;]+)`));
   const token = tokenMatch?.[1];
 
   if (!verifyAdminSessionToken(token)) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    return applyRateLimitHeaders(
+      NextResponse.json({ error: "Unauthorized." }, { status: 401 }),
+      rateLimit.result
+    );
   }
 
   try {
@@ -66,11 +79,17 @@ export async function POST(request: Request) {
     revalidatePath("/shows");
     revalidatePath("/admin");
 
-    return NextResponse.json({ shows: syncedShows });
+    return applyRateLimitHeaders(
+      NextResponse.json({ shows: syncedShows }),
+      rateLimit.result
+    );
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unable to sync show changes.";
 
-    return NextResponse.json({ error: message }, { status: 400 });
+    return applyRateLimitHeaders(
+      NextResponse.json({ error: message }, { status: 400 }),
+      rateLimit.result
+    );
   }
 }
