@@ -87,7 +87,7 @@ async function extractPosterUploads(formData: FormData) {
 }
 
 export async function POST(request: Request) {
-  const rateLimit = enforceRateLimit(request, ADMIN_SYNC_RATE_LIMIT);
+  const rateLimit = enforceRateLimit(ADMIN_SYNC_RATE_LIMIT);
   if (rateLimit.limited) {
     return rateLimit.response;
   }

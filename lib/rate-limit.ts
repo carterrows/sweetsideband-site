@@ -118,8 +118,7 @@ export function applyRateLimitHeaders(
   return response;
 }
 
-export function enforceRateLimit(request: Request, policy: RateLimitPolicy) {
-  void request;
+export function enforceRateLimit(policy: RateLimitPolicy) {
   // This deployment does not trust forwarded IP headers, so admin limits are
   // enforced process-wide per route instead of per reported client address.
   const key = `${policy.id}:global`;

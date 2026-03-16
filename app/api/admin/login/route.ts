@@ -14,7 +14,7 @@ import {
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  const rateLimit = enforceRateLimit(request, ADMIN_LOGIN_RATE_LIMIT);
+  const rateLimit = enforceRateLimit(ADMIN_LOGIN_RATE_LIMIT);
   if (rateLimit.limited) {
     return rateLimit.response;
   }
