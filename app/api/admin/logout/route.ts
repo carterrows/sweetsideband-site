@@ -3,29 +3,17 @@ import {
   ADMIN_COOKIE_NAME,
   getAdminSessionCookieOptions
 } from "@/lib/admin-auth";
-import {
-  ADMIN_LOGOUT_RATE_LIMIT,
-  applyRateLimitHeaders,
-  enforceRateLimit
-} from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
-export async function POST(request: Request) {
-  const rateLimit = enforceRateLimit(request, ADMIN_LOGOUT_RATE_LIMIT);
-  const nextUrl = new URL(request.url);
-  nextUrl.pathname = rateLimit.limited ? "/admin" : "/admin/login";
-  nextUrl.search = "";
+export async function POST() {
+  const response = NextResponse.json({ ok: true });
 
-  const response = NextResponse.redirect(nextUrl, { status: 303 });
+  response.cookies.set(ADMIN_COOKIE_NAME, "", {
+    ...getAdminSessionCookieOptions(),
+    expires: new Date(0),
+    maxAge: 0
+  });
 
-  if (!rateLimit.limited) {
-    response.cookies.set(ADMIN_COOKIE_NAME, "", {
-      ...getAdminSessionCookieOptions(),
-      expires: new Date(0),
-      maxAge: 0
-    });
-  }
-
-  return applyRateLimitHeaders(response, rateLimit.result);
+  return response;
 }

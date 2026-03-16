@@ -156,7 +156,7 @@ export function validateShowSyncPayload(rawPayload: string) {
   };
 }
 
-export function syncShows(
+export async function syncShows(
   shows: ManagedShow[],
   originalIdsByClientKey: Map<string, string | null>,
   idsByClientKey: Map<string, string>,
@@ -228,10 +228,10 @@ export function syncShows(
       upload.existingPosterFileName.toLowerCase() !==
         upload.nextPosterFileName.toLowerCase()
     ) {
-      deleteShowPoster(upload.existingPosterFileName);
+      await deleteShowPoster(upload.existingPosterFileName);
     }
 
-    saveShowPoster(upload.nextPosterFileName, upload.bytes);
+    await saveShowPoster(upload.nextPosterFileName, upload.bytes);
   }
 
   replaceShows(shows);
@@ -243,7 +243,7 @@ export function syncShows(
       !retainedOriginalIds.has(existingShow.id) ||
       retainedShow?.bucket === "past"
     ) {
-      deleteShowPoster(existingShow.posterFileName);
+      await deleteShowPoster(existingShow.posterFileName);
     }
   }
 

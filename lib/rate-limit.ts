@@ -47,36 +47,6 @@ function maybeCleanup(now: number) {
   globalThis.__sweetsideRateLimitLastCleanupAt__ = now;
 }
 
-function getForwardedIp(forwardedHeader: string) {
-  const forMatch = forwardedHeader.match(/for=(?:"?\[?)([^;\],"]+)/i);
-  return forMatch?.[1]?.trim();
-}
-
-export function getClientIpAddress(request: Request) {
-  const forwarded = request.headers.get("forwarded");
-  if (forwarded) {
-    const forwardedIp = getForwardedIp(forwarded);
-    if (forwardedIp) {
-      return forwardedIp;
-    }
-  }
-
-  const xForwardedFor = request.headers.get("x-forwarded-for");
-  if (xForwardedFor) {
-    const firstIp = xForwardedFor.split(",")[0]?.trim();
-    if (firstIp) {
-      return firstIp;
-    }
-  }
-
-  const xRealIp = request.headers.get("x-real-ip")?.trim();
-  if (xRealIp) {
-    return xRealIp;
-  }
-
-  return "unknown";
-}
-
 function consumeRateLimit(
   key: string,
   policy: RateLimitPolicy,
@@ -149,8 +119,10 @@ export function applyRateLimitHeaders(
 }
 
 export function enforceRateLimit(request: Request, policy: RateLimitPolicy) {
-  const clientIp = getClientIpAddress(request);
-  const key = `${policy.id}:${clientIp}`;
+  void request;
+  // This deployment does not trust forwarded IP headers, so admin limits are
+  // enforced process-wide per route instead of per reported client address.
+  const key = `${policy.id}:global`;
   const result = consumeRateLimit(key, policy);
 
   if (result.allowed) {

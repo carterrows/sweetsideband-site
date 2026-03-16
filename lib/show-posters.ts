@@ -42,19 +42,19 @@ export function getShowPosterSrc(fileName?: string): string | undefined {
   return `/posters/${encodeURIComponent(normalizedFileName)}`;
 }
 
-export function saveShowPoster(fileName: string, bytes: Uint8Array) {
+export async function saveShowPoster(fileName: string, bytes: Uint8Array) {
   ensurePosterDir();
-  fs.writeFileSync(getPosterPath(fileName), bytes);
+  await fs.promises.writeFile(getPosterPath(fileName), bytes);
 }
 
-export function deleteShowPoster(fileName?: string) {
+export async function deleteShowPoster(fileName?: string) {
   if (!fileName) {
     return;
   }
 
   const filePath = getPosterPath(fileName);
   if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
+    await fs.promises.unlink(filePath);
   }
 }
 

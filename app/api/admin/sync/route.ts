@@ -10,6 +10,27 @@ import {
 
 export const runtime = "nodejs";
 
+const MAX_POSTER_UPLOAD_BYTES = 5 * 1024 * 1024;
+const MAX_TOTAL_POSTER_UPLOAD_BYTES = 20 * 1024 * 1024;
+const PNG_SIGNATURE = new Uint8Array([
+  0x89,
+  0x50,
+  0x4e,
+  0x47,
+  0x0d,
+  0x0a,
+  0x1a,
+  0x0a
+]);
+
+function isPngFile(bytes: Uint8Array) {
+  if (bytes.length < PNG_SIGNATURE.length) {
+    return false;
+  }
+
+  return PNG_SIGNATURE.every((byte, index) => bytes[index] === byte);
+}
+
 async function extractPosterUploads(formData: FormData) {
   const uploads = new Map<
     string,
@@ -18,6 +39,7 @@ async function extractPosterUploads(formData: FormData) {
       fileName: string;
     }
   >();
+  let totalUploadBytes = 0;
 
   for (const [key, value] of formData.entries()) {
     if (!key.startsWith("poster:")) {
@@ -32,10 +54,30 @@ async function extractPosterUploads(formData: FormData) {
       throw new Error("Poster files must use the .png extension.");
     }
 
+    if (value.size === 0) {
+      throw new Error("Poster files cannot be empty.");
+    }
+
+    if (value.size > MAX_POSTER_UPLOAD_BYTES) {
+      throw new Error("Each poster must be 5 MB or smaller.");
+    }
+
+    totalUploadBytes += value.size;
+
+    if (totalUploadBytes > MAX_TOTAL_POSTER_UPLOAD_BYTES) {
+      throw new Error("Combined poster uploads must be 20 MB or smaller.");
+    }
+
+    const bytes = new Uint8Array(await value.arrayBuffer());
+
+    if (!isPngFile(bytes)) {
+      throw new Error("Poster files must be valid PNG images.");
+    }
+
     uploads.set(
       key.slice("poster:".length),
       {
-        bytes: new Uint8Array(await value.arrayBuffer()),
+        bytes,
         fileName: value.name
       }
     );
@@ -68,7 +110,7 @@ export async function POST(request: Request) {
     const { shows, originalIdsByClientKey, idsByClientKey } =
       validateShowSyncPayload(payload);
     const uploadsByClientKey = await extractPosterUploads(formData);
-    const syncedShows = syncShows(
+    const syncedShows = await syncShows(
       shows,
       originalIdsByClientKey,
       idsByClientKey,
