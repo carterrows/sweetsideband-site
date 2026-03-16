@@ -121,7 +121,8 @@
   - `X-Content-Type-Options`
   - `Referrer-Policy`
   - `Permissions-Policy`
-- Admin APIs also use an in-memory per-IP rate limiter for login, logout, and sync requests.
+- Admin APIs use an in-memory process-wide rate limiter for login and sync requests.
+- Logout clears the admin session cookie server-side and the client navigates directly to `/admin/login`.
 
 ## Environment Variables
 - `.env.example` contains:
@@ -153,7 +154,8 @@
 ## Known Caveats / Maintenance Notes
 - There are currently no automated tests in the repo.
 - Shows now exist only in SQLite, so local edits to show listings should go through the admin UI or direct DB changes.
-- The rate limiter is in-memory and assumes a single app instance.
+- The rate limiter is in-memory, process-wide, and assumes a single app instance.
+- Admin poster uploads are limited to valid PNG files, 5 MB each, and 20 MB combined per sync request.
 - Many `next/image` usages set `unoptimized`; keep this in mind before changing image optimization strategy.
 - `next-env.d.ts` is generated-style and should not be manually edited.
 - `node_modules`, `.next`, `.env*`, and `tsconfig.tsbuildinfo` are ignored by git.

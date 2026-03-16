@@ -24,7 +24,7 @@ npm start
 docker compose up --build
 ```
 
-Site runs at http://localhost:3000
+Site runs at http://127.0.0.1:3000
 
 ## JSON content editing
 
@@ -123,9 +123,11 @@ The admin dashboard lets you:
 - edit any show fields
 - add and delete shows
 - upload PNG posters only
+- upload posters up to 5 MB each, with a 20 MB combined upload cap per sync
 - sync the draft state and revalidate `/` and `/shows`
 
 Admin API protection:
 
-- login, logout, and sync endpoints are rate-limited per client IP
-- sync handles poster uploads and show writes in the same request
+- login and sync endpoints use an in-memory process-wide rate limiter
+- logout clears the admin session cookie server-side and the client navigates directly to `/admin/login`
+- sync validates poster extension, PNG file signature, upload size limits, and show writes in the same request
