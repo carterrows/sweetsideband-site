@@ -13,3 +13,11 @@ services:
     environment:
       NEXT_TELEMETRY_DISABLED: "1"
       SITE_URL: ${SITE_URL:-http://localhost:3000}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
+      ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET}
+      SHOWS_DB_PATH: /app/storage/shows.sqlite
+    volumes:
+      - shows-db:/app/storage
+
+volumes:
+  shows-db:

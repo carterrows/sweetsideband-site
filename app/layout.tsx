@@ -2,10 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
 import Script from "next/script";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import SiteChrome from "@/components/SiteChrome";
 import { getBand } from "@/lib/content";
-import { NavbarHeroProvider } from "@/components/NavbarHeroContext";
+import { getSiteUrl } from "@/lib/site-url";
 
 const display = Bebas_Neue({
   weight: "400",
@@ -20,9 +19,7 @@ const body = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: process.env.SITE_URL
-    ? new URL(process.env.SITE_URL)
-    : undefined,
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "Sweetside | Official Site — Shows, Videos & Merch",
     template: "%s | Sweetside"
@@ -60,13 +57,7 @@ export default function RootLayout({
           data-website-id="76fd866c-c6ee-44ab-9ef6-3150fce27238"
           strategy="afterInteractive"
         />
-        <NavbarHeroProvider>
-          <div className="flex min-h-screen flex-col">
-            <Navbar band={band} />
-            <main className="flex-1">{children}</main>
-            <Footer band={band} />
-          </div>
-        </NavbarHeroProvider>
+        <SiteChrome band={band}>{children}</SiteChrome>
       </body>
     </html>
   );

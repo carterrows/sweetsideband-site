@@ -1,0 +1,9 @@
+node_modules
+.next
+.env
+.env.*
+!.env.example
+data/*.sqlite
+storage
+tsconfig.tsbuildinfo
+.DS_Store

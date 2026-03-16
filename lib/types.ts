@@ -27,12 +27,20 @@ export type Show = {
   showTime?: string;
   doorsOpenTime?: string;
   coverFee?: string;
+  posterFileName?: string;
   posterSrc?: string;
 };
+
+export type ShowBucket = "upcoming" | "past";
 
 export type ShowsData = {
   upcoming: Show[];
   past: Show[];
+};
+
+export type ManagedShow = Show & {
+  bucket: ShowBucket;
+  sortOrder: number;
 };
 
 export type Member = {

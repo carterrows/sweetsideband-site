@@ -3,7 +3,7 @@
 ## Project Purpose
 - This repository powers the public website for the band **Sweetside**.
 - Primary goals: show upcoming/past shows, media gallery, streaming links, merch placeholder, and booking contact.
-- Content is file-driven (JSON + static assets), not DB-driven.
+- Band/member/media content is file-driven, while shows are stored in SQLite.
 
 ## Tech Stack
 - **Next.js 16** (App Router) + **React 18** + **TypeScript (strict)**.
@@ -14,7 +14,7 @@
 ## Repository Layout
 - `app/`: App Router pages, metadata routes, global styles.
 - `components/`: UI and interaction components.
-- `data/`: Editable site content (band/shows/members/media JSON).
+- `data/`: Editable site content and the local SQLite file for shows.
 - `lib/`: Typed models and content loading helpers.
 - `public/`: Static assets (backgrounds, logos, member photos, show photos, thumbnails, icons).
 - `Dockerfile`, `docker-compose.yml`: Production container build/run.
@@ -23,10 +23,16 @@
 ## Routing and Page Behavior
 - `/` (`app/page.tsx`):
   - Hero with background image and CTA from Spotify status.
-  - Sections: upcoming shows (first 3), streaming links, members, contact form.
+  - Sections: upcoming shows (first 3 from the SQLite-backed upcoming list), streaming links, members, contact form.
 - `/shows`:
   - Full upcoming + past show listings.
   - Booking mailto link.
+- `/admin`:
+  - Admin dashboard for editing shows in SQLite.
+- `/admin/login`:
+  - Fixed-username admin login page.
+- `/posters/[fileName]`:
+  - Runtime route that serves uploaded poster PNGs from writable storage.
 - `/video`:
   - Dedicated video gallery page with large video cards.
   - Top pill selector to switch between `Video` and `Photo`.
@@ -44,23 +50,27 @@
 - Content loader: `lib/content.ts`.
 - Uses synchronous JSON reads from `data/` with a strict allowlist:
   - `band.json`
-  - `shows.json`
   - `members.json`
   - `media.json`
+- Show data is loaded from SQLite through `lib/shows-db.ts`.
+- Public show lists are sorted by date descending within `upcoming` and `past`.
 - Show photos for `/video/photos` are loaded from `public/images/shows/` (filesystem scan), not from JSON.
 - Components/pages rely on these TypeScript types in `lib/types.ts`.
-- If moving to a DB later, keep return shapes unchanged and swap internals of `lib/content.ts`.
 
 ## Data Files: What They Drive
 - `data/band.json`:
   - band name, location, booking email, socials, streaming links.
-- `data/shows.json`:
-  - `upcoming[]` and `past[]` lists.
-  - No automatic date sorting/migration; maintain manually.
 - `data/members.json`:
   - member cards shown on home page.
 - `data/media.json`:
   - video items for the `/video` gallery page.
+- `data/shows.sqlite`:
+  - local default SQLite database for shows during non-Docker development.
+- `storage/posters/`:
+  - local default writable poster storage outside `public/`.
+- Docker volume storage:
+  - `/app/storage/shows.sqlite`
+  - `/app/storage/posters/`
 - `public/images/shows/`:
   - source of truth for the `/video/photos` masonry gallery.
   - all supported image files in this folder are included automatically and shuffled during build/static generation.
@@ -111,12 +121,19 @@
   - `X-Content-Type-Options`
   - `Referrer-Policy`
   - `Permissions-Policy`
+- Admin APIs use an in-memory process-wide rate limiter for login and sync requests.
+- Logout clears the admin session cookie server-side and the client navigates directly to `/admin/login`.
 
 ## Environment Variables
 - `.env.example` contains:
   - `SITE_URL=`
+- `.env.example` also documents:
+  - `ADMIN_PASSWORD_HASH=`
+  - `ADMIN_SESSION_SECRET=`
+  - `SHOWS_DB_PATH=`
 - `SITE_URL` influences metadata base URL, sitemap, and robots URLs.
 - Docker build/run also passes `SITE_URL`.
+- In Docker Compose, `SHOWS_DB_PATH` is set to `/app/storage/shows.sqlite`.
 
 ## Local Development
 - Install: `npm install`
@@ -127,15 +144,18 @@
 
 ## Docker
 - `docker compose up --build` runs production container on `127.0.0.1:3000`.
-- Dockerfile uses multi-stage Node 24 Alpine build:
+- Dockerfile uses multi-stage Node 24 bookworm-slim build:
   - install deps (`npm ci`)
+  - install native build tools for `better-sqlite3`
   - build Next app
   - prune dev dependencies
   - copy runtime artifacts to non-root `node` user image.
 
 ## Known Caveats / Maintenance Notes
 - There are currently no automated tests in the repo.
-- `data/shows.json` requires manual upkeep to move dates between `upcoming` and `past`.
+- Shows now exist only in SQLite, so local edits to show listings should go through the admin UI or direct DB changes.
+- The rate limiter is in-memory, process-wide, and assumes a single app instance.
+- Admin poster uploads are limited to valid PNG files, 5 MB each, and 20 MB combined per sync request.
 - Many `next/image` usages set `unoptimized`; keep this in mind before changing image optimization strategy.
 - `next-env.d.ts` is generated-style and should not be manually edited.
 - `node_modules`, `.next`, `.env*`, and `tsconfig.tsbuildinfo` are ignored by git.
@@ -145,6 +165,8 @@
 2. Check `data/*.json` for the latest real content before making assumptions.
 3. If content-only change: edit JSON + ensure referenced files exist in `public/images/...`.
    For show photos specifically, add/remove files in `public/images/shows/` instead of editing `data/media.json`.
+   For show listings, inspect the admin flow and SQLite helpers.
+   For show posters, inspect `lib/show-posters.ts` and the `/posters/[fileName]` route instead of `public/`.
 4. If UI change: inspect the specific page in `app/` and related component(s) in `components/`.
 5. Run `npm run lint` after code edits.
 6. If route/metadata/security behavior changes, review `app/layout.tsx`, `app/robots.ts`, `app/sitemap.ts`, and `next.config.js`.

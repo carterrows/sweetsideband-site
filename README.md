@@ -1,6 +1,6 @@
 # Sweetside Band Website
 
-Modern, mobile-first band website built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Content lives in local JSON files for easy editing, and Docker is ready for Raspberry Pi 5.
+Modern, mobile-first band website built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Band, member, and media content live in local JSON files, while shows are stored in SQLite. Docker is ready for Raspberry Pi 5.
 
 ## Local development
 
@@ -24,14 +24,13 @@ npm start
 docker compose up --build
 ```
 
-Site runs at http://localhost:3000
+Site runs at http://127.0.0.1:3000
 
-## Content editing (no code changes)
+## JSON content editing
 
 Edit the JSON files under `data/`:
 
 - `data/band.json` - name, location, socials, streaming
-- `data/shows.json` - upcoming and past shows
 - `data/members.json` - band member cards
 - `data/media.json` - video gallery cards
 
@@ -91,8 +90,44 @@ Pull YouTube thumbnails using: http://img.youtube.com/vi/VIDEOID/maxresdefault.j
 
 ## Environment config
 
-Copy `.env.example` to `.env` if you want to set `SITE_URL`.
+Copy `.env.example` to `.env` or `.env.local`.
 
-## Upgrade path: SQLite
+Available variables:
 
-The content loader lives in `lib/content.ts`. When you want a database, swap the JSON reads for SQLite queries and keep the same return types (see `lib/types.ts`). Components won’t need changes.
+- `SITE_URL` - canonical site URL used for metadata, sitemap, and robots
+- `ADMIN_PASSWORD_HASH` - salted scrypt hash for the fixed `admin` username
+- `ADMIN_SESSION_SECRET` - random secret for signing the admin session cookie
+- `SHOWS_DB_PATH` - optional override for the SQLite database path
+
+## Shows storage
+
+Shows load through `lib/shows-db.ts`.
+
+- Local default database path is `data/shows.sqlite`.
+- Docker stores the database in a named volume mounted at `/app/storage/shows.sqlite`.
+- Public pages still read through `lib/content.ts`, so the UI contracts stay the same.
+- Uploaded posters are stored in runtime storage.
+- Local poster storage defaults to `storage/posters/`.
+- Docker poster storage lives beside the database inside the mounted `/app/storage` volume.
+- Posters are served through `/posters/:fileName`.
+
+## Admin
+
+The admin UI lives at `/admin`.
+
+Use the admin UI for show management. JSON editing no longer applies to shows.
+
+The admin dashboard lets you:
+
+- review upcoming and past shows
+- edit any show fields
+- add and delete shows
+- upload PNG posters only
+- upload posters up to 5 MB each, with a 20 MB combined upload cap per sync
+- sync the draft state and revalidate `/` and `/shows`
+
+Admin API protection:
+
+- login and sync endpoints use an in-memory process-wide rate limiter
+- logout clears the admin session cookie server-side and the client navigates directly to `/admin/login`
+- sync validates poster extension, PNG file signature, upload size limits, and show writes in the same request
