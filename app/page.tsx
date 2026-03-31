@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Metadata } from "next";
+import { ChevronDown } from "lucide-react";
 import { getBand, getMembers, getShows } from "@/lib/content";
 import SectionHeading from "@/components/SectionHeading";
 import ShowsList from "@/components/ShowsList";
@@ -58,14 +58,14 @@ export default function HomePage() {
           />
           <div className="flex flex-wrap justify-center gap-4">
             {isSpotifyUrl(spotifyLink) ? (
-              <Link
+              <a
                 href={spotifyLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-5 py-2.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:px-6 sm:py-3 sm:text-xs"
               >
                 Listen
-              </Link>
+              </a>
             ) : (
               <span className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-5 py-2.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white sm:px-6 sm:py-3 sm:text-xs">
                 Coming Soon
@@ -73,10 +73,16 @@ export default function HomePage() {
             )}
           </div>
         </div>
+        <div className="absolute inset-x-0 bottom-8 z-10 flex justify-center px-6 sm:bottom-10">
+          <div className="inline-flex flex-col items-center gap-1 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-paper/80 sm:text-[0.7rem]">
+            <span>Scroll Down</span>
+            <ChevronDown className="h-4 w-4" strokeWidth={1.75} />
+          </div>
+        </div>
         <HomeHeroObserver />
       </section>
 
-      <section className="section py-12 md:py-16 relative z-10 bg-paper" id="content">
+      <section className="section py-12 md:py-16 relative z-10 bg-paper">
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
