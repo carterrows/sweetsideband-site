@@ -45,7 +45,7 @@ function normalizeOptionalValue(value?: string) {
   return normalized ? normalized : undefined;
 }
 
-function normalizeUrl(value?: string) {
+function normalizeOptionalAbsoluteUrl(value: string | undefined, field: string) {
   const normalized = normalizeOptionalValue(value);
 
   if (!normalized) {
@@ -57,33 +57,11 @@ function normalizeUrl(value?: string) {
   try {
     parsed = new URL(normalized);
   } catch {
-    throw new Error("Venue URL must be a valid absolute URL.");
+    throw new Error(`${field} must be a valid absolute URL.`);
   }
 
   if (!["http:", "https:"].includes(parsed.protocol)) {
-    throw new Error("Venue URL must begin with http:// or https://.");
-  }
-
-  return normalized;
-}
-
-function normalizeTicketsUrl(value?: string) {
-  const normalized = normalizeOptionalValue(value);
-
-  if (!normalized) {
-    return undefined;
-  }
-
-  let parsed: URL;
-
-  try {
-    parsed = new URL(normalized);
-  } catch {
-    throw new Error("Tickets URL must be a valid absolute URL.");
-  }
-
-  if (!["http:", "https:"].includes(parsed.protocol)) {
-    throw new Error("Tickets URL must begin with http:// or https://.");
+    throw new Error(`${field} must begin with http:// or https://.`);
   }
 
   return normalized;
@@ -103,8 +81,11 @@ function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedSho
   const detailFields =
     input.bucket === "upcoming"
       ? {
-          venueUrl: normalizeUrl(input.venueUrl),
-          ticketsUrl: normalizeTicketsUrl(input.ticketsUrl),
+          venueUrl: normalizeOptionalAbsoluteUrl(input.venueUrl, "Venue URL"),
+          ticketsUrl: normalizeOptionalAbsoluteUrl(
+            input.ticketsUrl,
+            "Tickets URL"
+          ),
           venueAddress: normalizeOptionalValue(input.venueAddress),
           showTime: normalizeOptionalValue(input.showTime),
           doorsOpenTime: normalizeOptionalValue(input.doorsOpenTime),
