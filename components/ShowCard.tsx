@@ -90,7 +90,7 @@ export default function ShowCard({
                   </dd>
                   {show.venueUrl || show.ticketsUrl ? (
                     <dd className="mt-3 md:col-start-1 md:mt-4">
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-3 md:flex-nowrap">
                         {show.venueUrl ? (
                           <Link
                             href={show.venueUrl}
