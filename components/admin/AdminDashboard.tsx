@@ -49,6 +49,7 @@ function createBlankShow(bucket: ShowBucket): EditableShow {
     city: "",
     venue: "",
     venueUrl: "",
+    ticketsUrl: "",
     venueAddress: "",
     showTime: "",
     doorsOpenTime: "",
@@ -136,6 +137,7 @@ export default function AdminDashboard({
               ...show,
               bucket,
               venueUrl: bucket === "past" ? undefined : show.venueUrl,
+              ticketsUrl: bucket === "past" ? undefined : show.ticketsUrl,
               venueAddress: bucket === "past" ? undefined : show.venueAddress,
               showTime: bucket === "past" ? undefined : show.showTime,
               doorsOpenTime: bucket === "past" ? undefined : show.doorsOpenTime,
@@ -252,6 +254,7 @@ export default function AdminDashboard({
         city: show.city,
         venue: show.venue,
         venueUrl: show.venueUrl,
+        ticketsUrl: show.ticketsUrl,
         venueAddress: show.venueAddress,
         showTime: show.showTime,
         doorsOpenTime: show.doorsOpenTime,
@@ -521,6 +524,22 @@ export default function AdminDashboard({
                     </label>
                     <label className="space-y-2">
                       <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
+                        Tickets URL
+                      </span>
+                      <input
+                        value={selectedShow.ticketsUrl ?? ""}
+                        onChange={(event) =>
+                          updateShow(
+                            selectedShow.clientKey,
+                            "ticketsUrl",
+                            event.target.value
+                          )
+                        }
+                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
+                      />
+                    </label>
+                    <label className="space-y-2">
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
                         Venue Address
                       </span>
                       <input
@@ -578,7 +597,7 @@ export default function AdminDashboard({
                   </>
                 ) : (
                   <div className="rounded-[1.5rem] border border-dashed border-black/10 px-4 py-5 text-sm text-ink-500 md:col-span-2">
-                    Past shows only keep date, city, and venue. Additional venue details are cleared automatically when a show is moved to past.
+                    Past shows only keep date, city, and venue. Additional venue, ticket, and poster details are cleared automatically when a show is moved to past.
                   </div>
                 )}
               </div>

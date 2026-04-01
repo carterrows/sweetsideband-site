@@ -12,6 +12,7 @@ type ShowRow = {
   city: string;
   venue: string;
   venue_url: string | null;
+  tickets_url: string | null;
   venue_address: string | null;
   show_time: string | null;
   doors_open_time: string | null;
@@ -32,10 +33,10 @@ function getDatabase() {
   }
 
   fs.mkdirSync(path.dirname(databasePath), { recursive: true });
-  database = new Database(databasePath);
-  database.exec("PRAGMA journal_mode = WAL;");
-  database.exec("PRAGMA synchronous = NORMAL;");
-  database.exec(`
+  const db = new Database(databasePath);
+  db.exec("PRAGMA journal_mode = WAL;");
+  db.exec("PRAGMA synchronous = NORMAL;");
+  db.exec(`
     CREATE TABLE IF NOT EXISTS shows (
       id TEXT PRIMARY KEY,
       bucket TEXT NOT NULL CHECK(bucket IN ('upcoming', 'past')),
@@ -44,6 +45,7 @@ function getDatabase() {
       city TEXT NOT NULL,
       venue TEXT NOT NULL,
       venue_url TEXT,
+      tickets_url TEXT,
       venue_address TEXT,
       show_time TEXT,
       doors_open_time TEXT,
@@ -51,6 +53,7 @@ function getDatabase() {
       poster_file_name TEXT
     );
   `);
+  database = db;
 
   return database;
 }
@@ -64,6 +67,7 @@ function mapShowRow(row: ShowRow): ManagedShow {
     city: row.city,
     venue: row.venue,
     venueUrl: row.venue_url ?? undefined,
+    ticketsUrl: row.tickets_url ?? undefined,
     venueAddress: row.venue_address ?? undefined,
     showTime: row.show_time ?? undefined,
     doorsOpenTime: row.doors_open_time ?? undefined,
@@ -98,6 +102,7 @@ export function getManagedShows(): ManagedShow[] {
           city,
           venue,
           venue_url,
+          tickets_url,
           venue_address,
           show_time,
           doors_open_time,
@@ -136,12 +141,13 @@ export function replaceShows(shows: ManagedShow[]) {
       city,
       venue,
       venue_url,
+      tickets_url,
       venue_address,
       show_time,
       doors_open_time,
       cover_fee,
       poster_file_name
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `);
 
   db.exec("BEGIN IMMEDIATE;");
@@ -158,6 +164,7 @@ export function replaceShows(shows: ManagedShow[]) {
         show.city,
         show.venue,
         normalizeNullableValue(show.venueUrl),
+        normalizeNullableValue(show.ticketsUrl),
         normalizeNullableValue(show.venueAddress),
         normalizeNullableValue(show.showTime),
         normalizeNullableValue(show.doorsOpenTime),

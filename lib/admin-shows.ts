@@ -15,6 +15,7 @@ export type ShowSyncInput = {
   city: string;
   venue: string;
   venueUrl?: string;
+  ticketsUrl?: string;
   venueAddress?: string;
   showTime?: string;
   doorsOpenTime?: string;
@@ -66,6 +67,28 @@ function normalizeUrl(value?: string) {
   return normalized;
 }
 
+function normalizeTicketsUrl(value?: string) {
+  const normalized = normalizeOptionalValue(value);
+
+  if (!normalized) {
+    return undefined;
+  }
+
+  let parsed: URL;
+
+  try {
+    parsed = new URL(normalized);
+  } catch {
+    throw new Error("Tickets URL must be a valid absolute URL.");
+  }
+
+  if (!["http:", "https:"].includes(parsed.protocol)) {
+    throw new Error("Tickets URL must begin with http:// or https://.");
+  }
+
+  return normalized;
+}
+
 function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedShow {
   const date = normalizeRequiredValue(input.date, "Date");
   if (!isIsoShowDate(date)) {
@@ -81,6 +104,7 @@ function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedSho
     input.bucket === "upcoming"
       ? {
           venueUrl: normalizeUrl(input.venueUrl),
+          ticketsUrl: normalizeTicketsUrl(input.ticketsUrl),
           venueAddress: normalizeOptionalValue(input.venueAddress),
           showTime: normalizeOptionalValue(input.showTime),
           doorsOpenTime: normalizeOptionalValue(input.doorsOpenTime),
@@ -88,6 +112,7 @@ function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedSho
         }
       : {
           venueUrl: undefined,
+          ticketsUrl: undefined,
           venueAddress: undefined,
           showTime: undefined,
           doorsOpenTime: undefined,

@@ -100,6 +100,18 @@ export default function ShowCard({
                       </Link>
                     </dd>
                   ) : null}
+                  {show.ticketsUrl ? (
+                    <dd className="mt-3 md:col-start-1 md:mt-0">
+                      <Link
+                        href={show.ticketsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${infoButtonClassName} justify-start`}
+                      >
+                        Tickets
+                      </Link>
+                    </dd>
+                  ) : null}
                 </div>
               </dl>
               {show.posterSrc ? (

@@ -110,6 +110,7 @@ Shows load through `lib/shows-db.ts`.
 - Local poster storage defaults to `storage/posters/`.
 - Docker poster storage lives beside the database inside the mounted `/app/storage` volume.
 - Posters are served through `/posters/:fileName`.
+- Upcoming shows may also store an optional `tickets_url` value in SQLite for the public Tickets button.
 
 ## Admin
 
@@ -121,6 +122,7 @@ The admin dashboard lets you:
 
 - review upcoming and past shows
 - edit any show fields
+- add or clear optional upcoming-only ticket links
 - add and delete shows
 - upload PNG posters only
 - upload posters up to 5 MB each, with a 20 MB combined upload cap per sync
