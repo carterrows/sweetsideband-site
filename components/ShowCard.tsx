@@ -101,7 +101,7 @@ export default function ShowCard({
                     </dd>
                   ) : null}
                   {show.ticketsUrl ? (
-                    <dd className="mt-3 md:col-start-1 md:mt-0">
+                    <dd className="mt-3 md:col-start-1 md:mt-3">
                       <Link
                         href={show.ticketsUrl}
                         target="_blank"
