@@ -9,7 +9,7 @@ export default function MerchPage() {
   return (
     <section className="section">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-6 text-center">
-        <h1 className="text-4xl font-semibold text-ink-900 sm:text-5xl">
+        <h1 className="text-4xl font-semibold text-accent sm:text-5xl">
           Coming Soon
         </h1>
         <p className="max-w-xl text-lg text-ink-600">

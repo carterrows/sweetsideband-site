@@ -9,7 +9,7 @@ export default function SectionHeading({
 
   return (
     <div>
-      <h2 className="text-3xl font-semibold text-ink-900 md:text-4xl">
+      <h2 className="text-3xl font-semibold text-accent md:text-4xl">
         {heading}
       </h2>
     </div>
