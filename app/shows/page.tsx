@@ -20,7 +20,7 @@ export default function ShowsPage() {
       <div className="mx-auto w-full max-w-6xl px-6">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <SectionHeading title="Shows" subtitle="Catch us live" />
+            <SectionHeading title="Shows" subtitle="Next shows" />
             <Link
               href={`mailto:${band.email}`}
               className="text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:text-ink-900"
