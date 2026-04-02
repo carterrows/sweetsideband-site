@@ -5,16 +5,13 @@ export default function SectionHeading({
   title: string;
   subtitle?: string;
 }) {
+  const heading = subtitle ?? title;
+
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-xs uppercase tracking-[0.35em] text-accent">
-        {title}
-      </p>
-      {subtitle && (
-        <h2 className="text-3xl font-semibold text-ink-900 md:text-4xl">
-          {subtitle}
-        </h2>
-      )}
+    <div>
+      <h2 className="text-3xl font-semibold text-ink-900 md:text-4xl">
+        {heading}
+      </h2>
     </div>
   );
 }

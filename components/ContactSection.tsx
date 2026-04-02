@@ -31,10 +31,7 @@ export default function ContactSection({ band }: { band: Band }) {
     >
       <div className="grid gap-10 md:grid-cols-[1.2fr_1fr]">
         <div>
-          <p className="text-xs uppercase tracking-[0.35em] text-accent">
-            Contact
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold text-ink-900 md:text-4xl">
+          <h2 className="text-3xl font-semibold text-ink-900 md:text-4xl">
             Get in touch
           </h2>
           <p className="mt-4 text-ink-600">
