@@ -18,6 +18,9 @@ export default function ShowCard({
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const detailsId = useId();
+  const ticketsButtonClassName = show.ticketsUrl
+    ? infoButtonClassName
+    : `${infoButtonClassName} cursor-not-allowed border-black/15 text-ink-400 hover:bg-transparent hover:text-ink-400 focus-visible:ring-0`;
 
   return (
     <li className="py-6">
@@ -31,15 +34,36 @@ export default function ShowCard({
           <span>{show.city}</span>
         </p>
         {showDetails ? (
-          <button
-            type="button"
-            aria-expanded={isExpanded}
-            aria-controls={detailsId}
-            onClick={() => setIsExpanded((open) => !open)}
-            className={`${infoButtonClassName} md:justify-self-end`}
-          >
-            <span>{isExpanded ? "Less info" : "More info"}</span>
-          </button>
+          <div className="flex flex-wrap gap-3 md:justify-self-end">
+            {show.ticketsUrl ? (
+              <Link
+                href={show.ticketsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={ticketsButtonClassName}
+              >
+                Tickets
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled
+                aria-disabled="true"
+                className={ticketsButtonClassName}
+              >
+                Tickets
+              </button>
+            )}
+            <button
+              type="button"
+              aria-expanded={isExpanded}
+              aria-controls={detailsId}
+              onClick={() => setIsExpanded((open) => !open)}
+              className={infoButtonClassName}
+            >
+              <span>{isExpanded ? "Less info" : "More info"}</span>
+            </button>
+          </div>
         ) : null}
       </div>
       {showDetails ? (
@@ -88,7 +112,7 @@ export default function ShowCard({
                   <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
                     {show.coverFee || "TBA"}
                   </dd>
-                  {show.venueUrl || show.ticketsUrl ? (
+                  {show.venueUrl ? (
                     <dd className="mt-3 md:col-start-1 md:mt-4">
                       <div className="flex flex-wrap gap-3 md:flex-nowrap">
                         {show.venueUrl ? (
@@ -99,16 +123,6 @@ export default function ShowCard({
                             className={`${infoButtonClassName} justify-start`}
                           >
                             Venue
-                          </Link>
-                        ) : null}
-                        {show.ticketsUrl ? (
-                          <Link
-                            href={show.ticketsUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`${infoButtonClassName} justify-start`}
-                          >
-                            Tickets
                           </Link>
                         ) : null}
                       </div>
