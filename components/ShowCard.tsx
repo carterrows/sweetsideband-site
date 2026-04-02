@@ -88,16 +88,30 @@ export default function ShowCard({
                   <dd className="mt-1 text-lg uppercase text-ink-900 sm:text-xl md:mt-0">
                     {show.coverFee || "TBA"}
                   </dd>
-                  {show.venueUrl ? (
+                  {show.venueUrl || show.ticketsUrl ? (
                     <dd className="mt-3 md:col-start-1 md:mt-4">
-                      <Link
-                        href={show.venueUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`${infoButtonClassName} justify-start`}
-                      >
-                        Venue
-                      </Link>
+                      <div className="flex flex-wrap gap-3 md:flex-nowrap">
+                        {show.venueUrl ? (
+                          <Link
+                            href={show.venueUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`${infoButtonClassName} justify-start`}
+                          >
+                            Venue
+                          </Link>
+                        ) : null}
+                        {show.ticketsUrl ? (
+                          <Link
+                            href={show.ticketsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`${infoButtonClassName} justify-start`}
+                          >
+                            Tickets
+                          </Link>
+                        ) : null}
+                      </div>
                     </dd>
                   ) : null}
                 </div>

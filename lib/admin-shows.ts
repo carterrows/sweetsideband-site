@@ -15,6 +15,7 @@ export type ShowSyncInput = {
   city: string;
   venue: string;
   venueUrl?: string;
+  ticketsUrl?: string;
   venueAddress?: string;
   showTime?: string;
   doorsOpenTime?: string;
@@ -44,7 +45,7 @@ function normalizeOptionalValue(value?: string) {
   return normalized ? normalized : undefined;
 }
 
-function normalizeUrl(value?: string) {
+function normalizeOptionalAbsoluteUrl(value: string | undefined, field: string) {
   const normalized = normalizeOptionalValue(value);
 
   if (!normalized) {
@@ -56,11 +57,11 @@ function normalizeUrl(value?: string) {
   try {
     parsed = new URL(normalized);
   } catch {
-    throw new Error("Venue URL must be a valid absolute URL.");
+    throw new Error(`${field} must be a valid absolute URL.`);
   }
 
   if (!["http:", "https:"].includes(parsed.protocol)) {
-    throw new Error("Venue URL must begin with http:// or https://.");
+    throw new Error(`${field} must begin with http:// or https://.`);
   }
 
   return normalized;
@@ -80,7 +81,11 @@ function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedSho
   const detailFields =
     input.bucket === "upcoming"
       ? {
-          venueUrl: normalizeUrl(input.venueUrl),
+          venueUrl: normalizeOptionalAbsoluteUrl(input.venueUrl, "Venue URL"),
+          ticketsUrl: normalizeOptionalAbsoluteUrl(
+            input.ticketsUrl,
+            "Tickets URL"
+          ),
           venueAddress: normalizeOptionalValue(input.venueAddress),
           showTime: normalizeOptionalValue(input.showTime),
           doorsOpenTime: normalizeOptionalValue(input.doorsOpenTime),
@@ -88,6 +93,7 @@ function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedSho
         }
       : {
           venueUrl: undefined,
+          ticketsUrl: undefined,
           venueAddress: undefined,
           showTime: undefined,
           doorsOpenTime: undefined,

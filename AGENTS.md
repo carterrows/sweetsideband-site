@@ -53,6 +53,7 @@
   - `members.json`
   - `media.json`
 - Show data is loaded from SQLite through `lib/shows-db.ts`.
+- Upcoming show records may include optional `venue_url`, `tickets_url`, time, fee, address, and poster fields.
 - Public show lists are sorted by date descending within `upcoming` and `past`.
 - Show photos for `/video/photos` are loaded from `public/images/shows/` (filesystem scan), not from JSON.
 - Components/pages rely on these TypeScript types in `lib/types.ts`.
@@ -66,6 +67,7 @@
   - video items for the `/video` gallery page.
 - `data/shows.sqlite`:
   - local default SQLite database for shows during non-Docker development.
+  - upcoming rows may include `tickets_url` for the public Tickets button.
 - `storage/posters/`:
   - local default writable poster storage outside `public/`.
 - Docker volume storage:
@@ -154,6 +156,7 @@
 ## Known Caveats / Maintenance Notes
 - There are currently no automated tests in the repo.
 - Shows now exist only in SQLite, so local edits to show listings should go through the admin UI or direct DB changes.
+- When a show is moved from `upcoming` to `past`, upcoming-only fields such as `venue_url`, `tickets_url`, and `poster_file_name` are cleared.
 - The rate limiter is in-memory, process-wide, and assumes a single app instance.
 - Admin poster uploads are limited to valid PNG files, 5 MB each, and 20 MB combined per sync request.
 - Many `next/image` usages set `unoptimized`; keep this in mind before changing image optimization strategy.
