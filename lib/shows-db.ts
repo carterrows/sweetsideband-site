@@ -1,7 +1,13 @@
 import fs from "fs";
 import path from "path";
 import Database from "better-sqlite3";
-import type { ManagedShow, ShowBucket, ShowsData } from "./types";
+import type {
+  GalleryImage,
+  ManagedShow,
+  MediaItem,
+  ShowBucket,
+  ShowsData
+} from "./types";
 import { getShowPosterSrc } from "./show-posters";
 
 type ShowRow = {
@@ -18,6 +24,19 @@ type ShowRow = {
   doors_open_time: string | null;
   cover_fee: string | null;
   poster_file_name: string | null;
+};
+
+type GalleryImageRow = {
+  id: string;
+  file_name: string;
+  title: string;
+  mime_type: "image/jpeg";
+  byte_size: number;
+  created_at: string;
+};
+
+type GalleryImageContentRow = GalleryImageRow & {
+  content: Buffer;
 };
 
 const dataDir = path.join(process.cwd(), "data");
@@ -53,9 +72,34 @@ function getDatabase() {
       poster_file_name TEXT
     );
   `);
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS gallery_images (
+      id TEXT PRIMARY KEY,
+      file_name TEXT NOT NULL UNIQUE,
+      title TEXT NOT NULL,
+      mime_type TEXT NOT NULL CHECK(mime_type = 'image/jpeg'),
+      byte_size INTEGER NOT NULL,
+      content BLOB NOT NULL,
+      created_at TEXT NOT NULL
+    );
+  `);
   database = db;
 
   return database;
+}
+
+function mapGalleryImageRow(row: GalleryImageRow): GalleryImage {
+  const src = `/gallery-images/${encodeURIComponent(row.file_name)}`;
+
+  return {
+    id: row.id,
+    fileName: row.file_name,
+    title: row.title,
+    src,
+    mimeType: row.mime_type,
+    byteSize: row.byte_size,
+    createdAt: row.created_at
+  };
 }
 
 function mapShowRow(row: ShowRow): ManagedShow {
@@ -178,4 +222,115 @@ export function replaceShows(shows: ManagedShow[]) {
     db.exec("ROLLBACK;");
     throw error;
   }
+}
+
+export function getManagedGalleryImages(): GalleryImage[] {
+  const db = getDatabase();
+  const rows = db
+    .prepare(
+      `
+        SELECT
+          id,
+          file_name,
+          title,
+          mime_type,
+          byte_size,
+          created_at
+        FROM gallery_images
+        ORDER BY created_at DESC, file_name ASC;
+      `
+    )
+    .all() as GalleryImageRow[];
+
+  return rows.map(mapGalleryImageRow);
+}
+
+function shuffle<T>(items: T[]): T[] {
+  const randomized = [...items];
+  for (let i = randomized.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [randomized[i], randomized[j]] = [randomized[j], randomized[i]];
+  }
+  return randomized;
+}
+
+export function getGalleryPhotosFromDatabase(): MediaItem[] {
+  return shuffle(
+    getManagedGalleryImages().map((image) => ({
+      id: image.id,
+      type: "image" as const,
+      title: image.title,
+      src: image.src,
+      link: image.src,
+      alt: image.title
+    }))
+  );
+}
+
+export function insertGalleryImage({
+  id,
+  fileName,
+  title,
+  bytes,
+  createdAt
+}: {
+  id: string;
+  fileName: string;
+  title: string;
+  bytes: Uint8Array;
+  createdAt: string;
+}) {
+  const db = getDatabase();
+
+  db.prepare(
+    `
+      INSERT INTO gallery_images (
+        id,
+        file_name,
+        title,
+        mime_type,
+        byte_size,
+        content,
+        created_at
+      ) VALUES (?, ?, ?, 'image/jpeg', ?, ?, ?);
+    `
+  ).run(id, fileName, title, bytes.length, Buffer.from(bytes), createdAt);
+}
+
+export function deleteGalleryImage(id: string) {
+  const db = getDatabase();
+  const result = db
+    .prepare("DELETE FROM gallery_images WHERE id = ?;")
+    .run(id.trim());
+
+  return result.changes > 0;
+}
+
+export function readGalleryImage(fileName: string) {
+  const db = getDatabase();
+  const row = db
+    .prepare(
+      `
+        SELECT
+          id,
+          file_name,
+          title,
+          mime_type,
+          byte_size,
+          created_at,
+          content
+        FROM gallery_images
+        WHERE file_name = ?;
+      `
+    )
+    .get(path.basename(fileName.trim())) as GalleryImageContentRow | undefined;
+
+  if (!row) {
+    return null;
+  }
+
+  return {
+    image: mapGalleryImageRow(row),
+    content: row.content
+  };
 }

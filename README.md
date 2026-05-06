@@ -65,7 +65,7 @@ When Spotify is set to a supported Spotify URL (`artist`, `album`, `track`, `pla
 
 ## Images and media
 
-Photos on `/video/photos` are loaded automatically from `public/images/shows/` and shuffled during site build/static generation (not on every request).
+Photos on `/video/photos` are loaded from the SQLite-backed admin gallery and shuffled during site build/static generation (not on every request). Use `/admin` → `Images` to upload or delete gallery photos.
 
 Place other images in `public/images/` and reference them by absolute path in JSON, e.g.
 
@@ -126,6 +126,8 @@ The admin dashboard lets you:
 - add and delete shows
 - upload PNG posters only
 - upload posters up to 5 MB each, with a 20 MB combined upload cap per sync
+- upload and delete photo gallery images
+- upload photo gallery images as `.jpg` or `.jpeg` files up to 1 MB each
 - sync the draft state and revalidate `/` and `/shows`
 
 Admin API protection:
@@ -133,3 +135,4 @@ Admin API protection:
 - login and sync endpoints use an in-memory process-wide rate limiter
 - logout clears the admin session cookie server-side and the client navigates directly to `/admin/login`
 - sync validates poster extension, PNG file signature, upload size limits, and show writes in the same request
+- gallery image uploads validate extension, JPEG file signature, and upload size before storing image bytes in SQLite
