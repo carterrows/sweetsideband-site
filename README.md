@@ -65,7 +65,7 @@ When Spotify is set to a supported Spotify URL (`artist`, `album`, `track`, `pla
 
 ## Images and media
 
-Photos on `/video/photos` are loaded from the SQLite-backed admin gallery and shuffled during site build/static generation (not on every request). Use `/admin` → `Images` to upload or delete gallery photos.
+Photos on `/video/photos` are loaded from the SQLite-backed admin gallery and shuffled during static generation. Use `/admin` → `Images` to upload, delete, or sync gallery photos.
 
 Place other images in `public/images/` and reference them by absolute path in JSON, e.g.
 

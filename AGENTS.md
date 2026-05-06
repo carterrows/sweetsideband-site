@@ -77,7 +77,8 @@
   - source of truth is the `gallery_images` table in SQLite.
   - public images are served through `/gallery-images/[fileName]`.
   - admin uploads accept `.jpg` and `.jpeg` files only, 1 MB max each.
-  - gallery records are shuffled during build/static generation.
+  - gallery records are shuffled during static generation.
+  - use the admin Images sync button to revalidate the static gallery from SQLite.
 
 ## Streaming Link Rules
 - `spotify`/`appleMusic` accept:

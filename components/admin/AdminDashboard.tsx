@@ -99,6 +99,7 @@ export default function AdminDashboard({
   const [imageFeedback, setImageFeedback] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [isSyncingImages, setIsSyncingImages] = useState(false);
   const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
 
   const selectedShow = useMemo(
@@ -429,6 +430,41 @@ export default function AdminDashboard({
     })();
   };
 
+  const syncGalleryImages = () => {
+    setImageFeedback(null);
+    setImageError(null);
+    setIsSyncingImages(true);
+
+    void (async () => {
+      try {
+        const response = await fetch("/api/admin/gallery-images", {
+          method: "PUT"
+        });
+        const result = (await response.json()) as {
+          error?: string;
+          images?: GalleryImage[];
+        };
+
+        if (!response.ok || !result.images) {
+          setImageError(result.error ?? "Gallery sync failed.");
+          return;
+        }
+
+        setImages(result.images);
+        setImageFeedback(
+          "Gallery synced. Public photos will refresh on the next request."
+        );
+        startTransition(() => {
+          router.refresh();
+        });
+      } catch {
+        setImageError("Gallery sync failed.");
+      } finally {
+        setIsSyncingImages(false);
+      }
+    })();
+  };
+
   return (
     <div className="min-h-screen bg-haze/40">
       <div className="mx-auto grid min-h-screen w-full max-w-[112rem] gap-8 px-6 py-8 lg:grid-cols-[24rem_minmax(0,1fr)]">
@@ -551,20 +587,30 @@ export default function AdminDashboard({
                   Photos
                 </h2>
               </div>
-              <label className="inline-flex cursor-pointer items-center justify-center rounded-full bg-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow">
-                {isUploadingImages ? "Uploading..." : "Upload JPEG"}
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,image/jpeg"
-                  multiple
-                  disabled={isUploadingImages}
-                  className="sr-only"
-                  onChange={(event) => {
-                    uploadGalleryImages(event.target.files);
-                    event.currentTarget.value = "";
-                  }}
-                />
-              </label>
+              <div className="flex flex-wrap gap-3">
+                <label className="inline-flex cursor-pointer items-center justify-center rounded-full bg-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow">
+                  {isUploadingImages ? "Uploading..." : "Upload JPEG"}
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,image/jpeg"
+                    multiple
+                    disabled={isUploadingImages}
+                    className="sr-only"
+                    onChange={(event) => {
+                      uploadGalleryImages(event.target.files);
+                      event.currentTarget.value = "";
+                    }}
+                  />
+                </label>
+                <button
+                  type="button"
+                  onClick={syncGalleryImages}
+                  disabled={isSyncingImages}
+                  className="rounded-full border border-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isSyncingImages ? "Syncing..." : "Sync Gallery"}
+                </button>
+              </div>
             </div>
 
             {imageFeedback ? (
