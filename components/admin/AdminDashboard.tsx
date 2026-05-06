@@ -560,35 +560,13 @@ export default function AdminDashboard({
                 />
               </label>
               <div className="space-y-2">
-                {images.length > 0 ? (
-                  images.map((image) => (
-                    <div
-                      key={image.id}
-                      className="overflow-hidden rounded-2xl border border-black/10 bg-white"
-                    >
-                      <Image
-                        src={image.src}
-                        alt={image.title}
-                        width={640}
-                        height={480}
-                        unoptimized
-                        className="h-36 w-full object-cover"
-                      />
-                      <div className="p-4">
-                        <p className="font-semibold text-ink-900">
-                          {image.title}
-                        </p>
-                        <p className="mt-1 text-xs uppercase tracking-[0.16em] text-ink-500">
-                          {formatByteSize(image.byteSize)}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="rounded-[1.5rem] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink-500">
-                    No gallery images uploaded yet.
-                  </div>
-                )}
+                <div className="rounded-[1.5rem] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink-500">
+                  {images.length > 0
+                    ? `${images.length} gallery image${
+                        images.length === 1 ? "" : "s"
+                      } uploaded.`
+                    : "No gallery images uploaded yet."}
+                </div>
               </div>
             </div>
           )}
