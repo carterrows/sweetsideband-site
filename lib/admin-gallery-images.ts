@@ -66,11 +66,7 @@ export function validateGalleryImageUpload(upload: GalleryImageUpload) {
   }
 }
 
-export async function saveGalleryImageUpload(
-  upload: GalleryImageUpload
-): Promise<GalleryImage> {
-  validateGalleryImageUpload(upload);
-
+function saveValidatedGalleryImageUpload(upload: GalleryImageUpload) {
   const id = randomUUID();
   const fileName = `${id}-${normalizeBaseName(upload.fileName)}.jpg`;
   const title = titleFromFileName(upload.fileName) || "Gallery image";
@@ -90,6 +86,20 @@ export async function saveGalleryImageUpload(
   }
 
   return savedImage;
+}
+
+export function saveGalleryImageUploads(
+  uploads: GalleryImageUpload[]
+): GalleryImage[] {
+  for (const upload of uploads) {
+    validateGalleryImageUpload(upload);
+  }
+
+  for (const upload of uploads) {
+    saveValidatedGalleryImageUpload(upload);
+  }
+
+  return getManagedGalleryImages();
 }
 
 export function removeGalleryImage(id: string) {

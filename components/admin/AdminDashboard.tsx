@@ -538,38 +538,7 @@ export default function AdminDashboard({
               </div>
             </section>
           </div>
-          ) : (
-            <div className="mt-6 space-y-5">
-              <label className="flex cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-accent/50 bg-white px-5 py-8 text-center transition hover:border-accent hover:bg-haze/40">
-                <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-                  {isUploadingImages ? "Uploading..." : "Upload JPEG"}
-                </span>
-                <span className="mt-2 text-sm text-ink-600">
-                  .jpg or .jpeg, 1 MB max each
-                </span>
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,image/jpeg"
-                  multiple
-                  disabled={isUploadingImages}
-                  className="sr-only"
-                  onChange={(event) => {
-                    uploadGalleryImages(event.target.files);
-                    event.currentTarget.value = "";
-                  }}
-                />
-              </label>
-              <div className="space-y-2">
-                <div className="rounded-[1.5rem] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink-500">
-                  {images.length > 0
-                    ? `${images.length} gallery image${
-                        images.length === 1 ? "" : "s"
-                      } uploaded.`
-                    : "No gallery images uploaded yet."}
-                </div>
-              </div>
-            </div>
-          )}
+          ) : null}
         </aside>
         {activeTab === "images" ? (
           <section className="rounded-[2rem] border border-black/10 bg-paper p-6 shadow-sm">

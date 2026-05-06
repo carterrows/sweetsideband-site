@@ -3,10 +3,8 @@ import { NextResponse } from "next/server";
 import { ADMIN_COOKIE_NAME, verifyAdminSessionToken } from "@/lib/admin-auth";
 import {
   removeGalleryImage,
-  saveGalleryImageUpload,
-  validateGalleryImageUpload
+  saveGalleryImageUploads
 } from "@/lib/admin-gallery-images";
-import { getManagedGalleryImages } from "@/lib/shows-db";
 import {
   ADMIN_SYNC_RATE_LIMIT,
   applyRateLimitHeaders,
@@ -57,19 +55,13 @@ export async function POST(request: Request) {
       }))
     );
 
-    for (const upload of uploads) {
-      validateGalleryImageUpload(upload);
-    }
-
-    for (const upload of uploads) {
-      await saveGalleryImageUpload(upload);
-    }
+    const images = saveGalleryImageUploads(uploads);
 
     revalidatePath("/video/photos");
     revalidatePath("/admin");
 
     return applyRateLimitHeaders(
-      NextResponse.json({ images: getManagedGalleryImages() }),
+      NextResponse.json({ images }),
       rateLimit.result
     );
   } catch (error) {
