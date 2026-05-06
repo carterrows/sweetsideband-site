@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useMemo, useRef, useState, startTransition } from "react";
 import { useRouter } from "next/navigation";
-import type { ManagedShow, ShowBucket } from "@/lib/types";
+import type { GalleryImage, ManagedShow, ShowBucket } from "@/lib/types";
 import { deriveShowId } from "@/lib/show-id";
 
 type EditableShow = ManagedShow & {
@@ -13,12 +13,18 @@ type EditableShow = ManagedShow & {
   pendingPosterName: string | null;
 };
 
+type AdminTab = "shows" | "images";
+
 function createClientKey() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
   }
 
   return `show-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function formatByteSize(byteSize: number) {
+  return `${(byteSize / 1024).toFixed(0)} KB`;
 }
 
 function toEditableShow(show: ManagedShow): EditableShow {
@@ -61,13 +67,16 @@ function createBlankShow(bucket: ShowBucket): EditableShow {
 }
 
 export default function AdminDashboard({
-  initialShows
+  initialShows,
+  initialImages
 }: {
   initialShows: ManagedShow[];
+  initialImages: GalleryImage[];
 }) {
   const router = useRouter();
   const initialStateRef = useRef<{
     shows: EditableShow[];
+    images: GalleryImage[];
     selectedKey: string | null;
   } | null>(null);
 
@@ -75,15 +84,22 @@ export default function AdminDashboard({
     const preparedShows = initialShows.map(toEditableShow);
     initialStateRef.current = {
       shows: preparedShows,
+      images: initialImages,
       selectedKey: preparedShows[0]?.clientKey ?? null
     };
   }
 
   const [shows, setShows] = useState(initialStateRef.current.shows);
+  const [images, setImages] = useState(initialStateRef.current.images);
   const [selectedKey, setSelectedKey] = useState(initialStateRef.current.selectedKey);
+  const [activeTab, setActiveTab] = useState<AdminTab>("shows");
   const [feedback, setFeedback] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [imageFeedback, setImageFeedback] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
 
   const selectedShow = useMemo(
     () => shows.find((show) => show.clientKey === selectedKey) ?? null,
@@ -100,10 +116,19 @@ export default function AdminDashboard({
   );
 
   const selectShow = (clientKey: string) => {
+    setActiveTab("shows");
     setSelectedKey(clientKey);
     setFeedback(null);
     setError(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const selectTab = (tab: AdminTab) => {
+    setActiveTab(tab);
+    setFeedback(null);
+    setError(null);
+    setImageFeedback(null);
+    setImageError(null);
   };
 
   const updateShow = (clientKey: string, field: keyof EditableShow, value: string) => {
@@ -306,6 +331,104 @@ export default function AdminDashboard({
     })();
   };
 
+  const uploadGalleryImages = (fileList: FileList | null) => {
+    const files = Array.from(fileList ?? []);
+
+    setImageFeedback(null);
+    setImageError(null);
+
+    if (files.length === 0) {
+      return;
+    }
+
+    for (const file of files) {
+      const lowerName = file.name.toLowerCase();
+
+      if (!lowerName.endsWith(".jpg") && !lowerName.endsWith(".jpeg")) {
+        setImageError("Gallery images must use the .jpg or .jpeg extension.");
+        return;
+      }
+
+      if (file.size > 1024 * 1024) {
+        setImageError("Each gallery image must be 1 MB or smaller.");
+        return;
+      }
+    }
+
+    setIsUploadingImages(true);
+
+    void (async () => {
+      const formData = new FormData();
+
+      for (const file of files) {
+        formData.append("images", file);
+      }
+
+      try {
+        const response = await fetch("/api/admin/gallery-images", {
+          method: "POST",
+          body: formData
+        });
+        const result = (await response.json()) as {
+          error?: string;
+          images?: GalleryImage[];
+        };
+
+        if (!response.ok || !result.images) {
+          setImageError(result.error ?? "Image upload failed.");
+          return;
+        }
+
+        setImages(result.images);
+        setImageFeedback("Image upload complete. Photo gallery will refresh on the next request.");
+        startTransition(() => {
+          router.refresh();
+        });
+      } catch {
+        setImageError("Image upload failed.");
+      } finally {
+        setIsUploadingImages(false);
+      }
+    })();
+  };
+
+  const deleteGalleryImage = (imageId: string) => {
+    setImageFeedback(null);
+    setImageError(null);
+    setDeletingImageId(imageId);
+
+    void (async () => {
+      try {
+        const response = await fetch("/api/admin/gallery-images", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ id: imageId })
+        });
+        const result = (await response.json()) as {
+          error?: string;
+          images?: GalleryImage[];
+        };
+
+        if (!response.ok || !result.images) {
+          setImageError(result.error ?? "Image delete failed.");
+          return;
+        }
+
+        setImages(result.images);
+        setImageFeedback("Image deleted. Photo gallery will refresh on the next request.");
+        startTransition(() => {
+          router.refresh();
+        });
+      } catch {
+        setImageError("Image delete failed.");
+      } finally {
+        setDeletingImageId(null);
+      }
+    })();
+  };
+
   return (
     <div className="min-h-screen bg-haze/40">
       <div className="mx-auto grid min-h-screen w-full max-w-[112rem] gap-8 px-6 py-8 lg:grid-cols-[24rem_minmax(0,1fr)]">
@@ -316,10 +439,27 @@ export default function AdminDashboard({
                 Admin
               </p>
               <h1 className="mt-2 font-display text-5xl uppercase text-ink-900">
-                Shows
+                Dashboard
               </h1>
             </div>
           </div>
+          <div className="mt-6 grid grid-cols-2 gap-2 rounded-full border border-black/10 bg-white p-1">
+            {(["shows", "images"] as const).map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => selectTab(tab)}
+                className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] transition ${
+                  activeTab === tab
+                    ? "bg-accent text-white shadow-glow"
+                    : "text-ink-600 hover:bg-haze"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+          {activeTab === "shows" ? (
           <div className="mt-6 space-y-6">
             <section className="space-y-3">
               <div className="flex items-center justify-between">
@@ -398,7 +538,93 @@ export default function AdminDashboard({
               </div>
             </section>
           </div>
+          ) : null}
         </aside>
+        {activeTab === "images" ? (
+          <section className="rounded-[2rem] border border-black/10 bg-paper p-6 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
+                  Gallery
+                </p>
+                <h2 className="mt-2 font-display text-4xl uppercase text-ink-900">
+                  Photos
+                </h2>
+              </div>
+              <label className="inline-flex cursor-pointer items-center justify-center rounded-full bg-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow">
+                {isUploadingImages ? "Uploading..." : "Upload JPEG"}
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,image/jpeg"
+                  multiple
+                  disabled={isUploadingImages}
+                  className="sr-only"
+                  onChange={(event) => {
+                    uploadGalleryImages(event.target.files);
+                    event.currentTarget.value = "";
+                  }}
+                />
+              </label>
+            </div>
+
+            {imageFeedback ? (
+              <p className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                {imageFeedback}
+              </p>
+            ) : null}
+            {imageError ? (
+              <p className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {imageError}
+              </p>
+            ) : null}
+
+            <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-5 py-4 text-sm text-ink-600">
+              Gallery photos are stored in SQLite and served to the public photo gallery from the database. Only .jpg and .jpeg files up to 1 MB are accepted.
+            </div>
+
+            {images.length > 0 ? (
+              <div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {images.map((image) => (
+                  <article
+                    key={image.id}
+                    className="overflow-hidden rounded-[1.5rem] border border-black/10 bg-white"
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.title}
+                      width={900}
+                      height={700}
+                      unoptimized
+                      className="h-56 w-full object-cover"
+                    />
+                    <div className="space-y-4 p-5">
+                      <div>
+                        <h3 className="font-semibold text-ink-900">
+                          {image.title}
+                        </h3>
+                        <p className="mt-1 text-xs uppercase tracking-[0.16em] text-ink-500">
+                          {formatByteSize(image.byteSize)}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => deleteGalleryImage(image.id)}
+                        disabled={deletingImageId === image.id}
+                        className="rounded-full border border-red-300 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {deletingImageId === image.id ? "Deleting..." : "Delete"}
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-6 py-16 text-center text-sm text-ink-500">
+                Upload JPEG images to populate the public photo gallery.
+              </div>
+            )}
+          </section>
+        ) : (
         <section className="rounded-[2rem] border border-black/10 bg-paper p-6 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
@@ -673,6 +899,7 @@ export default function AdminDashboard({
             </div>
           )}
         </section>
+        )}
       </div>
     </div>
   );

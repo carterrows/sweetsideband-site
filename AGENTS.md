@@ -3,7 +3,7 @@
 ## Project Purpose
 - This repository powers the public website for the band **Sweetside**.
 - Primary goals: show upcoming/past shows, media gallery, streaming links, merch placeholder, and booking contact.
-- Band/member/media content is file-driven, while shows are stored in SQLite.
+- Band/member/video media content is file-driven, while shows and photo gallery images are stored in SQLite.
 
 ## Tech Stack
 - **Next.js 16** (App Router) + **React 18** + **TypeScript (strict)**.
@@ -55,7 +55,7 @@
 - Show data is loaded from SQLite through `lib/shows-db.ts`.
 - Upcoming show records may include optional `venue_url`, `tickets_url`, time, fee, address, and poster fields.
 - Public show lists are sorted by date descending within `upcoming` and `past`.
-- Show photos for `/video/photos` are loaded from `public/images/shows/` (filesystem scan), not from JSON.
+- Show photos for `/video/photos` are loaded from the SQLite-backed admin gallery, not from JSON or `public/images/shows/`.
 - Components/pages rely on these TypeScript types in `lib/types.ts`.
 
 ## Data Files: What They Drive
@@ -66,16 +66,18 @@
 - `data/media.json`:
   - video items for the `/video` gallery page.
 - `data/shows.sqlite`:
-  - local default SQLite database for shows during non-Docker development.
+  - local default SQLite database for shows and photo gallery images during non-Docker development.
   - upcoming rows may include `tickets_url` for the public Tickets button.
 - `storage/posters/`:
   - local default writable poster storage outside `public/`.
 - Docker volume storage:
   - `/app/storage/shows.sqlite`
   - `/app/storage/posters/`
-- `public/images/shows/`:
-  - source of truth for the `/video/photos` masonry gallery.
-  - all supported image files in this folder are included automatically and shuffled during build/static generation.
+- Photo gallery images:
+  - source of truth is the `gallery_images` table in SQLite.
+  - public images are served through `/gallery-images/[fileName]`.
+  - admin uploads accept `.jpg` and `.jpeg` files only, 1 MB max each.
+  - gallery records are shuffled during build/static generation.
 
 ## Streaming Link Rules
 - `spotify`/`appleMusic` accept:
@@ -96,6 +98,7 @@
   - Pill-style `Video`/`Photo` selector shared by gallery subpages.
 - `components/PhotoMasonryGrid.tsx`:
   - Adaptive masonry photo layout + in-page lightbox interaction.
+  - Receives database-backed image media from `getShowPhotos()`.
 - `components/MediaGrid.tsx`:
   - Video card grid used on the default gallery route.
 - `components/ContactSection.tsx`:
@@ -167,7 +170,7 @@
 1. Read `README.md` and this file.
 2. Check `data/*.json` for the latest real content before making assumptions.
 3. If content-only change: edit JSON + ensure referenced files exist in `public/images/...`.
-   For show photos specifically, add/remove files in `public/images/shows/` instead of editing `data/media.json`.
+   For show photos specifically, use the admin Images tab instead of editing `data/media.json` or adding files to `public/images/shows/`.
    For show listings, inspect the admin flow and SQLite helpers.
    For show posters, inspect `lib/show-posters.ts` and the `/posters/[fileName]` route instead of `public/`.
 4. If UI change: inspect the specific page in `app/` and related component(s) in `components/`.
