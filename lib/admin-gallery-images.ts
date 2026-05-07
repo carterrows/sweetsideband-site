@@ -2,7 +2,12 @@ import path from "path";
 import { randomUUID } from "crypto";
 import type { GalleryImage } from "./types";
 import {
+  deleteGalleryImageFile,
+  saveGalleryImageFile
+} from "./gallery-image-files";
+import {
   deleteGalleryImage,
+  getManagedGalleryImageById,
   getManagedGalleryImages,
   insertGalleryImage
 } from "./shows-db";
@@ -66,20 +71,27 @@ export function validateGalleryImageUpload(upload: GalleryImageUpload) {
   }
 }
 
-function saveValidatedGalleryImageUpload(upload: GalleryImageUpload) {
+async function saveValidatedGalleryImageUpload(upload: GalleryImageUpload) {
   const id = randomUUID();
   const fileName = `${id}-${normalizeBaseName(upload.fileName)}.jpg`;
   const title = titleFromFileName(upload.fileName) || "Gallery image";
 
-  insertGalleryImage({
-    id,
-    fileName,
-    title,
-    bytes: upload.bytes,
-    createdAt: new Date().toISOString()
-  });
+  await saveGalleryImageFile(fileName, upload.bytes);
 
-  const savedImage = getManagedGalleryImages().find((image) => image.id === id);
+  try {
+    insertGalleryImage({
+      id,
+      fileName,
+      title,
+      byteSize: upload.bytes.length,
+      createdAt: new Date().toISOString()
+    });
+  } catch (error) {
+    await deleteGalleryImageFile(fileName);
+    throw error;
+  }
+
+  const savedImage = getManagedGalleryImageById(id);
 
   if (!savedImage) {
     throw new Error("Unable to save gallery image.");
@@ -90,24 +102,34 @@ function saveValidatedGalleryImageUpload(upload: GalleryImageUpload) {
 
 export function saveGalleryImageUploads(
   uploads: GalleryImageUpload[]
-): GalleryImage[] {
+): Promise<GalleryImage[]> {
   for (const upload of uploads) {
     validateGalleryImageUpload(upload);
   }
 
-  for (const upload of uploads) {
-    saveValidatedGalleryImageUpload(upload);
-  }
+  return (async () => {
+    for (const upload of uploads) {
+      await saveValidatedGalleryImageUpload(upload);
+    }
 
-  return getManagedGalleryImages();
+    return getManagedGalleryImages();
+  })();
 }
 
-export function removeGalleryImage(id: string) {
+export async function removeGalleryImage(id: string) {
   const normalizedId = id.trim();
 
   if (!normalizedId) {
     throw new Error("Image ID is required.");
   }
+
+  const image = getManagedGalleryImageById(normalizedId);
+
+  if (!image) {
+    throw new Error("Gallery image was not found.");
+  }
+
+  await deleteGalleryImageFile(image.fileName);
 
   if (!deleteGalleryImage(normalizedId)) {
     throw new Error("Gallery image was not found.");

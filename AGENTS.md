@@ -3,7 +3,7 @@
 ## Project Purpose
 - This repository powers the public website for the band **Sweetside**.
 - Primary goals: show upcoming/past shows, media gallery, streaming links, merch placeholder, and booking contact.
-- Band/member/video media content is file-driven, while shows and photo gallery images are stored in SQLite.
+- Band/member/video media content is file-driven, while shows and photo gallery metadata are stored in SQLite.
 
 ## Tech Stack
 - **Next.js 16** (App Router) + **React 18** + **TypeScript (strict)**.
@@ -55,7 +55,7 @@
 - Show data is loaded from SQLite through `lib/shows-db.ts`.
 - Upcoming show records may include optional `venue_url`, `tickets_url`, time, fee, address, and poster fields.
 - Public show lists are sorted by date descending within `upcoming` and `past`.
-- Show photos for `/video/photos` are loaded from the SQLite-backed admin gallery, not from JSON or `public/images/shows/`.
+- Show photos for `/video/photos` are loaded from the SQLite-backed admin gallery metadata, not from JSON or `public/images/shows/`.
 - Components/pages rely on these TypeScript types in `lib/types.ts`.
 
 ## Data Files: What They Drive
@@ -66,7 +66,7 @@
 - `data/media.json`:
   - video items for the `/video` gallery page.
 - `data/shows.sqlite`:
-  - local default SQLite database for shows and photo gallery images during non-Docker development.
+  - local default SQLite database for shows and photo gallery image metadata during non-Docker development.
   - upcoming rows may include `tickets_url` for the public Tickets button.
 - `storage/posters/`:
   - local default writable poster storage outside `public/`.
@@ -74,8 +74,12 @@
   - `/app/storage/shows.sqlite`
   - `/app/storage/posters/`
 - Photo gallery images:
-  - source of truth is the `gallery_images` table in SQLite.
+  - source of truth for metadata is the `gallery_images` table in SQLite.
+  - uploaded image files are stored in runtime storage.
+  - local default gallery image storage is `storage/gallery-images/`.
+  - Docker gallery image storage lives beside the database inside the mounted `/app/storage` volume.
   - public images are served through `/gallery-images/[fileName]`.
+  - public image responses use immutable cache headers because uploaded filenames are stable and UUID-prefixed.
   - admin uploads accept `.jpg` and `.jpeg` files only, 1 MB max each.
   - gallery records are shuffled during static generation.
   - use the admin Images sync button to revalidate the static gallery from SQLite.

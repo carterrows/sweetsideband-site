@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { readGalleryImage } from "@/lib/shows-db";
+import {
+  readGalleryImageFile,
+  sanitizeGalleryImageFileName
+} from "@/lib/gallery-image-files";
 
 export const runtime = "nodejs";
 
@@ -7,17 +10,22 @@ export async function GET(
   _request: Request,
   context: { params: Promise<{ fileName: string }> }
 ) {
-  const { fileName } = await context.params;
-  const galleryImage = readGalleryImage(fileName);
+  try {
+    const { fileName } = await context.params;
+    const normalizedFileName = sanitizeGalleryImageFileName(fileName);
+    const galleryImage = readGalleryImageFile(normalizedFileName);
 
-  if (!galleryImage) {
+    if (!galleryImage) {
+      return new NextResponse("Not found.", { status: 404 });
+    }
+
+    return new NextResponse(galleryImage, {
+      headers: {
+        "Content-Type": "image/jpeg",
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    });
+  } catch {
     return new NextResponse("Not found.", { status: 404 });
   }
-
-  return new NextResponse(new Uint8Array(galleryImage.content), {
-    headers: {
-      "Content-Type": galleryImage.image.mimeType,
-      "Cache-Control": "public, max-age=31536000, immutable"
-    }
-  });
 }

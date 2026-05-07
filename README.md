@@ -65,7 +65,7 @@ When Spotify is set to a supported Spotify URL (`artist`, `album`, `track`, `pla
 
 ## Images and media
 
-Photos on `/video/photos` are loaded from the SQLite-backed admin gallery and shuffled during static generation. Use `/admin` → `Images` to upload, delete, or sync gallery photos.
+Photos on `/video/photos` are loaded from the admin gallery metadata in SQLite and shuffled during static generation. Uploaded gallery image files live in runtime storage. Use `/admin` → `Images` to upload, delete, or sync gallery photos.
 
 Place other images in `public/images/` and reference them by absolute path in JSON, e.g.
 
@@ -110,6 +110,10 @@ Shows load through `lib/shows-db.ts`.
 - Local poster storage defaults to `storage/posters/`.
 - Docker poster storage lives beside the database inside the mounted `/app/storage` volume.
 - Posters are served through `/posters/:fileName`.
+- Uploaded gallery images are stored in runtime storage.
+- Local gallery image storage defaults to `storage/gallery-images/`.
+- Docker gallery image storage lives beside the database inside the mounted `/app/storage` volume.
+- Gallery images are served through `/gallery-images/:fileName` with immutable cache headers.
 - Upcoming shows may also store an optional `tickets_url` value in SQLite for the public Tickets button.
 
 ## Admin
@@ -135,4 +139,4 @@ Admin API protection:
 - login and sync endpoints use an in-memory process-wide rate limiter
 - logout clears the admin session cookie server-side and the client navigates directly to `/admin/login`
 - sync validates poster extension, PNG file signature, upload size limits, and show writes in the same request
-- gallery image uploads validate extension, JPEG file signature, and upload size before storing image bytes in SQLite
+- gallery image uploads validate extension, JPEG file signature, and upload size before storing files on disk and metadata in SQLite

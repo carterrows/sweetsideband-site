@@ -8,6 +8,7 @@ import type {
   ShowBucket,
   ShowsData
 } from "./types";
+import { getGalleryImageSrc } from "./gallery-image-files";
 import { getShowPosterSrc } from "./show-posters";
 
 type ShowRow = {
@@ -33,10 +34,6 @@ type GalleryImageRow = {
   mime_type: "image/jpeg";
   byte_size: number;
   created_at: string;
-};
-
-type GalleryImageContentRow = GalleryImageRow & {
-  content: Buffer;
 };
 
 const dataDir = path.join(process.cwd(), "data");
@@ -79,7 +76,6 @@ function getDatabase() {
       title TEXT NOT NULL,
       mime_type TEXT NOT NULL CHECK(mime_type = 'image/jpeg'),
       byte_size INTEGER NOT NULL,
-      content BLOB NOT NULL,
       created_at TEXT NOT NULL
     );
   `);
@@ -89,13 +85,11 @@ function getDatabase() {
 }
 
 function mapGalleryImageRow(row: GalleryImageRow): GalleryImage {
-  const src = `/gallery-images/${encodeURIComponent(row.file_name)}`;
-
   return {
     id: row.id,
     fileName: row.file_name,
     title: row.title,
-    src,
+    src: getGalleryImageSrc(row.file_name),
     mimeType: row.mime_type,
     byteSize: row.byte_size,
     createdAt: row.created_at
@@ -245,6 +239,27 @@ export function getManagedGalleryImages(): GalleryImage[] {
   return rows.map(mapGalleryImageRow);
 }
 
+export function getManagedGalleryImageById(id: string): GalleryImage | null {
+  const db = getDatabase();
+  const row = db
+    .prepare(
+      `
+        SELECT
+          id,
+          file_name,
+          title,
+          mime_type,
+          byte_size,
+          created_at
+        FROM gallery_images
+        WHERE id = ?;
+      `
+    )
+    .get(id.trim()) as GalleryImageRow | undefined;
+
+  return row ? mapGalleryImageRow(row) : null;
+}
+
 function shuffle<T>(items: T[]): T[] {
   const randomized = [...items];
   for (let i = randomized.length - 1; i > 0; i -= 1) {
@@ -256,14 +271,19 @@ function shuffle<T>(items: T[]): T[] {
 
 export function getGalleryPhotosFromDatabase(): MediaItem[] {
   return shuffle(
-    getManagedGalleryImages().map((image) => ({
-      id: image.id,
-      type: "image" as const,
-      title: image.title,
-      src: image.src,
-      link: image.src,
-      alt: image.title
-    }))
+    getManagedGalleryImages()
+      .filter(
+        (image): image is GalleryImage & { src: string } =>
+          typeof image.src === "string"
+      )
+      .map((image) => ({
+        id: image.id,
+        type: "image" as const,
+        title: image.title,
+        src: image.src,
+        link: image.src,
+        alt: image.title
+      }))
   );
 }
 
@@ -271,13 +291,13 @@ export function insertGalleryImage({
   id,
   fileName,
   title,
-  bytes,
+  byteSize,
   createdAt
 }: {
   id: string;
   fileName: string;
   title: string;
-  bytes: Uint8Array;
+  byteSize: number;
   createdAt: string;
 }) {
   const db = getDatabase();
@@ -290,11 +310,10 @@ export function insertGalleryImage({
         title,
         mime_type,
         byte_size,
-        content,
         created_at
-      ) VALUES (?, ?, ?, 'image/jpeg', ?, ?, ?);
+      ) VALUES (?, ?, ?, 'image/jpeg', ?, ?);
     `
-  ).run(id, fileName, title, bytes.length, Buffer.from(bytes), createdAt);
+  ).run(id, fileName, title, byteSize, createdAt);
 }
 
 export function deleteGalleryImage(id: string) {
@@ -304,33 +323,4 @@ export function deleteGalleryImage(id: string) {
     .run(id.trim());
 
   return result.changes > 0;
-}
-
-export function readGalleryImage(fileName: string) {
-  const db = getDatabase();
-  const row = db
-    .prepare(
-      `
-        SELECT
-          id,
-          file_name,
-          title,
-          mime_type,
-          byte_size,
-          created_at,
-          content
-        FROM gallery_images
-        WHERE file_name = ?;
-      `
-    )
-    .get(path.basename(fileName.trim())) as GalleryImageContentRow | undefined;
-
-  if (!row) {
-    return null;
-  }
-
-  return {
-    image: mapGalleryImageRow(row),
-    content: row.content
-  };
 }
