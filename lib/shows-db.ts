@@ -31,7 +31,6 @@ type GalleryImageRow = {
   id: string;
   file_name: string;
   title: string;
-  mime_type: "image/jpeg";
   byte_size: number;
   created_at: string;
 };
@@ -74,7 +73,6 @@ function getDatabase() {
       id TEXT PRIMARY KEY,
       file_name TEXT NOT NULL UNIQUE,
       title TEXT NOT NULL,
-      mime_type TEXT NOT NULL CHECK(mime_type = 'image/jpeg'),
       byte_size INTEGER NOT NULL,
       created_at TEXT NOT NULL
     );
@@ -90,7 +88,6 @@ function mapGalleryImageRow(row: GalleryImageRow): GalleryImage {
     fileName: row.file_name,
     title: row.title,
     src: getGalleryImageSrc(row.file_name),
-    mimeType: row.mime_type,
     byteSize: row.byte_size,
     createdAt: row.created_at
   };
@@ -227,7 +224,6 @@ export function getManagedGalleryImages(): GalleryImage[] {
           id,
           file_name,
           title,
-          mime_type,
           byte_size,
           created_at
         FROM gallery_images
@@ -248,7 +244,6 @@ export function getManagedGalleryImageById(id: string): GalleryImage | null {
           id,
           file_name,
           title,
-          mime_type,
           byte_size,
           created_at
         FROM gallery_images
@@ -308,10 +303,9 @@ export function insertGalleryImage({
         id,
         file_name,
         title,
-        mime_type,
         byte_size,
         created_at
-      ) VALUES (?, ?, ?, 'image/jpeg', ?, ?);
+      ) VALUES (?, ?, ?, ?, ?);
     `
   ).run(id, fileName, title, byteSize, createdAt);
 }
