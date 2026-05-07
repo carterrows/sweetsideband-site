@@ -66,8 +66,7 @@ export type GalleryImage = {
   id: string;
   fileName: string;
   title: string;
-  src: string;
-  mimeType: "image/jpeg";
+  src?: string;
   byteSize: number;
   createdAt: string;
 };

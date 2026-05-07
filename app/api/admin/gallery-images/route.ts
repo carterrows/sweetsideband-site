@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       }))
     );
 
-    const images = saveGalleryImageUploads(uploads);
+    const images = await saveGalleryImageUploads(uploads);
 
     revalidatePath("/video/photos");
     revalidatePath("/admin");
@@ -93,7 +93,7 @@ export async function DELETE(request: Request) {
       throw new Error("Image ID is required.");
     }
 
-    const images = removeGalleryImage(payload.id);
+    const images = await removeGalleryImage(payload.id);
 
     revalidatePath("/video/photos");
     revalidatePath("/admin");

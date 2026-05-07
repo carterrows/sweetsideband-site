@@ -625,7 +625,7 @@ export default function AdminDashboard({
             ) : null}
 
             <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-5 py-4 text-sm text-ink-600">
-              Gallery photos are stored in SQLite and served to the public photo gallery from the database. Only .jpg and .jpeg files up to 1 MB are accepted.
+              Gallery photo metadata is stored in SQLite, while uploaded files live in runtime storage and are served with immutable cache headers. Only .jpg and .jpeg files up to 1 MB are accepted.
             </div>
 
             {images.length > 0 ? (
@@ -635,14 +635,20 @@ export default function AdminDashboard({
                     key={image.id}
                     className="overflow-hidden rounded-[1.5rem] border border-black/10 bg-white"
                   >
-                    <Image
-                      src={image.src}
-                      alt={image.title}
-                      width={900}
-                      height={700}
-                      unoptimized
-                      className="h-56 w-full object-cover"
-                    />
+                    {image.src ? (
+                      <Image
+                        src={image.src}
+                        alt={image.title}
+                        width={900}
+                        height={700}
+                        unoptimized
+                        className="h-56 w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-56 items-center justify-center bg-haze/60 px-6 text-center text-sm text-ink-500">
+                        Image file is missing from runtime storage.
+                      </div>
+                    )}
                     <div className="space-y-4 p-5">
                       <div>
                         <h3 className="font-semibold text-ink-900">
