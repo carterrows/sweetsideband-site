@@ -1,4 +1,4 @@
-FROM node:25.9-bookworm-slim AS builder
+FROM node:26-bookworm-slim AS builder
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 RUN npm prune --omit=dev
 
-FROM node:25.9-bookworm-slim AS runner
+FROM node:26-bookworm-slim AS runner
 
 WORKDIR /app
 ARG SITE_URL
