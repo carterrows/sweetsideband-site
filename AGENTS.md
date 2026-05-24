@@ -52,7 +52,6 @@
 - Uses synchronous JSON reads from `data/` with a strict allowlist:
   - `band.json`
   - `members.json`
-  - `media.json`
 - Show data is loaded from SQLite through `lib/shows-db.ts`.
 - Upcoming show records may include optional `venue_url`, `tickets_url`, time, fee, address, and poster fields.
 - Public show lists are sorted by date descending within `upcoming` and `past`.
@@ -64,8 +63,6 @@
   - band name, location, booking email, socials, streaming links.
 - `data/members.json`:
   - member cards shown on home page.
-- `data/media.json`:
-  - legacy video data; `/video` now reads from SQLite-backed admin video metadata.
 - `data/shows.sqlite`:
   - local default SQLite database for shows, video gallery metadata, and photo gallery image metadata during non-Docker development.
   - upcoming rows may include `tickets_url` for the public Tickets button.
@@ -187,8 +184,8 @@
 1. Read `README.md` and this file.
 2. Check `data/*.json` for the latest real content before making assumptions.
 3. If content-only change: edit JSON + ensure referenced files exist in `public/images/...`.
-   For gallery videos, use the admin Videos tab instead of editing `data/media.json` or adding files to `public/images/thumbnails/`.
-   For show photos specifically, use the admin Images tab instead of editing `data/media.json` or adding files to `public/images/shows/`.
+   For gallery videos, use the admin Videos tab instead of adding files to `public/images/thumbnails/`.
+   For show photos specifically, use the admin Images tab instead of adding files to `public/images/shows/`.
    For show listings, inspect the admin flow and SQLite helpers.
    For show posters, inspect `lib/show-posters.ts` and the `/posters/[fileName]` route instead of `public/`.
 4. If UI change: inspect the specific page in `app/` and related component(s) in `components/`.

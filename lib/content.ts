@@ -8,7 +8,7 @@ import {
 } from "./shows-db";
 
 const dataDir = path.join(process.cwd(), "data");
-const allowedFiles = new Set(["band.json", "members.json", "media.json"]);
+const allowedFiles = new Set(["band.json", "members.json"]);
 
 function readJson<T>(fileName: string): T {
   if (!allowedFiles.has(fileName)) {

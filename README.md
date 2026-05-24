@@ -32,7 +32,8 @@ Edit the JSON files under `data/`:
 
 - `data/band.json` - name, location, socials, streaming
 - `data/members.json` - band member cards
-- `data/media.json` - legacy video gallery data, no longer used by `/video`
+
+Shows and gallery media are managed through `/admin`, not JSON.
 
 ### Streaming links (Spotify / Apple Music)
 
