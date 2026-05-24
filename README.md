@@ -1,6 +1,6 @@
 # Sweetside Band Website
 
-Modern, mobile-first band website built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Band, member, and media content live in local JSON files, while shows are stored in SQLite. Docker is ready for Raspberry Pi 5.
+Modern, mobile-first band website built with Next.js (App Router), React, TypeScript, and Tailwind CSS. Band and member content live in local JSON files, while shows and gallery media are stored in SQLite. Docker is ready for Raspberry Pi 5.
 
 ## Local development
 
@@ -32,7 +32,8 @@ Edit the JSON files under `data/`:
 
 - `data/band.json` - name, location, socials, streaming
 - `data/members.json` - band member cards
-- `data/media.json` - video gallery cards
+
+Shows and gallery media are managed through `/admin`, not JSON.
 
 ### Streaming links (Spotify / Apple Music)
 
@@ -65,28 +66,14 @@ When Spotify is set to a supported Spotify URL (`artist`, `album`, `track`, `pla
 
 ## Images and media
 
-Photos on `/video/photos` are loaded from the admin gallery metadata in SQLite and shuffled during static generation. Uploaded gallery image files live in runtime storage. Use `/admin` → `Images` to upload, delete, or sync gallery photos.
+Videos on `/video` and photos on `/video/photos` are loaded from admin gallery metadata in SQLite. Uploaded gallery files live in runtime storage. Use `/admin` → `Videos` to add, edit, delete, or sync video cards, and `/admin` → `Images` to upload, delete, or sync gallery photos.
 
 Place other images in `public/images/` and reference them by absolute path in JSON, e.g.
 
 - `/images/members/avery.svg`
-- `/images/thumbnails/superstar.png`
+- `/images/logos/sweetside-logo.png`
 
-Videos should use external links (YouTube/Vimeo) in `data/media.json`.
-
-- Example JSON in `media.json`:
-
-```json
-{
-  "id": "media-2",
-  "type": "video",
-  "title": "Live at Voltage Hall",
-  "thumbnail": "/images/thumbnails/money_man.jpg",
-  "link": "https://www.youtube.com/watch?v=5NV6Rdv1a3I"
-}
-```
-
-Pull YouTube thumbnails using: http://img.youtube.com/vi/VIDEOID/maxresdefault.jpg
+Video thumbnails are uploaded through `/admin` and served from runtime storage through `/video-thumbnails/:fileName`. Thumbnails must be `.jpg`, `.jpeg`, or `.png` files up to 250 KB.
 
 ## Environment config
 
@@ -114,6 +101,10 @@ Shows load through `lib/shows-db.ts`.
 - Local gallery image storage defaults to `storage/gallery-images/`.
 - Docker gallery image storage lives beside the database inside the mounted `/app/storage` volume.
 - Gallery images are served through `/gallery-images/:fileName` with immutable cache headers.
+- Uploaded video thumbnails are stored in runtime storage.
+- Local video thumbnail storage defaults to `storage/video-thumbnails/`.
+- Docker video thumbnail storage lives beside the database inside the mounted `/app/storage` volume.
+- Video thumbnails are served through `/video-thumbnails/:fileName` with immutable cache headers.
 - Upcoming shows may also store an optional `tickets_url` value in SQLite for the public Tickets button.
 
 ## Admin
@@ -132,7 +123,10 @@ The admin dashboard lets you:
 - upload posters up to 5 MB each, with a 20 MB combined upload cap per sync
 - upload and delete photo gallery images
 - upload photo gallery images as `.jpg` or `.jpeg` files up to 1 MB each
-- sync the draft state and revalidate `/` and `/shows`
+- add, edit, delete, and sync video gallery cards
+- upload video thumbnails as `.jpg`, `.jpeg`, or `.png` files up to 250 KB each
+- sync show draft state and revalidate `/` and `/shows`
+- sync video draft state and revalidate `/video`
 
 Admin API protection:
 
@@ -140,3 +134,4 @@ Admin API protection:
 - logout clears the admin session cookie server-side and the client navigates directly to `/admin/login`
 - sync validates poster extension, PNG file signature, upload size limits, and show writes in the same request
 - gallery image uploads validate extension, JPEG file signature, and upload size before storing files on disk and metadata in SQLite
+- video sync validates YouTube links, thumbnail extension, image file signature, and upload size before storing files on disk and metadata in SQLite

@@ -3,6 +3,7 @@ import path from "path";
 import Database from "better-sqlite3";
 import type {
   GalleryImage,
+  GalleryVideo,
   ManagedShow,
   MediaItem,
   ShowBucket,
@@ -10,6 +11,7 @@ import type {
 } from "./types";
 import { getGalleryImageSrc } from "./gallery-image-files";
 import { getShowPosterSrc } from "./show-posters";
+import { getVideoThumbnailSrc } from "./video-thumbnail-files";
 
 type ShowRow = {
   id: string;
@@ -33,6 +35,17 @@ type GalleryImageRow = {
   title: string;
   byte_size: number;
   created_at: string;
+};
+
+type GalleryVideoRow = {
+  id: string;
+  title: string;
+  youtube_url: string;
+  thumbnail_file_name: string | null;
+  thumbnail_byte_size: number | null;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
 };
 
 const dataDir = path.join(process.cwd(), "data");
@@ -77,6 +90,18 @@ function getDatabase() {
       created_at TEXT NOT NULL
     );
   `);
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS gallery_videos (
+      id TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      youtube_url TEXT NOT NULL,
+      thumbnail_file_name TEXT UNIQUE,
+      thumbnail_byte_size INTEGER,
+      sort_order INTEGER NOT NULL,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+  `);
   database = db;
 
   return database;
@@ -90,6 +115,20 @@ function mapGalleryImageRow(row: GalleryImageRow): GalleryImage {
     src: getGalleryImageSrc(row.file_name),
     byteSize: row.byte_size,
     createdAt: row.created_at
+  };
+}
+
+function mapGalleryVideoRow(row: GalleryVideoRow): GalleryVideo {
+  return {
+    id: row.id,
+    title: row.title,
+    youtubeUrl: row.youtube_url,
+    thumbnailFileName: row.thumbnail_file_name ?? undefined,
+    thumbnailSrc: getVideoThumbnailSrc(row.thumbnail_file_name ?? undefined),
+    thumbnailByteSize: row.thumbnail_byte_size ?? undefined,
+    sortOrder: row.sort_order,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
   };
 }
 
@@ -235,6 +274,29 @@ export function getManagedGalleryImages(): GalleryImage[] {
   return rows.map(mapGalleryImageRow);
 }
 
+export function getManagedGalleryVideos(): GalleryVideo[] {
+  const db = getDatabase();
+  const rows = db
+    .prepare(
+      `
+        SELECT
+          id,
+          title,
+          youtube_url,
+          thumbnail_file_name,
+          thumbnail_byte_size,
+          sort_order,
+          created_at,
+          updated_at
+        FROM gallery_videos
+        ORDER BY sort_order ASC, created_at DESC;
+      `
+    )
+    .all() as GalleryVideoRow[];
+
+  return rows.map(mapGalleryVideoRow);
+}
+
 export function getManagedGalleryImageById(id: string): GalleryImage | null {
   const db = getDatabase();
   const row = db
@@ -282,6 +344,22 @@ export function getGalleryPhotosFromDatabase(): MediaItem[] {
   );
 }
 
+export function getGalleryVideosFromDatabase(): MediaItem[] {
+  return getManagedGalleryVideos()
+    .filter(
+      (video): video is GalleryVideo & { thumbnailSrc: string } =>
+        typeof video.thumbnailSrc === "string"
+    )
+    .map((video) => ({
+      id: video.id,
+      type: "video" as const,
+      title: video.title,
+      thumbnail: video.thumbnailSrc,
+      link: video.youtubeUrl,
+      alt: video.title
+    }));
+}
+
 export function insertGalleryImage({
   id,
   fileName,
@@ -317,4 +395,48 @@ export function deleteGalleryImage(id: string) {
     .run(id.trim());
 
   return result.changes > 0;
+}
+
+function normalizeNullableNumber(value?: number) {
+  return typeof value === "number" ? value : null;
+}
+
+export function replaceGalleryVideos(videos: GalleryVideo[]) {
+  const db = getDatabase();
+  const insert = db.prepare(`
+    INSERT INTO gallery_videos (
+      id,
+      title,
+      youtube_url,
+      thumbnail_file_name,
+      thumbnail_byte_size,
+      sort_order,
+      created_at,
+      updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+  `);
+
+  db.exec("BEGIN IMMEDIATE;");
+
+  try {
+    db.exec("DELETE FROM gallery_videos;");
+
+    for (const video of videos) {
+      insert.run(
+        video.id,
+        video.title,
+        video.youtubeUrl,
+        normalizeNullableValue(video.thumbnailFileName),
+        normalizeNullableNumber(video.thumbnailByteSize),
+        video.sortOrder,
+        video.createdAt,
+        video.updatedAt
+      );
+    }
+
+    db.exec("COMMIT;");
+  } catch (error) {
+    db.exec("ROLLBACK;");
+    throw error;
+  }
 }

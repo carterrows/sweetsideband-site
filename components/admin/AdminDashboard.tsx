@@ -1,9 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useRef, useState, startTransition } from "react";
+import { useMemo, useState, startTransition } from "react";
 import { useRouter } from "next/navigation";
-import type { GalleryImage, ManagedShow, ShowBucket } from "@/lib/types";
+import type {
+  GalleryImage,
+  GalleryVideo,
+  ManagedShow,
+  ShowBucket
+} from "@/lib/types";
 import { deriveShowId } from "@/lib/show-id";
 
 type EditableShow = ManagedShow & {
@@ -13,7 +18,16 @@ type EditableShow = ManagedShow & {
   pendingPosterName: string | null;
 };
 
-type AdminTab = "shows" | "images";
+type EditableVideo = GalleryVideo & {
+  clientKey: string;
+  originalId: string | null;
+  pendingThumbnailFile: File | null;
+  pendingThumbnailName: string | null;
+};
+
+type AdminTab = "shows" | "videos" | "images";
+
+const MAX_VIDEO_THUMBNAIL_BYTES = 250 * 1024;
 
 function createClientKey() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -35,6 +49,16 @@ function toEditableShow(show: ManagedShow): EditableShow {
     originalId: show.id,
     pendingPosterFile: null,
     pendingPosterName: null
+  };
+}
+
+function toEditableVideo(video: GalleryVideo): EditableVideo {
+  return {
+    ...video,
+    clientKey: createClientKey(),
+    originalId: video.id,
+    pendingThumbnailFile: null,
+    pendingThumbnailName: null
   };
 }
 
@@ -66,36 +90,69 @@ function createBlankShow(bucket: ShowBucket): EditableShow {
   };
 }
 
+function createBlankVideo(): EditableVideo {
+  const now = new Date().toISOString();
+
+  return {
+    clientKey: createClientKey(),
+    originalId: null,
+    id: "",
+    title: "",
+    youtubeUrl: "",
+    thumbnailFileName: undefined,
+    thumbnailSrc: undefined,
+    thumbnailByteSize: undefined,
+    sortOrder: 0,
+    createdAt: now,
+    updatedAt: now,
+    pendingThumbnailFile: null,
+    pendingThumbnailName: null
+  };
+}
+
 export default function AdminDashboard({
   initialShows,
-  initialImages
+  initialImages,
+  initialVideos
 }: {
   initialShows: ManagedShow[];
   initialImages: GalleryImage[];
+  initialVideos: GalleryVideo[];
 }) {
   const router = useRouter();
-  const initialStateRef = useRef<{
+  const [initialState] = useState<{
     shows: EditableShow[];
     images: GalleryImage[];
+    videos: EditableVideo[];
     selectedKey: string | null;
-  } | null>(null);
-
-  if (!initialStateRef.current) {
+    selectedVideoKey: string | null;
+  }>(() => {
     const preparedShows = initialShows.map(toEditableShow);
-    initialStateRef.current = {
+    const preparedVideos = initialVideos.map(toEditableVideo);
+
+    return {
       shows: preparedShows,
       images: initialImages,
-      selectedKey: preparedShows[0]?.clientKey ?? null
+      videos: preparedVideos,
+      selectedKey: preparedShows[0]?.clientKey ?? null,
+      selectedVideoKey: preparedVideos[0]?.clientKey ?? null
     };
-  }
+  });
 
-  const [shows, setShows] = useState(initialStateRef.current.shows);
-  const [images, setImages] = useState(initialStateRef.current.images);
-  const [selectedKey, setSelectedKey] = useState(initialStateRef.current.selectedKey);
+  const [shows, setShows] = useState(initialState.shows);
+  const [images, setImages] = useState(initialState.images);
+  const [videos, setVideos] = useState(initialState.videos);
+  const [selectedKey, setSelectedKey] = useState(initialState.selectedKey);
+  const [selectedVideoKey, setSelectedVideoKey] = useState(
+    initialState.selectedVideoKey
+  );
   const [activeTab, setActiveTab] = useState<AdminTab>("shows");
   const [feedback, setFeedback] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [videoFeedback, setVideoFeedback] = useState<string | null>(null);
+  const [videoError, setVideoError] = useState<string | null>(null);
+  const [isSyncingVideos, setIsSyncingVideos] = useState(false);
   const [imageFeedback, setImageFeedback] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
@@ -105,6 +162,11 @@ export default function AdminDashboard({
   const selectedShow = useMemo(
     () => shows.find((show) => show.clientKey === selectedKey) ?? null,
     [selectedKey, shows]
+  );
+
+  const selectedVideo = useMemo(
+    () => videos.find((video) => video.clientKey === selectedVideoKey) ?? null,
+    [selectedVideoKey, videos]
   );
 
   const upcomingShows = useMemo(
@@ -124,10 +186,20 @@ export default function AdminDashboard({
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const selectVideo = (clientKey: string) => {
+    setActiveTab("videos");
+    setSelectedVideoKey(clientKey);
+    setVideoFeedback(null);
+    setVideoError(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const selectTab = (tab: AdminTab) => {
     setActiveTab(tab);
     setFeedback(null);
     setError(null);
+    setVideoFeedback(null);
+    setVideoError(null);
     setImageFeedback(null);
     setImageError(null);
   };
@@ -332,6 +404,167 @@ export default function AdminDashboard({
     })();
   };
 
+  const addVideo = () => {
+    const nextVideo = createBlankVideo();
+
+    setVideos((currentVideos) => [...currentVideos, nextVideo]);
+    setSelectedVideoKey(nextVideo.clientKey);
+    setActiveTab("videos");
+    setVideoFeedback(null);
+    setVideoError(null);
+  };
+
+  const updateVideo = (
+    clientKey: string,
+    field: "title" | "youtubeUrl",
+    value: string
+  ) => {
+    setVideos((currentVideos) =>
+      currentVideos.map((video) =>
+        video.clientKey === clientKey
+          ? {
+              ...video,
+              [field]: value
+            }
+          : video
+      )
+    );
+    setVideoFeedback(null);
+    setVideoError(null);
+  };
+
+  const deleteSelectedVideo = () => {
+    if (!selectedVideo) {
+      return;
+    }
+
+    setVideos((currentVideos) => {
+      const remainingVideos = currentVideos.filter(
+        (video) => video.clientKey !== selectedVideo.clientKey
+      );
+      setSelectedVideoKey(remainingVideos[0]?.clientKey ?? null);
+      return remainingVideos;
+    });
+    setVideoFeedback(null);
+    setVideoError(null);
+  };
+
+  const onVideoThumbnailChange = (fileList: FileList | null) => {
+    if (!selectedVideo) {
+      return;
+    }
+
+    const file = fileList?.[0] ?? null;
+
+    if (!file) {
+      setVideos((currentVideos) =>
+        currentVideos.map((video) =>
+          video.clientKey === selectedVideo.clientKey
+            ? {
+                ...video,
+                pendingThumbnailFile: null,
+                pendingThumbnailName: null
+              }
+            : video
+        )
+      );
+      return;
+    }
+
+    const lowerName = file.name.toLowerCase();
+
+    if (
+      !lowerName.endsWith(".jpg") &&
+      !lowerName.endsWith(".jpeg") &&
+      !lowerName.endsWith(".png")
+    ) {
+      setVideoError("Video thumbnails must use .jpg, .jpeg, or .png.");
+      return;
+    }
+
+    if (file.size > MAX_VIDEO_THUMBNAIL_BYTES) {
+      setVideoError("Each video thumbnail must be 250 KB or smaller.");
+      return;
+    }
+
+    setVideos((currentVideos) =>
+      currentVideos.map((video) =>
+        video.clientKey === selectedVideo.clientKey
+          ? {
+              ...video,
+              pendingThumbnailFile: file,
+              pendingThumbnailName: file.name
+            }
+          : video
+      )
+    );
+    setVideoFeedback(null);
+    setVideoError(null);
+  };
+
+  const syncGalleryVideos = () => {
+    setVideoFeedback(null);
+    setVideoError(null);
+    setIsSyncingVideos(true);
+
+    void (async () => {
+      const formData = new FormData();
+      const payload = videos.map((video) => ({
+        clientKey: video.clientKey,
+        originalId: video.originalId,
+        title: video.title,
+        youtubeUrl: video.youtubeUrl
+      }));
+
+      formData.set("payload", JSON.stringify(payload));
+
+      for (const video of videos) {
+        if (video.pendingThumbnailFile) {
+          formData.append(
+            `thumbnail:${video.clientKey}`,
+            video.pendingThumbnailFile
+          );
+        }
+      }
+
+      try {
+        const currentSelectedId = selectedVideo?.originalId ?? null;
+        const response = await fetch("/api/admin/gallery-videos", {
+          method: "POST",
+          body: formData
+        });
+        const result = (await response.json()) as {
+          error?: string;
+          videos?: GalleryVideo[];
+        };
+
+        if (!response.ok || !result.videos) {
+          setVideoError(result.error ?? "Video sync failed.");
+          return;
+        }
+
+        const refreshedVideos = result.videos.map(toEditableVideo);
+        setVideos(refreshedVideos);
+        setSelectedVideoKey(
+          refreshedVideos.find((video) => video.id === currentSelectedId)
+            ?.clientKey ??
+            refreshedVideos[0]?.clientKey ??
+            null
+        );
+        setVideoFeedback(
+          "Videos synced. Public videos will refresh on the next request."
+        );
+        startTransition(() => {
+          router.refresh();
+        });
+      } catch {
+        setVideoError("Video sync failed.");
+      } finally {
+        setIsSyncingVideos(false);
+      }
+    })();
+  };
+
   const uploadGalleryImages = (fileList: FileList | null) => {
     const files = Array.from(fileList ?? []);
 
@@ -479,8 +712,8 @@ export default function AdminDashboard({
               </h1>
             </div>
           </div>
-          <div className="mt-6 grid grid-cols-2 gap-2 rounded-full border border-black/10 bg-white p-1">
-            {(["shows", "images"] as const).map((tab) => (
+          <div className="mt-6 grid grid-cols-3 gap-2 rounded-full border border-black/10 bg-white p-1">
+            {(["shows", "videos", "images"] as const).map((tab) => (
               <button
                 key={tab}
                 type="button"
@@ -574,6 +807,43 @@ export default function AdminDashboard({
               </div>
             </section>
           </div>
+          ) : null}
+          {activeTab === "videos" ? (
+            <div className="mt-6 space-y-3">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-ink-700">
+                  Videos
+                </h2>
+                <button
+                  type="button"
+                  onClick={addVideo}
+                  className="rounded-full border border-accent px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white"
+                >
+                  Add
+                </button>
+              </div>
+              <div className="space-y-2">
+                {videos.map((video) => (
+                  <button
+                    key={video.clientKey}
+                    type="button"
+                    onClick={() => selectVideo(video.clientKey)}
+                    className={`flex w-full flex-col rounded-2xl border px-4 py-3 text-left transition ${
+                      selectedVideoKey === video.clientKey
+                        ? "border-accent bg-accent text-white shadow-glow"
+                        : "border-black/10 bg-white text-ink-900 hover:border-accent/30"
+                    }`}
+                  >
+                    <span className="font-semibold">
+                      {video.title || "Untitled video"}
+                    </span>
+                    <span className="mt-1 truncate text-sm opacity-80">
+                      {video.youtubeUrl || "YouTube URL not set"}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : null}
         </aside>
         {activeTab === "images" ? (
@@ -673,6 +943,154 @@ export default function AdminDashboard({
             ) : (
               <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-6 py-16 text-center text-sm text-ink-500">
                 Upload JPEG images to populate the public photo gallery.
+              </div>
+            )}
+          </section>
+        ) : activeTab === "videos" ? (
+          <section className="rounded-[2rem] border border-black/10 bg-paper p-6 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
+                  Draft Workspace
+                </p>
+                <h2 className="mt-2 font-display text-4xl uppercase text-ink-900">
+                  {selectedVideo
+                    ? selectedVideo.title || "Edit video"
+                    : "No video selected"}
+                </h2>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={deleteSelectedVideo}
+                  disabled={!selectedVideo}
+                  className="rounded-full border border-red-300 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Delete Video
+                </button>
+                <button
+                  type="button"
+                  onClick={syncGalleryVideos}
+                  disabled={isSyncingVideos}
+                  className="rounded-full bg-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isSyncingVideos ? "Syncing..." : "Sync Videos"}
+                </button>
+              </div>
+            </div>
+
+            {videoFeedback ? (
+              <p className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                {videoFeedback}
+              </p>
+            ) : null}
+            {videoError ? (
+              <p className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {videoError}
+              </p>
+            ) : null}
+
+            <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-5 py-4 text-sm text-ink-600">
+              Video metadata is stored in SQLite, while thumbnails live in runtime storage and are served with immutable cache headers. Thumbnails must be .jpg, .jpeg, or .png files up to 250 KB.
+            </div>
+
+            {selectedVideo ? (
+              <div className="mt-8 grid gap-8 xl:grid-cols-[minmax(0,1.35fr)_22rem]">
+                <div className="grid gap-5">
+                  <label className="space-y-2">
+                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
+                      Title
+                    </span>
+                    <input
+                      value={selectedVideo.title}
+                      onChange={(event) =>
+                        updateVideo(
+                          selectedVideo.clientKey,
+                          "title",
+                          event.target.value
+                        )
+                      }
+                      className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
+                    />
+                  </label>
+                  <label className="space-y-2">
+                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
+                      YouTube URL
+                    </span>
+                    <input
+                      value={selectedVideo.youtubeUrl}
+                      onChange={(event) =>
+                        updateVideo(
+                          selectedVideo.clientKey,
+                          "youtubeUrl",
+                          event.target.value
+                        )
+                      }
+                      className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
+                    />
+                  </label>
+                </div>
+
+                <div className="space-y-4 rounded-[1.5rem] border border-black/10 bg-white p-5">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
+                      Thumbnail
+                    </p>
+                    <p className="mt-2 text-sm text-ink-600">
+                      Choose a .jpg, .jpeg, or .png file up to 250 KB.
+                    </p>
+                    {selectedVideo.thumbnailFileName ? (
+                      <p className="text-sm text-ink-600">
+                        Current thumbnail file:{" "}
+                        <span className="font-semibold text-ink-900">
+                          {selectedVideo.thumbnailFileName}
+                        </span>
+                      </p>
+                    ) : null}
+                    {selectedVideo.thumbnailByteSize ? (
+                      <p className="text-sm text-ink-600">
+                        Current size: {formatByteSize(selectedVideo.thumbnailByteSize)}
+                      </p>
+                    ) : null}
+                  </div>
+                  <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white">
+                    Choose Image
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                      className="sr-only"
+                      onChange={(event) => {
+                        onVideoThumbnailChange(event.target.files);
+                        event.currentTarget.value = "";
+                      }}
+                    />
+                  </label>
+                  {selectedVideo.pendingThumbnailName ? (
+                    <p className="text-sm text-ink-600">
+                      Pending upload: {selectedVideo.pendingThumbnailName}
+                    </p>
+                  ) : null}
+                  {selectedVideo.thumbnailSrc ? (
+                    <div className="overflow-hidden rounded-[1.25rem] border border-black/10">
+                      <Image
+                        src={selectedVideo.thumbnailSrc}
+                        alt={`${selectedVideo.title || "Video"} thumbnail`}
+                        width={900}
+                        height={506}
+                        unoptimized
+                        className="aspect-video w-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="rounded-[1.25rem] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink-500">
+                      No thumbnail uploaded yet.
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-6 py-16 text-center text-sm text-ink-500">
+                Select a video from the left or add a new one to begin editing.
               </div>
             )}
           </section>
