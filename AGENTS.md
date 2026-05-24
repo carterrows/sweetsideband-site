@@ -3,7 +3,7 @@
 ## Project Purpose
 - This repository powers the public website for the band **Sweetside**.
 - Primary goals: show upcoming/past shows, media gallery, streaming links, merch placeholder, and booking contact.
-- Band/member/video media content is file-driven, while shows and photo gallery metadata are stored in SQLite.
+- Band/member content is file-driven, while shows, video gallery metadata, and photo gallery metadata are stored in SQLite.
 
 ## Tech Stack
 - **Next.js 16** (App Router) + **React 18** + **TypeScript (strict)**.
@@ -16,7 +16,7 @@
 - `components/`: UI and interaction components.
 - `data/`: Editable site content and the local SQLite file for shows.
 - `lib/`: Typed models and content loading helpers.
-- `public/`: Static assets (backgrounds, logos, member photos, show photos, thumbnails, icons).
+- `public/`: Static assets (backgrounds, logos, member photos, show photos, icons).
 - `Dockerfile`, `docker-compose.yml`: Production container build/run.
 - `next.config.js`: security headers + image formats.
 
@@ -28,13 +28,14 @@
   - Full upcoming + past show listings.
   - Booking mailto link.
 - `/admin`:
-  - Admin dashboard for editing shows in SQLite.
+  - Admin dashboard for editing shows, videos, and gallery images in SQLite.
 - `/admin/login`:
   - Fixed-username admin login page.
 - `/posters/[fileName]`:
   - Runtime route that serves uploaded poster PNGs from writable storage.
 - `/video`:
   - Dedicated video gallery page with large video cards.
+  - Video cards are loaded from SQLite-backed admin video metadata.
   - Top pill selector to switch between `Video` and `Photo`.
 - `/video/photos`:
   - Masonry-style photo gallery (mixed aspect ratios, spaced grid).
@@ -55,7 +56,7 @@
 - Show data is loaded from SQLite through `lib/shows-db.ts`.
 - Upcoming show records may include optional `venue_url`, `tickets_url`, time, fee, address, and poster fields.
 - Public show lists are sorted by date descending within `upcoming` and `past`.
-- Show photos for `/video/photos` are loaded from the SQLite-backed admin gallery metadata, not from JSON or `public/images/shows/`.
+- Videos for `/video` and show photos for `/video/photos` are loaded from SQLite-backed admin gallery metadata, not from JSON or `public/images/shows/`.
 - Components/pages rely on these TypeScript types in `lib/types.ts`.
 
 ## Data Files: What They Drive
@@ -64,15 +65,24 @@
 - `data/members.json`:
   - member cards shown on home page.
 - `data/media.json`:
-  - video items for the `/video` gallery page.
+  - legacy video data; `/video` now reads from SQLite-backed admin video metadata.
 - `data/shows.sqlite`:
-  - local default SQLite database for shows and photo gallery image metadata during non-Docker development.
+  - local default SQLite database for shows, video gallery metadata, and photo gallery image metadata during non-Docker development.
   - upcoming rows may include `tickets_url` for the public Tickets button.
 - `storage/posters/`:
   - local default writable poster storage outside `public/`.
 - Docker volume storage:
   - `/app/storage/shows.sqlite`
   - `/app/storage/posters/`
+- Video gallery:
+  - source of truth for metadata is the `gallery_videos` table in SQLite.
+  - uploaded thumbnail files are stored in runtime storage.
+  - local default thumbnail storage is `storage/video-thumbnails/`.
+  - Docker thumbnail storage lives beside the database inside the mounted `/app/storage` volume.
+  - public thumbnails are served through `/video-thumbnails/[fileName]`.
+  - public thumbnail responses use immutable cache headers because uploaded filenames are stable and UUID-prefixed.
+  - admin uploads accept `.jpg`, `.jpeg`, and `.png` files only, 250 KB max each.
+  - use the admin Videos sync button to revalidate the static video gallery from SQLite.
 - Photo gallery images:
   - source of truth for metadata is the `gallery_images` table in SQLite.
   - uploaded image files are stored in runtime storage.
@@ -106,6 +116,7 @@
   - Receives database-backed image media from `getShowPhotos()`.
 - `components/MediaGrid.tsx`:
   - Video card grid used on the default gallery route.
+  - Receives database-backed video media from `getMedia()`.
 - `components/ContactSection.tsx`:
   - Client-side form builds a `mailto:` URL (no backend API).
 
@@ -167,6 +178,7 @@
 - When a show is moved from `upcoming` to `past`, upcoming-only fields such as `venue_url`, `tickets_url`, and `poster_file_name` are cleared.
 - The rate limiter is in-memory, process-wide, and assumes a single app instance.
 - Admin poster uploads are limited to valid PNG files, 5 MB each, and 20 MB combined per sync request.
+- Admin video thumbnail uploads are limited to valid JPG, JPEG, or PNG files, 250 KB each.
 - Many `next/image` usages set `unoptimized`; keep this in mind before changing image optimization strategy.
 - `next-env.d.ts` is generated-style and should not be manually edited.
 - `node_modules`, `.next`, `.env*`, and `tsconfig.tsbuildinfo` are ignored by git.
@@ -175,6 +187,7 @@
 1. Read `README.md` and this file.
 2. Check `data/*.json` for the latest real content before making assumptions.
 3. If content-only change: edit JSON + ensure referenced files exist in `public/images/...`.
+   For gallery videos, use the admin Videos tab instead of editing `data/media.json` or adding files to `public/images/thumbnails/`.
    For show photos specifically, use the admin Images tab instead of editing `data/media.json` or adding files to `public/images/shows/`.
    For show listings, inspect the admin flow and SQLite helpers.
    For show posters, inspect `lib/show-posters.ts` and the `/posters/[fileName]` route instead of `public/`.

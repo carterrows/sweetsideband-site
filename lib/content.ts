@@ -1,7 +1,11 @@
 import fs from "fs";
 import path from "path";
 import type { Band, ShowsData, Member, MediaItem } from "./types";
-import { getGalleryPhotosFromDatabase, getShowsFromDatabase } from "./shows-db";
+import {
+  getGalleryPhotosFromDatabase,
+  getGalleryVideosFromDatabase,
+  getShowsFromDatabase
+} from "./shows-db";
 
 const dataDir = path.join(process.cwd(), "data");
 const allowedFiles = new Set(["band.json", "members.json", "media.json"]);
@@ -28,7 +32,7 @@ export function getMembers(): Member[] {
 }
 
 export function getMedia(): MediaItem[] {
-  return readJson<MediaItem[]>("media.json");
+  return getGalleryVideosFromDatabase();
 }
 
 export function getShowPhotos(): MediaItem[] {

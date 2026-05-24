@@ -70,3 +70,15 @@ export type GalleryImage = {
   byteSize: number;
   createdAt: string;
 };
+
+export type GalleryVideo = {
+  id: string;
+  title: string;
+  youtubeUrl: string;
+  thumbnailFileName?: string;
+  thumbnailSrc?: string;
+  thumbnailByteSize?: number;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+};
