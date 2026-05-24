@@ -297,29 +297,6 @@ export function getManagedGalleryVideos(): GalleryVideo[] {
   return rows.map(mapGalleryVideoRow);
 }
 
-export function getManagedGalleryVideoById(id: string): GalleryVideo | null {
-  const db = getDatabase();
-  const row = db
-    .prepare(
-      `
-        SELECT
-          id,
-          title,
-          youtube_url,
-          thumbnail_file_name,
-          thumbnail_byte_size,
-          sort_order,
-          created_at,
-          updated_at
-        FROM gallery_videos
-        WHERE id = ?;
-      `
-    )
-    .get(id.trim()) as GalleryVideoRow | undefined;
-
-  return row ? mapGalleryVideoRow(row) : null;
-}
-
 export function getManagedGalleryImageById(id: string): GalleryImage | null {
   const db = getDatabase();
   const row = db

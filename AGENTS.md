@@ -184,7 +184,7 @@
 1. Read `README.md` and this file.
 2. Check `data/*.json` for the latest real content before making assumptions.
 3. If content-only change: edit JSON + ensure referenced files exist in `public/images/...`.
-   For gallery videos, use the admin Videos tab instead of adding files to `public/images/thumbnails/`.
+   For gallery videos, use the admin Videos tab.
    For show photos specifically, use the admin Images tab instead of adding files to `public/images/shows/`.
    For show listings, inspect the admin flow and SQLite helpers.
    For show posters, inspect `lib/show-posters.ts` and the `/posters/[fileName]` route instead of `public/`.
