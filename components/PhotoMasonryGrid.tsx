@@ -135,7 +135,7 @@ export default function PhotoMasonryGrid({ items }: { items: MediaItem[] }) {
 
   return (
     <>
-      <div className="columns-1 gap-4 px-3 sm:columns-2 md:gap-5 md:px-6 2xl:columns-4">
+      <div className="columns-1 gap-4 px-3 sm:columns-2 md:gap-5 md:px-6 lg:columns-4">
         {photoItems.map((item, index) => (
           <button
             key={item.id}
@@ -149,7 +149,7 @@ export default function PhotoMasonryGrid({ items }: { items: MediaItem[] }) {
               alt={item.alt ?? item.title}
               width={1600}
               height={1200}
-              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="h-auto w-full transition duration-300 group-hover:scale-[1.02] group-focus-visible:scale-[1.02]"
               unoptimized
             />
