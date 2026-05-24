@@ -23,9 +23,29 @@ const securityHeaders = [
   }
 ];
 
+const runtimeFileRouteTraceExcludes = [
+  "./AGENTS.md",
+  "./Dockerfile",
+  "./README.md",
+  "./app/**/*",
+  "./components/**/*",
+  "./data/**/*",
+  "./lib/**/*",
+  "./public/**/*",
+  "./*.config.*",
+  "./package*.json",
+  "./tailwind.config.js",
+  "./tsconfig*"
+];
+
 const nextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ["better-sqlite3"],
+  outputFileTracingExcludes: {
+    "/posters/\\[fileName\\]": runtimeFileRouteTraceExcludes,
+    "/gallery-images/\\[fileName\\]": runtimeFileRouteTraceExcludes,
+    "/video-thumbnails/\\[fileName\\]": runtimeFileRouteTraceExcludes
+  },
   images: {
     formats: ["image/avif", "image/webp"]
   },
