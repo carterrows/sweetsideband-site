@@ -5,11 +5,12 @@ import {
   sanitizePosterFileName
 } from "./show-posters";
 import { getManagedShows, replaceShows } from "./shows-db";
-import { deriveShowId, isIsoShowDate } from "./show-id";
+import { isIsoShowDate, isShowId } from "./show-id";
 
 export type ShowSyncInput = {
   clientKey: string;
   originalId: string | null;
+  id: string;
   bucket: ShowBucket;
   date: string;
   city: string;
@@ -68,6 +69,13 @@ function normalizeOptionalAbsoluteUrl(value: string | undefined, field: string) 
 }
 
 function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedShow {
+  const id = normalizeRequiredValue(input.id, "Show ID");
+  if (!isShowId(id)) {
+    throw new Error(
+      "Show ID must use the format ss- followed by 8 lowercase hex characters."
+    );
+  }
+
   const date = normalizeRequiredValue(input.date, "Date");
   if (!isIsoShowDate(date)) {
     throw new Error("Date must use YYYY-MM-DD.");
@@ -77,7 +85,6 @@ function normalizeShowInput(input: ShowSyncInput, sortOrder: number): ManagedSho
     throw new Error("Show bucket must be upcoming or past.");
   }
 
-  const id = deriveShowId(date);
   const detailFields =
     input.bucket === "upcoming"
       ? {

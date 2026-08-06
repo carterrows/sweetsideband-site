@@ -1,3 +1,4 @@
+import { randomBytes } from "crypto";
 import fs from "fs";
 import path from "path";
 import Database from "better-sqlite3";
@@ -55,6 +56,138 @@ const databasePath = process.env.SHOWS_DB_PATH?.trim()
 
 let database: Database.Database | null = null;
 
+const randomShowIdMigration = "shows-random-id-v1";
+
+function createShowsTableSql(
+  tableName: "shows" | "shows_random_id_migration"
+) {
+  return `
+  CREATE TABLE IF NOT EXISTS ${tableName} (
+    id TEXT PRIMARY KEY CHECK (
+      length(id) = 11
+      AND substr(id, 1, 3) = 'ss-'
+      AND substr(id, 4) NOT GLOB '*[^0-9a-f]*'
+    ),
+    bucket TEXT NOT NULL CHECK(bucket IN ('upcoming', 'past')),
+    sort_order INTEGER NOT NULL,
+    date TEXT NOT NULL,
+    city TEXT NOT NULL,
+    venue TEXT NOT NULL,
+    venue_url TEXT,
+    tickets_url TEXT,
+    venue_address TEXT,
+    show_time TEXT,
+    doors_open_time TEXT,
+    cover_fee TEXT,
+    poster_file_name TEXT
+  );
+`;
+}
+
+function generateUniqueShowId(assignedIds: Set<string>) {
+  let id: string;
+
+  do {
+    id = `ss-${randomBytes(4).toString("hex")}`;
+  } while (assignedIds.has(id));
+
+  assignedIds.add(id);
+  return id;
+}
+
+function migrateShowIds(db: Database.Database) {
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS schema_migrations (
+      name TEXT PRIMARY KEY,
+      applied_at TEXT NOT NULL
+    );
+  `);
+
+  db.exec("BEGIN IMMEDIATE;");
+
+  try {
+    const migrationApplied = db
+      .prepare("SELECT 1 FROM schema_migrations WHERE name = ?;")
+      .get(randomShowIdMigration);
+
+    if (migrationApplied) {
+      db.exec("COMMIT;");
+      return;
+    }
+
+    const rows = db
+      .prepare(
+        `
+          SELECT
+            bucket,
+            sort_order,
+            date,
+            city,
+            venue,
+            venue_url,
+            tickets_url,
+            venue_address,
+            show_time,
+            doors_open_time,
+            cover_fee,
+            poster_file_name
+          FROM shows;
+        `
+      )
+      .all() as Omit<ShowRow, "id">[];
+    const assignedIds = new Set<string>();
+
+    db.exec("DROP TABLE IF EXISTS shows_random_id_migration;");
+    db.exec(createShowsTableSql("shows_random_id_migration"));
+
+    const insert = db.prepare(`
+      INSERT INTO shows_random_id_migration (
+        id,
+        bucket,
+        sort_order,
+        date,
+        city,
+        venue,
+        venue_url,
+        tickets_url,
+        venue_address,
+        show_time,
+        doors_open_time,
+        cover_fee,
+        poster_file_name
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `);
+
+    for (const row of rows) {
+      insert.run(
+        generateUniqueShowId(assignedIds),
+        row.bucket,
+        row.sort_order,
+        row.date,
+        row.city,
+        row.venue,
+        row.venue_url,
+        row.tickets_url,
+        row.venue_address,
+        row.show_time,
+        row.doors_open_time,
+        row.cover_fee,
+        row.poster_file_name
+      );
+    }
+
+    db.exec("DROP TABLE shows;");
+    db.exec("ALTER TABLE shows_random_id_migration RENAME TO shows;");
+    db.prepare(
+      "INSERT INTO schema_migrations (name, applied_at) VALUES (?, ?);"
+    ).run(randomShowIdMigration, new Date().toISOString());
+    db.exec("COMMIT;");
+  } catch (error) {
+    db.exec("ROLLBACK;");
+    throw error;
+  }
+}
+
 function getDatabase() {
   if (database) {
     return database;
@@ -64,23 +197,8 @@ function getDatabase() {
   const db = new Database(databasePath);
   db.exec("PRAGMA journal_mode = WAL;");
   db.exec("PRAGMA synchronous = NORMAL;");
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS shows (
-      id TEXT PRIMARY KEY,
-      bucket TEXT NOT NULL CHECK(bucket IN ('upcoming', 'past')),
-      sort_order INTEGER NOT NULL,
-      date TEXT NOT NULL,
-      city TEXT NOT NULL,
-      venue TEXT NOT NULL,
-      venue_url TEXT,
-      tickets_url TEXT,
-      venue_address TEXT,
-      show_time TEXT,
-      doors_open_time TEXT,
-      cover_fee TEXT,
-      poster_file_name TEXT
-    );
-  `);
+  db.exec(createShowsTableSql("shows"));
+  migrateShowIds(db);
   db.exec(`
     CREATE TABLE IF NOT EXISTS gallery_images (
       id TEXT PRIMARY KEY,
