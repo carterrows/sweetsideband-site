@@ -93,6 +93,7 @@ Shows load through `lib/shows-db.ts`.
 - Local default database path is `data/shows.sqlite`.
 - Docker stores the database in a named volume mounted at `/app/storage/shows.sqlite`.
 - Public pages still read through `lib/content.ts`, so the UI contracts stay the same.
+- Show IDs use the immutable `ss-xxxxxxxx` format, with eight random lowercase hex characters. Existing databases migrate automatically on first startup.
 - Uploaded posters are stored in runtime storage.
 - Local poster storage defaults to `storage/posters/`.
 - Docker poster storage lives beside the database inside the mounted `/app/storage` volume.

@@ -9,7 +9,7 @@ import type {
   ManagedShow,
   ShowBucket
 } from "@/lib/types";
-import { deriveShowId } from "@/lib/show-id";
+import { generateShowId } from "@/lib/show-id";
 
 type EditableShow = ManagedShow & {
   clientKey: string;
@@ -44,7 +44,6 @@ function formatByteSize(byteSize: number) {
 function toEditableShow(show: ManagedShow): EditableShow {
   return {
     ...show,
-    id: deriveShowId(show.date),
     clientKey: createClientKey(),
     originalId: show.id,
     pendingPosterFile: null,
@@ -67,14 +66,12 @@ function groupCount(shows: EditableShow[], bucket: ShowBucket) {
 }
 
 function createBlankShow(bucket: ShowBucket): EditableShow {
-  const id = deriveShowId("");
-
   return {
     clientKey: createClientKey(),
     originalId: null,
     bucket,
     sortOrder: 0,
-    id,
+    id: generateShowId(),
     date: "",
     city: "",
     venue: "",
@@ -208,18 +205,10 @@ export default function AdminDashboard({
     setShows((currentShows) =>
       currentShows.map((show) =>
         show.clientKey === clientKey
-          ? (() => {
-              const updatedShow = {
-                ...show,
-                [field]: value
-              };
-
-              if (field === "date") {
-                updatedShow.id = deriveShowId(value);
-              }
-
-              return updatedShow;
-            })()
+          ? {
+              ...show,
+              [field]: value
+            }
           : show
       )
     );
@@ -347,6 +336,7 @@ export default function AdminDashboard({
       const payload = shows.map((show) => ({
         clientKey: show.clientKey,
         originalId: show.originalId,
+        id: show.id,
         bucket: show.bucket,
         date: show.date,
         city: show.city,
@@ -368,7 +358,7 @@ export default function AdminDashboard({
       }
 
       try {
-        const currentSelectedId = selectedShow ? deriveShowId(selectedShow.date) : null;
+        const currentSelectedId = selectedShow?.id ?? null;
         const response = await fetch("/api/admin/sync", {
           method: "POST",
           body: formData
