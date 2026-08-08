@@ -163,6 +163,7 @@ export default function AdminDashboard({
   const [imageFeedback, setImageFeedback] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [isSyncingImages, setIsSyncingImages] = useState(false);
   const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
 
   const selectedShow = useMemo(
@@ -662,6 +663,39 @@ export default function AdminDashboard({
     })();
   };
 
+  const syncGalleryImages = () => {
+    setImageFeedback(null);
+    setImageError(null);
+    setIsSyncingImages(true);
+
+    void (async () => {
+      try {
+        const response = await fetch("/api/admin/gallery-images", {
+          method: "PUT"
+        });
+        const result = (await response.json()) as {
+          error?: string;
+          images?: GalleryImage[];
+        };
+
+        if (!response.ok || !result.images) {
+          setImageError(result.error ?? "Unable to save photo changes.");
+          return;
+        }
+
+        setImages(result.images);
+        setImageFeedback("Photo changes saved successfully.");
+        startTransition(() => {
+          router.refresh();
+        });
+      } catch {
+        setImageError("Unable to save photo changes.");
+      } finally {
+        setIsSyncingImages(false);
+      }
+    })();
+  };
+
   const tabs = [
     {
       id: "shows" as const,
@@ -769,23 +803,34 @@ export default function AdminDashboard({
                   JPG or JPEG · Maximum 1 MB per photo
                 </p>
               </div>
-              <label className={`${primaryButtonClass} cursor-pointer ${
-                isUploadingImages ? "pointer-events-none opacity-60" : ""
-              }`}>
-                <Upload aria-hidden="true" size={17} />
-                {isUploadingImages ? "Uploading..." : "Upload photos"}
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,image/jpeg"
-                  multiple
-                  disabled={isUploadingImages}
-                  className="sr-only"
-                  onChange={(event) => {
-                    uploadGalleryImages(event.target.files);
-                    event.currentTarget.value = "";
-                  }}
-                />
-              </label>
+              <div className="flex flex-wrap gap-2">
+                <label className={`${secondaryButtonClass} cursor-pointer ${
+                  isUploadingImages ? "pointer-events-none opacity-60" : ""
+                }`}>
+                  <Upload aria-hidden="true" size={17} />
+                  {isUploadingImages ? "Uploading..." : "Upload photos"}
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,image/jpeg"
+                    multiple
+                    disabled={isUploadingImages}
+                    className="sr-only"
+                    onChange={(event) => {
+                      uploadGalleryImages(event.target.files);
+                      event.currentTarget.value = "";
+                    }}
+                  />
+                </label>
+                <button
+                  type="button"
+                  onClick={syncGalleryImages}
+                  disabled={isSyncingImages}
+                  className={primaryButtonClass}
+                >
+                  <Save aria-hidden="true" size={16} />
+                  {isSyncingImages ? "Saving..." : "Save changes"}
+                </button>
+              </div>
             </div>
 
             {(imageFeedback || imageError) && (
