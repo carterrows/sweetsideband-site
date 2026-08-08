@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const isDevelopment = process.env.NODE_ENV === "development";
+
 const csp = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -7,8 +9,8 @@ const csp = [
   "img-src 'self' data: https:",
   "font-src 'self'",
   "style-src 'self' 'unsafe-inline'",
-  "script-src 'self' 'unsafe-inline' https://cloud.umami.is",
-  "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev",
+  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://cloud.umami.is`,
+  `connect-src 'self'${isDevelopment ? " ws: wss:" : ""} https://cloud.umami.is https://gateway.umami.is https://api-gateway.umami.dev`,
   "frame-src 'self' https://open.spotify.com",
   "form-action 'self' mailto:"
 ].join("; ");

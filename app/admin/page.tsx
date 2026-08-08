@@ -1,5 +1,4 @@
 import AdminDashboard from "@/components/admin/AdminDashboard";
-import AdminLogoutButton from "@/components/admin/AdminLogoutButton";
 import { requireAdminAuthentication } from "@/lib/admin-auth";
 import {
   getManagedGalleryImages,
@@ -16,15 +15,10 @@ export default async function AdminPage() {
   const videos = getManagedGalleryVideos();
 
   return (
-    <div className="relative">
-      <div className="absolute right-6 top-6 z-10">
-        <AdminLogoutButton />
-      </div>
-      <AdminDashboard
-        initialShows={shows}
-        initialImages={images}
-        initialVideos={videos}
-      />
-    </div>
+    <AdminDashboard
+      initialShows={shows}
+      initialImages={images}
+      initialVideos={videos}
+    />
   );
 }

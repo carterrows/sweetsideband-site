@@ -12,7 +12,6 @@ import {
   applyRateLimitHeaders,
   enforceRateLimit
 } from "@/lib/rate-limit";
-import { getManagedGalleryVideos } from "@/lib/shows-db";
 
 export const runtime = "nodejs";
 
@@ -103,23 +102,4 @@ export async function POST(request: Request) {
       rateLimit.result
     );
   }
-}
-
-export async function PUT(request: Request) {
-  const rateLimit = enforceRateLimit(ADMIN_SYNC_RATE_LIMIT);
-  if (rateLimit.limited) {
-    return rateLimit.response;
-  }
-
-  if (!isAuthenticated(request)) {
-    return unauthorized(rateLimit);
-  }
-
-  revalidatePath("/video");
-  revalidatePath("/admin");
-
-  return applyRateLimitHeaders(
-    NextResponse.json({ videos: getManagedGalleryVideos() }),
-    rateLimit.result
-  );
 }

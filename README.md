@@ -82,7 +82,7 @@ Copy `.env.example` to `.env` or `.env.local`.
 Available variables:
 
 - `SITE_URL` - canonical site URL used for metadata, sitemap, and robots
-- `ADMIN_PASSWORD_HASH` - salted scrypt hash for the fixed `admin` username
+- `ADMIN_PASSWORD_HASH` - salted scrypt hash for the fixed `admin` username. Escape both `$` delimiters as `\$` when saving it in `.env` or `.env.local`.
 - `ADMIN_SESSION_SECRET` - random secret for signing the admin session cookie
 - `SHOWS_DB_PATH` - optional override for the SQLite database path
 

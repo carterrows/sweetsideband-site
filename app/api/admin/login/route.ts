@@ -34,7 +34,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const response = NextResponse.json({ ok: true });
+    const response = request.headers.get("accept")?.includes("text/html")
+      ? NextResponse.redirect(new URL("/admin", request.url), 303)
+      : NextResponse.json({ ok: true });
     response.cookies.set(
       ADMIN_COOKIE_NAME,
       createAdminSessionToken(),
@@ -43,11 +45,13 @@ export async function POST(request: Request) {
 
     return applyRateLimitHeaders(response, rateLimit.result);
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unable to complete login.";
+    console.error("Admin login failed:", error);
 
     return applyRateLimitHeaders(
-      NextResponse.json({ error: message }, { status: 500 }),
+      NextResponse.json(
+        { error: "Unable to log in right now. Please try again." },
+        { status: 500 }
+      ),
       rateLimit.result
     );
   }
