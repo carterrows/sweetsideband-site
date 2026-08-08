@@ -13,5 +13,5 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <div className="admin-ui font-body antialiased">{children}</div>;
 }

@@ -15,23 +15,33 @@ export default function AdminLoginForm() {
     setError(null);
 
     const formData = new FormData(event.currentTarget);
-    const response = await fetch("/api/admin/login", {
-      method: "POST",
-      body: formData
-    });
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        body: formData
+      });
 
-    if (response.ok) {
-      window.location.assign("/admin");
-      return;
+      if (response.ok) {
+        window.location.assign("/admin");
+        return;
+      }
+
+      const result = (await response.json()) as { error?: string };
+      setError(result.error ?? "Unable to log in. Please try again.");
+    } catch {
+      setError("Unable to log in. Check your connection and try again.");
+    } finally {
+      setPending(false);
     }
-
-    const result = (await response.json()) as { error?: string };
-    setError(result.error ?? "Login failed.");
-    setPending(false);
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-5">
+    <form
+      action="/api/admin/login"
+      method="post"
+      onSubmit={onSubmit}
+      className="flex flex-col gap-5"
+    >
       <div className="space-y-2">
         <label
           htmlFor="username"
@@ -45,7 +55,8 @@ export default function AdminLoginForm() {
           type="text"
           defaultValue="admin"
           autoComplete="username"
-          className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-base text-ink-900 outline-none transition focus:border-accent"
+          required
+          className="w-full rounded-xl border border-black/15 bg-[#fbfaf7] px-4 py-3.5 text-base text-ink-900 outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/10"
         />
       </div>
       <div className="space-y-2">
@@ -61,7 +72,8 @@ export default function AdminLoginForm() {
             name="password"
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
-            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 pr-14 text-base text-ink-900 outline-none transition focus:border-accent"
+            required
+            className="w-full rounded-xl border border-black/15 bg-[#fbfaf7] px-4 py-3.5 pr-14 text-base text-ink-900 outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/10"
           />
           <button
             type="button"
@@ -79,14 +91,14 @@ export default function AdminLoginForm() {
         </div>
       </div>
       {error ? (
-        <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </p>
       ) : null}
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-1 inline-flex min-h-12 items-center justify-center rounded-xl bg-accent px-5 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-[#df5d40] hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-70"
       >
         {pending ? "Checking..." : "Log In"}
       </button>

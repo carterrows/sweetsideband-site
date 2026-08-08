@@ -1,8 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import {
+  CalendarDays,
+  Images as ImagesIcon,
+  Plus,
+  Save,
+  Trash2,
+  Upload,
+  Video
+} from "lucide-react";
 import { useMemo, useState, startTransition } from "react";
 import { useRouter } from "next/navigation";
+import AdminLogoutButton from "@/components/admin/AdminLogoutButton";
 import type {
   GalleryImage,
   GalleryVideo,
@@ -153,7 +163,6 @@ export default function AdminDashboard({
   const [imageFeedback, setImageFeedback] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
-  const [isSyncingImages, setIsSyncingImages] = useState(false);
   const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
 
   const selectedShow = useMemo(
@@ -380,9 +389,7 @@ export default function AdminDashboard({
             refreshedShows[0]?.clientKey ??
             null
         );
-        setFeedback(
-          "Changes synced. Public pages will refresh on the next request."
-        );
+        setFeedback("Show changes saved successfully.");
         startTransition(() => {
           router.refresh();
         });
@@ -529,7 +536,7 @@ export default function AdminDashboard({
         };
 
         if (!response.ok || !result.videos) {
-          setVideoError(result.error ?? "Video sync failed.");
+          setVideoError(result.error ?? "Unable to save videos.");
           return;
         }
 
@@ -541,14 +548,12 @@ export default function AdminDashboard({
             refreshedVideos[0]?.clientKey ??
             null
         );
-        setVideoFeedback(
-          "Videos synced. Public videos will refresh on the next request."
-        );
+        setVideoFeedback("Video changes saved successfully.");
         startTransition(() => {
           router.refresh();
         });
       } catch {
-        setVideoError("Video sync failed.");
+        setVideoError("Unable to save videos.");
       } finally {
         setIsSyncingVideos(false);
       }
@@ -604,7 +609,11 @@ export default function AdminDashboard({
         }
 
         setImages(result.images);
-        setImageFeedback("Image upload complete. Photo gallery will refresh on the next request.");
+        setImageFeedback(
+          files.length === 1
+            ? "Photo uploaded successfully."
+            : `${files.length} photos uploaded successfully.`
+        );
         startTransition(() => {
           router.refresh();
         });
@@ -641,7 +650,7 @@ export default function AdminDashboard({
         }
 
         setImages(result.images);
-        setImageFeedback("Image deleted. Photo gallery will refresh on the next request.");
+        setImageFeedback("Photo deleted successfully.");
         startTransition(() => {
           router.refresh();
         });
@@ -653,247 +662,159 @@ export default function AdminDashboard({
     })();
   };
 
-  const syncGalleryImages = () => {
-    setImageFeedback(null);
-    setImageError(null);
-    setIsSyncingImages(true);
+  const tabs = [
+    {
+      id: "shows" as const,
+      label: "Shows",
+      icon: CalendarDays,
+      count: shows.length
+    },
+    {
+      id: "videos" as const,
+      label: "Videos",
+      icon: Video,
+      count: videos.length
+    },
+    {
+      id: "images" as const,
+      label: "Photos",
+      icon: ImagesIcon,
+      count: images.length
+    }
+  ];
 
-    void (async () => {
-      try {
-        const response = await fetch("/api/admin/gallery-images", {
-          method: "PUT"
-        });
-        const result = (await response.json()) as {
-          error?: string;
-          images?: GalleryImage[];
-        };
-
-        if (!response.ok || !result.images) {
-          setImageError(result.error ?? "Gallery sync failed.");
-          return;
-        }
-
-        setImages(result.images);
-        setImageFeedback(
-          "Gallery synced. Public photos will refresh on the next request."
-        );
-        startTransition(() => {
-          router.refresh();
-        });
-      } catch {
-        setImageError("Gallery sync failed.");
-      } finally {
-        setIsSyncingImages(false);
-      }
-    })();
-  };
+  const fieldClass =
+    "w-full rounded-xl border border-black/15 bg-white px-4 py-3 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-600/45 focus:border-accent focus:ring-4 focus:ring-accent/10";
+  const labelClass =
+    "mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-600";
+  const primaryButtonClass =
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-[#df5d40] hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60";
+  const secondaryButtonClass =
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-black/15 bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-ink-700 transition hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-50";
+  const dangerButtonClass =
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-red-700 transition hover:border-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
-    <div className="min-h-screen bg-haze/40">
-      <div className="mx-auto grid min-h-screen w-full max-w-[112rem] gap-8 px-6 py-8 lg:grid-cols-[24rem_minmax(0,1fr)]">
-        <aside className="rounded-[2rem] border border-black/10 bg-paper p-6 shadow-sm">
-          <div className="flex items-start justify-between gap-4">
+    <div className="min-h-screen bg-[#f5efe3]">
+      <header className="sticky top-0 z-30 border-b border-black/10 bg-[#fffdf8]/95 backdrop-blur-xl">
+        <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+          <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
-                Admin
+              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-accent">
+                Sweetside
               </p>
-              <h1 className="mt-2 font-display text-5xl uppercase text-ink-900">
-                Dashboard
+              <h1 className="mt-1 text-3xl uppercase leading-none text-ink-900">
+                Website manager
               </h1>
             </div>
+            <div className="lg:hidden">
+              <AdminLogoutButton />
+            </div>
           </div>
-          <div className="mt-6 grid grid-cols-3 gap-2 rounded-full border border-black/10 bg-white p-1">
-            {(["shows", "videos", "images"] as const).map((tab) => (
+
+          <nav
+            aria-label="Website content"
+            className="grid grid-cols-3 gap-1 rounded-2xl border border-black/10 bg-[#f6f0e5] p-1.5 lg:min-w-[32rem]"
+          >
+            {tabs.map(({ id, label, icon: Icon, count }) => (
               <button
-                key={tab}
+                key={id}
                 type="button"
-                onClick={() => selectTab(tab)}
-                className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] transition ${
-                  activeTab === tab
-                    ? "bg-accent text-white shadow-glow"
-                    : "text-ink-600 hover:bg-haze"
+                onClick={() => selectTab(id)}
+                aria-pressed={activeTab === id}
+                className={`flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${
+                  activeTab === id
+                    ? "bg-white text-ink-900 shadow-sm"
+                    : "text-ink-600 hover:bg-white/60 hover:text-ink-900"
                 }`}
               >
-                {tab}
+                <Icon
+                  aria-hidden="true"
+                  size={17}
+                  strokeWidth={activeTab === id ? 2.4 : 2}
+                  className={activeTab === id ? "text-accent" : ""}
+                />
+                <span>{label}</span>
+                <span
+                  className={`rounded-full px-2 py-0.5 text-[10px] ${
+                    activeTab === id
+                      ? "bg-accent/10 text-accent"
+                      : "bg-black/5 text-ink-600"
+                  }`}
+                >
+                  {count}
+                </span>
               </button>
             ))}
+          </nav>
+
+          <div className="hidden lg:block">
+            <AdminLogoutButton />
           </div>
-          {activeTab === "shows" ? (
-          <div className="mt-6 space-y-6">
-            <section className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-ink-700">
-                  Upcoming
-                </h2>
-                <button
-                  type="button"
-                  onClick={() => addShow("upcoming")}
-                  className="rounded-full border border-accent px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white"
-                >
-                  Add
-                </button>
-              </div>
-              <div className="space-y-2">
-                {upcomingShows.map((show) => (
-                  <button
-                    key={show.clientKey}
-                    type="button"
-                    onClick={() => selectShow(show.clientKey)}
-                    className={`flex w-full flex-col rounded-2xl border px-4 py-3 text-left transition ${
-                      selectedKey === show.clientKey
-                        ? "border-accent bg-accent text-white shadow-glow"
-                        : "border-black/10 bg-white text-ink-900 hover:border-accent/30"
-                    }`}
-                  >
-                    <span className="text-xs font-semibold uppercase tracking-[0.2em]">
-                      {show.date || "No date"}
-                    </span>
-                    <span className="mt-1 font-semibold">
-                      {show.venue || "Untitled show"}
-                    </span>
-                    <span className="text-sm opacity-80">
-                      {show.city || "City not set"}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </section>
-            <section className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-ink-700">
-                  Past
-                </h2>
-                <button
-                  type="button"
-                  onClick={() => addShow("past")}
-                  className="rounded-full border border-accent px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white"
-                >
-                  Add
-                </button>
-              </div>
-              <div className="space-y-2">
-                {pastShows.map((show) => (
-                  <button
-                    key={show.clientKey}
-                    type="button"
-                    onClick={() => selectShow(show.clientKey)}
-                    className={`flex w-full flex-col rounded-2xl border px-4 py-3 text-left transition ${
-                      selectedKey === show.clientKey
-                        ? "border-accent bg-accent text-white shadow-glow"
-                        : "border-black/10 bg-white text-ink-900 hover:border-accent/30"
-                    }`}
-                  >
-                    <span className="text-xs font-semibold uppercase tracking-[0.2em]">
-                      {show.date || "No date"}
-                    </span>
-                    <span className="mt-1 font-semibold">
-                      {show.venue || "Untitled show"}
-                    </span>
-                    <span className="text-sm opacity-80">
-                      {show.city || "City not set"}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </section>
-          </div>
-          ) : null}
-          {activeTab === "videos" ? (
-            <div className="mt-6 space-y-3">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-ink-700">
-                  Videos
-                </h2>
-                <button
-                  type="button"
-                  onClick={addVideo}
-                  className="rounded-full border border-accent px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white"
-                >
-                  Add
-                </button>
-              </div>
-              <div className="space-y-2">
-                {videos.map((video) => (
-                  <button
-                    key={video.clientKey}
-                    type="button"
-                    onClick={() => selectVideo(video.clientKey)}
-                    className={`flex w-full flex-col rounded-2xl border px-4 py-3 text-left transition ${
-                      selectedVideoKey === video.clientKey
-                        ? "border-accent bg-accent text-white shadow-glow"
-                        : "border-black/10 bg-white text-ink-900 hover:border-accent/30"
-                    }`}
-                  >
-                    <span className="font-semibold">
-                      {video.title || "Untitled video"}
-                    </span>
-                    <span className="mt-1 truncate text-sm opacity-80">
-                      {video.youtubeUrl || "YouTube URL not set"}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </aside>
-        {activeTab === "images" ? (
-          <section className="rounded-[2rem] border border-black/10 bg-paper p-6 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+        </div>
+      </header>
+
+      {activeTab === "images" ? (
+        <main className="w-full p-4 sm:p-6 lg:p-8">
+          <section className="overflow-hidden rounded-3xl border border-black/10 bg-[#fffdf8] shadow-sm">
+            <div className="flex flex-col gap-5 border-b border-black/10 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-7">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
-                  Gallery
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
+                  Photo gallery
                 </p>
-                <h2 className="mt-2 font-display text-4xl uppercase text-ink-900">
-                  Photos
+                <h2 className="mt-2 text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
+                  Manage photos
                 </h2>
+                <p className="mt-3 text-sm text-ink-600">
+                  JPG or JPEG · Maximum 1 MB per photo
+                </p>
               </div>
-              <div className="flex flex-wrap gap-3">
-                <label className="inline-flex cursor-pointer items-center justify-center rounded-full bg-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow">
-                  {isUploadingImages ? "Uploading..." : "Upload JPEG"}
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,image/jpeg"
-                    multiple
-                    disabled={isUploadingImages}
-                    className="sr-only"
-                    onChange={(event) => {
-                      uploadGalleryImages(event.target.files);
-                      event.currentTarget.value = "";
-                    }}
-                  />
-                </label>
-                <button
-                  type="button"
-                  onClick={syncGalleryImages}
-                  disabled={isSyncingImages}
-                  className="rounded-full border border-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {isSyncingImages ? "Syncing..." : "Sync Gallery"}
-                </button>
-              </div>
+              <label className={`${primaryButtonClass} cursor-pointer ${
+                isUploadingImages ? "pointer-events-none opacity-60" : ""
+              }`}>
+                <Upload aria-hidden="true" size={17} />
+                {isUploadingImages ? "Uploading..." : "Upload photos"}
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,image/jpeg"
+                  multiple
+                  disabled={isUploadingImages}
+                  className="sr-only"
+                  onChange={(event) => {
+                    uploadGalleryImages(event.target.files);
+                    event.currentTarget.value = "";
+                  }}
+                />
+              </label>
             </div>
 
-            {imageFeedback ? (
-              <p className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                {imageFeedback}
-              </p>
-            ) : null}
-            {imageError ? (
-              <p className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                {imageError}
-              </p>
-            ) : null}
-
-            <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-5 py-4 text-sm text-ink-600">
-              Gallery photo metadata is stored in SQLite, while uploaded files live in runtime storage and are served with immutable cache headers. Only .jpg and .jpeg files up to 1 MB are accepted.
-            </div>
+            {(imageFeedback || imageError) && (
+              <div className="px-5 pt-5 sm:px-7">
+                {imageFeedback ? (
+                  <p
+                    role="status"
+                    className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
+                  >
+                    {imageFeedback}
+                  </p>
+                ) : null}
+                {imageError ? (
+                  <p
+                    role="alert"
+                    className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                  >
+                    {imageError}
+                  </p>
+                ) : null}
+              </div>
+            )}
 
             {images.length > 0 ? (
-              <div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-7 xl:grid-cols-3 2xl:grid-cols-4">
                 {images.map((image) => (
                   <article
                     key={image.id}
-                    className="overflow-hidden rounded-[1.5rem] border border-black/10 bg-white"
+                    className="group overflow-hidden rounded-2xl border border-black/10 bg-white transition hover:-translate-y-0.5 hover:shadow-lg"
                   >
                     {image.src ? (
                       <Image
@@ -902,19 +823,19 @@ export default function AdminDashboard({
                         width={900}
                         height={700}
                         unoptimized
-                        className="h-56 w-full object-cover"
+                        className="aspect-[4/3] w-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-56 items-center justify-center bg-haze/60 px-6 text-center text-sm text-ink-500">
-                        Image file is missing from runtime storage.
+                      <div className="flex aspect-[4/3] items-center justify-center bg-haze/60 px-6 text-center text-sm text-ink-500">
+                        Photo unavailable
                       </div>
                     )}
-                    <div className="space-y-4 p-5">
-                      <div>
-                        <h3 className="font-semibold text-ink-900">
+                    <div className="flex items-center justify-between gap-4 p-4">
+                      <div className="min-w-0">
+                        <h3 className="truncate font-semibold text-ink-900">
                           {image.title}
                         </h3>
-                        <p className="mt-1 text-xs uppercase tracking-[0.16em] text-ink-500">
+                        <p className="mt-1 text-[11px] uppercase tracking-[0.14em] text-ink-500">
                           {formatByteSize(image.byteSize)}
                         </p>
                       </div>
@@ -922,445 +843,639 @@ export default function AdminDashboard({
                         type="button"
                         onClick={() => deleteGalleryImage(image.id)}
                         disabled={deletingImageId === image.id}
-                        className="rounded-full border border-red-300 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        aria-label={`Delete ${image.title}`}
+                        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-red-100 text-red-600 transition hover:border-red-200 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        {deletingImageId === image.id ? "Deleting..." : "Delete"}
+                        <Trash2 aria-hidden="true" size={17} />
                       </button>
                     </div>
                   </article>
                 ))}
               </div>
             ) : (
-              <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-6 py-16 text-center text-sm text-ink-500">
-                Upload JPEG images to populate the public photo gallery.
-              </div>
-            )}
-          </section>
-        ) : activeTab === "videos" ? (
-          <section className="rounded-[2rem] border border-black/10 bg-paper p-6 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
-                  Draft Workspace
+              <div className="m-5 flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-black/15 bg-white/50 px-6 text-center sm:m-7">
+                <ImagesIcon aria-hidden="true" size={34} className="text-accent" />
+                <h3 className="mt-4 text-3xl uppercase text-ink-900">
+                  No photos yet
+                </h3>
+                <p className="mt-2 max-w-sm text-sm text-ink-600">
+                  Upload photos to start building the gallery.
                 </p>
-                <h2 className="mt-2 font-display text-4xl uppercase text-ink-900">
-                  {selectedVideo
-                    ? selectedVideo.title || "Edit video"
-                    : "No video selected"}
-                </h2>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={deleteSelectedVideo}
-                  disabled={!selectedVideo}
-                  className="rounded-full border border-red-300 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  Delete Video
-                </button>
-                <button
-                  type="button"
-                  onClick={syncGalleryVideos}
-                  disabled={isSyncingVideos}
-                  className="rounded-full bg-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {isSyncingVideos ? "Syncing..." : "Sync Videos"}
-                </button>
-              </div>
-            </div>
-
-            {videoFeedback ? (
-              <p className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                {videoFeedback}
-              </p>
-            ) : null}
-            {videoError ? (
-              <p className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                {videoError}
-              </p>
-            ) : null}
-
-            <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-5 py-4 text-sm text-ink-600">
-              Video metadata is stored in SQLite, while thumbnails live in runtime storage and are served with immutable cache headers. Thumbnails must be .jpg, .jpeg, or .png files up to 250 KB.
-            </div>
-
-            {selectedVideo ? (
-              <div className="mt-8 grid gap-8 xl:grid-cols-[minmax(0,1.35fr)_22rem]">
-                <div className="grid gap-5">
-                  <label className="space-y-2">
-                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                      Title
-                    </span>
-                    <input
-                      value={selectedVideo.title}
-                      onChange={(event) =>
-                        updateVideo(
-                          selectedVideo.clientKey,
-                          "title",
-                          event.target.value
-                        )
-                      }
-                      className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                    />
-                  </label>
-                  <label className="space-y-2">
-                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                      YouTube URL
-                    </span>
-                    <input
-                      value={selectedVideo.youtubeUrl}
-                      onChange={(event) =>
-                        updateVideo(
-                          selectedVideo.clientKey,
-                          "youtubeUrl",
-                          event.target.value
-                        )
-                      }
-                      className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                    />
-                  </label>
-                </div>
-
-                <div className="space-y-4 rounded-[1.5rem] border border-black/10 bg-white p-5">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
-                      Thumbnail
-                    </p>
-                    <p className="mt-2 text-sm text-ink-600">
-                      Choose a .jpg, .jpeg, or .png file up to 250 KB.
-                    </p>
-                    {selectedVideo.thumbnailFileName ? (
-                      <p className="text-sm text-ink-600">
-                        Current thumbnail file:{" "}
-                        <span className="font-semibold text-ink-900">
-                          {selectedVideo.thumbnailFileName}
-                        </span>
-                      </p>
-                    ) : null}
-                    {selectedVideo.thumbnailByteSize ? (
-                      <p className="text-sm text-ink-600">
-                        Current size: {formatByteSize(selectedVideo.thumbnailByteSize)}
-                      </p>
-                    ) : null}
-                  </div>
-                  <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white">
-                    Choose Image
-                    <input
-                      type="file"
-                      accept=".jpg,.jpeg,.png,image/jpeg,image/png"
-                      className="sr-only"
-                      onChange={(event) => {
-                        onVideoThumbnailChange(event.target.files);
-                        event.currentTarget.value = "";
-                      }}
-                    />
-                  </label>
-                  {selectedVideo.pendingThumbnailName ? (
-                    <p className="text-sm text-ink-600">
-                      Pending upload: {selectedVideo.pendingThumbnailName}
-                    </p>
-                  ) : null}
-                  {selectedVideo.thumbnailSrc ? (
-                    <div className="overflow-hidden rounded-[1.25rem] border border-black/10">
-                      <Image
-                        src={selectedVideo.thumbnailSrc}
-                        alt={`${selectedVideo.title || "Video"} thumbnail`}
-                        width={900}
-                        height={506}
-                        unoptimized
-                        className="aspect-video w-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="rounded-[1.25rem] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink-500">
-                      No thumbnail uploaded yet.
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-6 py-16 text-center text-sm text-ink-500">
-                Select a video from the left or add a new one to begin editing.
               </div>
             )}
           </section>
-        ) : (
-        <section className="rounded-[2rem] border border-black/10 bg-paper p-6 shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
-                Draft Workspace
-              </p>
-              <h2 className="mt-2 font-display text-4xl uppercase text-ink-900">
-                {selectedShow ? selectedShow.venue || "Edit show" : "No show selected"}
-              </h2>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={deleteSelectedShow}
-                disabled={!selectedShow}
-                className="rounded-full border border-red-300 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Delete Show
-              </button>
-              <button
-                type="button"
-                onClick={syncChanges}
-                disabled={isSyncing}
-                className="rounded-full bg-accent px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {isSyncing ? "Syncing..." : "Sync Changes"}
-              </button>
-            </div>
-          </div>
+        </main>
+      ) : (
+        <div className="grid min-h-[calc(100vh-93px)] lg:grid-cols-[21rem_minmax(0,1fr)]">
+          <aside className="border-b border-black/10 bg-[#eee4d3] lg:sticky lg:top-[93px] lg:h-[calc(100vh-93px)] lg:overflow-y-auto lg:border-b-0 lg:border-r">
+            <div className="p-4 sm:p-5">
+              {activeTab === "shows" ? (
+                <div className="space-y-6">
+                  <section>
+                    <div className="mb-3 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-700">
+                          Upcoming
+                        </h2>
+                        <p className="mt-1 text-xs text-ink-600">
+                          {upcomingShows.length} {upcomingShows.length === 1 ? "show" : "shows"}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => addShow("upcoming")}
+                        className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-accent px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-[#df5d40]"
+                      >
+                        <Plus aria-hidden="true" size={15} />
+                        Add
+                      </button>
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-2 lg:block lg:space-y-2 lg:overflow-visible lg:pb-0">
+                      {upcomingShows.map((show) => (
+                        <button
+                          key={show.clientKey}
+                          type="button"
+                          onClick={() => selectShow(show.clientKey)}
+                          className={`min-w-64 rounded-xl border px-4 py-3 text-left transition lg:w-full ${
+                            selectedKey === show.clientKey
+                              ? "border-accent bg-white shadow-sm ring-2 ring-accent/15"
+                              : "border-black/10 bg-white/65 hover:border-accent/40 hover:bg-white"
+                          }`}
+                        >
+                          <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+                            {show.date || "Date needed"}
+                          </span>
+                          <span className="mt-1 block truncate font-semibold text-ink-900">
+                            {show.venue || "Untitled show"}
+                          </span>
+                          <span className="mt-0.5 block truncate text-xs text-ink-600">
+                            {show.city || "City needed"}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
 
-          {feedback ? (
-            <p className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-              {feedback}
-            </p>
-          ) : null}
-          {error ? (
-            <p className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              {error}
-            </p>
-          ) : null}
+                  <section>
+                    <div className="mb-3 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-700">
+                          Past
+                        </h2>
+                        <p className="mt-1 text-xs text-ink-600">
+                          {pastShows.length} {pastShows.length === 1 ? "show" : "shows"}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => addShow("past")}
+                        className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-black/15 bg-white px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-700 transition hover:border-accent hover:text-accent"
+                      >
+                        <Plus aria-hidden="true" size={15} />
+                        Add
+                      </button>
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-2 lg:block lg:space-y-2 lg:overflow-visible lg:pb-0">
+                      {pastShows.map((show) => (
+                        <button
+                          key={show.clientKey}
+                          type="button"
+                          onClick={() => selectShow(show.clientKey)}
+                          className={`min-w-64 rounded-xl border px-4 py-3 text-left transition lg:w-full ${
+                            selectedKey === show.clientKey
+                              ? "border-accent bg-white shadow-sm ring-2 ring-accent/15"
+                              : "border-black/10 bg-white/65 hover:border-accent/40 hover:bg-white"
+                          }`}
+                        >
+                          <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+                            {show.date || "Date needed"}
+                          </span>
+                          <span className="mt-1 block truncate font-semibold text-ink-900">
+                            {show.venue || "Untitled show"}
+                          </span>
+                          <span className="mt-0.5 block truncate text-xs text-ink-600">
+                            {show.city || "City needed"}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                </div>
+              ) : (
+                <section>
+                  <div className="mb-3 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-700">
+                        All videos
+                      </h2>
+                      <p className="mt-1 text-xs text-ink-600">
+                        {videos.length} {videos.length === 1 ? "video" : "videos"}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addVideo}
+                      className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-accent px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-[#df5d40]"
+                    >
+                      <Plus aria-hidden="true" size={15} />
+                      Add
+                    </button>
+                  </div>
+                  <div className="flex gap-2 overflow-x-auto pb-2 lg:block lg:space-y-2 lg:overflow-visible lg:pb-0">
+                    {videos.map((video) => (
+                      <button
+                        key={video.clientKey}
+                        type="button"
+                        onClick={() => selectVideo(video.clientKey)}
+                        className={`min-w-64 rounded-xl border px-4 py-3 text-left transition lg:w-full ${
+                          selectedVideoKey === video.clientKey
+                            ? "border-accent bg-white shadow-sm ring-2 ring-accent/15"
+                            : "border-black/10 bg-white/65 hover:border-accent/40 hover:bg-white"
+                        }`}
+                      >
+                        <span className="block truncate font-semibold text-ink-900">
+                          {video.title || "Untitled video"}
+                        </span>
+                        <span className="mt-1 block truncate text-xs text-ink-600">
+                          {video.youtubeUrl || "YouTube link needed"}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
+            </div>
+          </aside>
 
-          {selectedShow ? (
-            <div className="mt-8 grid gap-8 xl:grid-cols-[minmax(0,1.35fr)_22rem]">
-              <div className="grid gap-5 md:grid-cols-2">
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    Show ID
-                  </span>
-                  <input
-                    value={selectedShow.id}
-                    readOnly
-                    className="w-full rounded-2xl border border-black/10 bg-haze/40 px-4 py-3 text-ink-600 outline-none"
-                  />
-                </label>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    Bucket
-                  </span>
-                  <select
-                    value={selectedShow.bucket}
-                    onChange={(event) =>
-                      moveShowToBucket(
-                        selectedShow.clientKey,
-                        event.target.value as ShowBucket
-                      )
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                  >
-                    <option value="upcoming">Upcoming</option>
-                    <option value="past">Past</option>
-                  </select>
-                </label>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    Date
-                  </span>
-                  <input
-                    type="date"
-                    value={selectedShow.date}
-                    onChange={(event) =>
-                      updateShow(selectedShow.clientKey, "date", event.target.value)
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                  />
-                </label>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    City
-                  </span>
-                  <input
-                    value={selectedShow.city}
-                    onChange={(event) =>
-                      updateShow(selectedShow.clientKey, "city", event.target.value)
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                  />
-                </label>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                    Venue
-                  </span>
-                  <input
-                    value={selectedShow.venue}
-                    onChange={(event) =>
-                      updateShow(selectedShow.clientKey, "venue", event.target.value)
-                    }
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                  />
-                </label>
-                {selectedShow.bucket === "upcoming" ? (
-                  <>
-                    <label className="space-y-2">
-                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                        Venue URL
-                      </span>
-                      <input
-                        value={selectedShow.venueUrl ?? ""}
-                        onChange={(event) =>
-                          updateShow(selectedShow.clientKey, "venueUrl", event.target.value)
-                        }
-                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                      />
-                    </label>
-                    <label className="space-y-2">
-                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                        Tickets URL
-                      </span>
-                      <input
-                        value={selectedShow.ticketsUrl ?? ""}
-                        onChange={(event) =>
-                          updateShow(
-                            selectedShow.clientKey,
-                            "ticketsUrl",
-                            event.target.value
-                          )
-                        }
-                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                      />
-                    </label>
-                    <label className="space-y-2">
-                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                        Venue Address
-                      </span>
-                      <input
-                        value={selectedShow.venueAddress ?? ""}
-                        onChange={(event) =>
-                          updateShow(
-                            selectedShow.clientKey,
-                            "venueAddress",
-                            event.target.value
-                          )
-                        }
-                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                      />
-                    </label>
-                    <label className="space-y-2">
-                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                        Show Time
-                      </span>
-                      <input
-                        value={selectedShow.showTime ?? ""}
-                        onChange={(event) =>
-                          updateShow(selectedShow.clientKey, "showTime", event.target.value)
-                        }
-                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                      />
-                    </label>
-                    <label className="space-y-2">
-                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                        Doors Open
-                      </span>
-                      <input
-                        value={selectedShow.doorsOpenTime ?? ""}
-                        onChange={(event) =>
-                          updateShow(
-                            selectedShow.clientKey,
-                            "doorsOpenTime",
-                            event.target.value
-                          )
-                        }
-                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                      />
-                    </label>
-                    <label className="space-y-2">
-                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">
-                        Cover Fee
-                      </span>
-                      <input
-                        value={selectedShow.coverFee ?? ""}
-                        onChange={(event) =>
-                          updateShow(selectedShow.clientKey, "coverFee", event.target.value)
-                        }
-                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-accent"
-                      />
-                    </label>
-                  </>
-                ) : (
-                  <div className="rounded-[1.5rem] border border-dashed border-black/10 px-4 py-5 text-sm text-ink-500 md:col-span-2">
-                    Past shows only keep date, city, and venue. Additional venue, ticket, and poster details are cleared automatically when a show is moved to past.
+          <main className="min-w-0 p-4 sm:p-6 xl:p-8">
+            {activeTab === "videos" ? (
+              <section className="overflow-hidden rounded-3xl border border-black/10 bg-[#fffdf8] shadow-sm">
+                <div className="flex flex-col gap-5 border-b border-black/10 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
+                      Video details
+                    </p>
+                    <h2 className="mt-2 truncate text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
+                      {selectedVideo
+                        ? selectedVideo.title || "New video"
+                        : "Choose a video"}
+                    </h2>
+                  </div>
+                  <div className="flex shrink-0 flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={deleteSelectedVideo}
+                      disabled={!selectedVideo}
+                      className={dangerButtonClass}
+                    >
+                      <Trash2 aria-hidden="true" size={16} />
+                      Delete
+                    </button>
+                    <button
+                      type="button"
+                      onClick={syncGalleryVideos}
+                      disabled={isSyncingVideos}
+                      className={primaryButtonClass}
+                    >
+                      <Save aria-hidden="true" size={16} />
+                      {isSyncingVideos ? "Saving..." : "Save changes"}
+                    </button>
+                  </div>
+                </div>
+
+                {(videoFeedback || videoError) && (
+                  <div className="px-5 pt-5 sm:px-7">
+                    {videoFeedback ? (
+                      <p role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                        {videoFeedback}
+                      </p>
+                    ) : null}
+                    {videoError ? (
+                      <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {videoError}
+                      </p>
+                    ) : null}
                   </div>
                 )}
-              </div>
 
-              <div className="space-y-4 rounded-[1.5rem] border border-black/10 bg-white p-5">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">
-                    Poster
-                  </p>
-                  {selectedShow.bucket === "past" ? (
-                    <p className="mt-2 text-sm text-ink-600">
-                      Past shows do not use posters. Any existing poster will be deleted on sync.
-                    </p>
-                  ) : (
-                    <>
-                      <p className="mt-2 text-sm text-ink-600">
-                        Poster MUST be a .png file.
-                      </p>
-                      {selectedShow.posterFileName ? (
-                        <p className="text-sm text-ink-600">
-                          Current poster file:{" "}
-                          <span className="font-semibold text-ink-900">
-                            {selectedShow.posterFileName}
-                          </span>
+                {selectedVideo ? (
+                  <div className="grid gap-5 p-5 sm:p-7 xl:grid-cols-[minmax(0,1fr)_22rem] 2xl:grid-cols-[minmax(0,1fr)_26rem]">
+                    <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
+                      <h3 className="text-2xl uppercase text-ink-900">
+                        Video information
+                      </h3>
+                      <div className="mt-5 grid gap-5">
+                        <label>
+                          <span className={labelClass}>Title</span>
+                          <input
+                            value={selectedVideo.title}
+                            placeholder="e.g. Superstition – Live Cover"
+                            onChange={(event) =>
+                              updateVideo(
+                                selectedVideo.clientKey,
+                                "title",
+                                event.target.value
+                              )
+                            }
+                            className={fieldClass}
+                          />
+                        </label>
+                        <label>
+                          <span className={labelClass}>YouTube link</span>
+                          <input
+                            type="url"
+                            value={selectedVideo.youtubeUrl}
+                            placeholder="https://youtube.com/watch?v=..."
+                            onChange={(event) =>
+                              updateVideo(
+                                selectedVideo.clientKey,
+                                "youtubeUrl",
+                                event.target.value
+                              )
+                            }
+                            className={fieldClass}
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <h3 className="text-2xl uppercase text-ink-900">
+                            Thumbnail
+                          </h3>
+                          <p className="mt-1 text-xs leading-relaxed text-ink-600">
+                            JPG, JPEG, or PNG · Maximum 250 KB
+                          </p>
+                        </div>
+                        <label className={`${secondaryButtonClass} cursor-pointer`}>
+                          <Upload aria-hidden="true" size={16} />
+                          Choose
+                          <input
+                            type="file"
+                            accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                            className="sr-only"
+                            onChange={(event) => {
+                              onVideoThumbnailChange(event.target.files);
+                              event.currentTarget.value = "";
+                            }}
+                          />
+                        </label>
+                      </div>
+
+                      {selectedVideo.pendingThumbnailName ? (
+                        <p className="mt-4 rounded-lg bg-accent/10 px-3 py-2 text-xs text-accent">
+                          Ready to upload: {selectedVideo.pendingThumbnailName}
                         </p>
                       ) : null}
-                    </>
-                  )}
-                </div>
-                {selectedShow.bucket === "upcoming" ? (
-                  <>
-                    <label className="inline-flex cursor-pointer items-center justify-center rounded-full border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent transition hover:bg-accent hover:text-white">
-                      Choose PNG
-                      <input
-                        type="file"
-                        accept=".png,image/png"
-                        className="sr-only"
-                        onChange={(event) => onPosterChange(event.target.files)}
-                      />
-                    </label>
-                    {selectedShow.pendingPosterName ? (
-                      <p className="text-sm text-ink-600">
-                        Pending upload: {selectedShow.pendingPosterName}
-                      </p>
-                    ) : null}
-                    {selectedShow.posterSrc ? (
-                      <div className="overflow-hidden rounded-[1.25rem] border border-black/10">
-                        <Image
-                          src={selectedShow.posterSrc}
-                          alt={`${selectedShow.venue || "Show"} poster`}
-                          width={900}
-                          height={1200}
-                          unoptimized
-                          className="h-auto w-full object-cover"
-                        />
+
+                      <div className="mt-5 overflow-hidden rounded-xl border border-black/10 bg-haze/40">
+                        {selectedVideo.thumbnailSrc ? (
+                          <Image
+                            src={selectedVideo.thumbnailSrc}
+                            alt={`${selectedVideo.title || "Video"} thumbnail`}
+                            width={900}
+                            height={506}
+                            unoptimized
+                            className="aspect-video w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex aspect-video items-center justify-center px-6 text-center text-sm text-ink-500">
+                            No thumbnail selected
+                          </div>
+                        )}
                       </div>
-                    ) : (
-                      <div className="rounded-[1.25rem] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink-500">
-                        No poster uploaded yet.
-                      </div>
-                    )}
-                  </>
+
+                      {selectedVideo.thumbnailByteSize ? (
+                        <p className="mt-3 text-xs text-ink-500">
+                          Current size: {formatByteSize(selectedVideo.thumbnailByteSize)}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
                 ) : (
-                  <div className="rounded-[1.25rem] border border-dashed border-black/10 px-4 py-8 text-center text-sm text-ink-500">
-                    Poster upload and preview are disabled for past shows.
+                  <div className="flex min-h-80 flex-col items-center justify-center px-6 text-center">
+                    <Video aria-hidden="true" size={34} className="text-accent" />
+                    <h3 className="mt-4 text-3xl uppercase text-ink-900">
+                      Choose a video
+                    </h3>
+                    <p className="mt-2 text-sm text-ink-600">
+                      Select one from the list or add a new video.
+                    </p>
                   </div>
                 )}
-              </div>
-            </div>
-          ) : (
-            <div className="mt-8 rounded-[1.5rem] border border-dashed border-black/10 px-6 py-16 text-center text-sm text-ink-500">
-              Select a show from the left or add a new one to begin editing.
-            </div>
-          )}
-        </section>
-        )}
-      </div>
+              </section>
+            ) : (
+              <section className="overflow-hidden rounded-3xl border border-black/10 bg-[#fffdf8] shadow-sm">
+                <div className="flex flex-col gap-5 border-b border-black/10 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
+                      Show details
+                    </p>
+                    <h2 className="mt-2 truncate text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
+                      {selectedShow
+                        ? selectedShow.venue || "New show"
+                        : "Choose a show"}
+                    </h2>
+                    {selectedShow ? (
+                      <p className="mt-2 text-sm text-ink-600">
+                        {selectedShow.date || "Date needed"} · {selectedShow.city || "City needed"}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="flex shrink-0 flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={deleteSelectedShow}
+                      disabled={!selectedShow}
+                      className={dangerButtonClass}
+                    >
+                      <Trash2 aria-hidden="true" size={16} />
+                      Delete
+                    </button>
+                    <button
+                      type="button"
+                      onClick={syncChanges}
+                      disabled={isSyncing}
+                      className={primaryButtonClass}
+                    >
+                      <Save aria-hidden="true" size={16} />
+                      {isSyncing ? "Saving..." : "Save changes"}
+                    </button>
+                  </div>
+                </div>
+
+                {(feedback || error) && (
+                  <div className="px-5 pt-5 sm:px-7">
+                    {feedback ? (
+                      <p role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                        {feedback}
+                      </p>
+                    ) : null}
+                    {error ? (
+                      <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {error}
+                      </p>
+                    ) : null}
+                  </div>
+                )}
+
+                {selectedShow ? (
+                  <div className="grid gap-5 p-5 sm:p-7 2xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)_22rem]">
+                    <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
+                      <h3 className="text-2xl uppercase text-ink-900">
+                        Event basics
+                      </h3>
+                      <div className="mt-5 grid gap-5">
+                        <label>
+                          <span className={labelClass}>Status</span>
+                          <select
+                            value={selectedShow.bucket}
+                            onChange={(event) =>
+                              moveShowToBucket(
+                                selectedShow.clientKey,
+                                event.target.value as ShowBucket
+                              )
+                            }
+                            className={fieldClass}
+                          >
+                            <option value="upcoming">Upcoming show</option>
+                            <option value="past">Past show</option>
+                          </select>
+                        </label>
+                        <label>
+                          <span className={labelClass}>Date</span>
+                          <input
+                            type="date"
+                            value={selectedShow.date}
+                            onChange={(event) =>
+                              updateShow(
+                                selectedShow.clientKey,
+                                "date",
+                                event.target.value
+                              )
+                            }
+                            className={fieldClass}
+                          />
+                        </label>
+                        <label>
+                          <span className={labelClass}>Venue</span>
+                          <input
+                            value={selectedShow.venue}
+                            placeholder="Venue name"
+                            onChange={(event) =>
+                              updateShow(
+                                selectedShow.clientKey,
+                                "venue",
+                                event.target.value
+                              )
+                            }
+                            className={fieldClass}
+                          />
+                        </label>
+                        <label>
+                          <span className={labelClass}>City</span>
+                          <input
+                            value={selectedShow.city}
+                            placeholder="e.g. Toronto, ON"
+                            onChange={(event) =>
+                              updateShow(
+                                selectedShow.clientKey,
+                                "city",
+                                event.target.value
+                              )
+                            }
+                            className={fieldClass}
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
+                      <h3 className="text-2xl uppercase text-ink-900">
+                        {selectedShow.bucket === "upcoming"
+                          ? "Timing & tickets"
+                          : "Past show"}
+                      </h3>
+                      {selectedShow.bucket === "upcoming" ? (
+                        <div className="mt-5 grid gap-5 md:grid-cols-2">
+                          <label className="md:col-span-2">
+                            <span className={labelClass}>Venue address</span>
+                            <input
+                              value={selectedShow.venueAddress ?? ""}
+                              placeholder="Street address"
+                              onChange={(event) =>
+                                updateShow(
+                                  selectedShow.clientKey,
+                                  "venueAddress",
+                                  event.target.value
+                                )
+                              }
+                              className={fieldClass}
+                            />
+                          </label>
+                          <label>
+                            <span className={labelClass}>Doors open</span>
+                            <input
+                              value={selectedShow.doorsOpenTime ?? ""}
+                              placeholder="e.g. 8:00 PM"
+                              onChange={(event) =>
+                                updateShow(
+                                  selectedShow.clientKey,
+                                  "doorsOpenTime",
+                                  event.target.value
+                                )
+                              }
+                              className={fieldClass}
+                            />
+                          </label>
+                          <label>
+                            <span className={labelClass}>Show time</span>
+                            <input
+                              value={selectedShow.showTime ?? ""}
+                              placeholder="e.g. 9:00 PM"
+                              onChange={(event) =>
+                                updateShow(
+                                  selectedShow.clientKey,
+                                  "showTime",
+                                  event.target.value
+                                )
+                              }
+                              className={fieldClass}
+                            />
+                          </label>
+                          <label>
+                            <span className={labelClass}>Cover fee</span>
+                            <input
+                              value={selectedShow.coverFee ?? ""}
+                              placeholder="e.g. $10"
+                              onChange={(event) =>
+                                updateShow(
+                                  selectedShow.clientKey,
+                                  "coverFee",
+                                  event.target.value
+                                )
+                              }
+                              className={fieldClass}
+                            />
+                          </label>
+                          <label>
+                            <span className={labelClass}>Venue website</span>
+                            <input
+                              type="url"
+                              value={selectedShow.venueUrl ?? ""}
+                              placeholder="https://..."
+                              onChange={(event) =>
+                                updateShow(
+                                  selectedShow.clientKey,
+                                  "venueUrl",
+                                  event.target.value
+                                )
+                              }
+                              className={fieldClass}
+                            />
+                          </label>
+                          <label className="md:col-span-2">
+                            <span className={labelClass}>Ticket link</span>
+                            <input
+                              type="url"
+                              value={selectedShow.ticketsUrl ?? ""}
+                              placeholder="https://..."
+                              onChange={(event) =>
+                                updateShow(
+                                  selectedShow.clientKey,
+                                  "ticketsUrl",
+                                  event.target.value
+                                )
+                              }
+                              className={fieldClass}
+                            />
+                          </label>
+                        </div>
+                      ) : (
+                        <div className="mt-5 rounded-xl bg-haze/55 p-5 text-sm leading-relaxed text-ink-600">
+                          Past shows only need a date, venue, and city. Ticket,
+                          timing, and poster details will be cleared when you save.
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="text-2xl uppercase text-ink-900">
+                            Poster
+                          </h3>
+                          <p className="mt-1 text-xs leading-relaxed text-ink-600">
+                            {selectedShow.bucket === "upcoming"
+                              ? "PNG only · Maximum 5 MB"
+                              : "Posters are not shown for past events."}
+                          </p>
+                        </div>
+                        {selectedShow.bucket === "upcoming" ? (
+                          <label className={`${secondaryButtonClass} cursor-pointer`}>
+                            <Upload aria-hidden="true" size={16} />
+                            Choose
+                            <input
+                              type="file"
+                              accept=".png,image/png"
+                              className="sr-only"
+                              onChange={(event) =>
+                                onPosterChange(event.target.files)
+                              }
+                            />
+                          </label>
+                        ) : null}
+                      </div>
+
+                      {selectedShow.pendingPosterName ? (
+                        <p className="mt-4 rounded-lg bg-accent/10 px-3 py-2 text-xs text-accent">
+                          Ready to upload: {selectedShow.pendingPosterName}
+                        </p>
+                      ) : null}
+
+                      <div className="mt-5 overflow-hidden rounded-xl border border-black/10 bg-haze/40">
+                        {selectedShow.bucket === "upcoming" &&
+                        selectedShow.posterSrc ? (
+                          <Image
+                            src={selectedShow.posterSrc}
+                            alt={`${selectedShow.venue || "Show"} poster`}
+                            width={900}
+                            height={1200}
+                            unoptimized
+                            className="h-auto max-h-[32rem] w-full object-contain"
+                          />
+                        ) : (
+                          <div className="flex min-h-52 items-center justify-center px-6 text-center text-sm text-ink-500">
+                            {selectedShow.bucket === "upcoming"
+                              ? "No poster selected"
+                              : "No poster needed"}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex min-h-80 flex-col items-center justify-center px-6 text-center">
+                    <CalendarDays
+                      aria-hidden="true"
+                      size={34}
+                      className="text-accent"
+                    />
+                    <h3 className="mt-4 text-3xl uppercase text-ink-900">
+                      Choose a show
+                    </h3>
+                    <p className="mt-2 text-sm text-ink-600">
+                      Select one from the list or add a new show.
+                    </p>
+                  </div>
+                )}
+              </section>
+            )}
+          </main>
+        </div>
+      )}
     </div>
   );
 }
