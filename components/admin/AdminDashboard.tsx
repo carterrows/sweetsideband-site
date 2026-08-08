@@ -54,7 +54,7 @@ function formatByteSize(byteSize: number) {
 function toEditableShow(show: ManagedShow): EditableShow {
   return {
     ...show,
-    clientKey: createClientKey(),
+    clientKey: `show-${show.id}`,
     originalId: show.id,
     pendingPosterFile: null,
     pendingPosterName: null
@@ -64,7 +64,7 @@ function toEditableShow(show: ManagedShow): EditableShow {
 function toEditableVideo(video: GalleryVideo): EditableVideo {
   return {
     ...video,
-    clientKey: createClientKey(),
+    clientKey: `video-${video.id}`,
     originalId: video.id,
     pendingThumbnailFile: null,
     pendingThumbnailName: null
@@ -729,7 +729,7 @@ export default function AdminDashboard({
     "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-red-700 transition hover:border-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
-    <div className="min-h-screen bg-[#f5efe3]">
+    <div className="min-h-screen max-w-full overflow-x-clip bg-[#f5efe3]">
       <header className="sticky top-0 z-30 border-b border-black/10 bg-[#fffdf8]/95 backdrop-blur-xl">
         <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div className="flex items-center justify-between gap-4">
@@ -737,7 +737,7 @@ export default function AdminDashboard({
               <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-accent">
                 Sweetside
               </p>
-              <h1 className="mt-1 text-3xl uppercase leading-none text-ink-900">
+              <h1 className="mt-1 text-2xl uppercase leading-none text-ink-900 sm:text-3xl">
                 Website manager
               </h1>
             </div>
@@ -766,7 +766,9 @@ export default function AdminDashboard({
                   aria-hidden="true"
                   size={17}
                   strokeWidth={activeTab === id ? 2.4 : 2}
-                  className={activeTab === id ? "text-accent" : ""}
+                  className={`hidden shrink-0 sm:block ${
+                    activeTab === id ? "text-accent" : ""
+                  }`}
                 />
                 <span>{label}</span>
                 <span
@@ -789,8 +791,8 @@ export default function AdminDashboard({
       </header>
 
       {activeTab === "images" ? (
-        <main className="w-full p-4 sm:p-6 lg:p-8">
-          <section className="overflow-hidden rounded-3xl border border-black/10 bg-[#fffdf8] shadow-sm">
+        <main className="w-full min-w-0 max-w-full p-3 sm:p-6 lg:p-8">
+          <section className="overflow-hidden rounded-2xl border border-black/10 bg-[#fffdf8] shadow-sm sm:rounded-3xl">
             <div className="flex flex-col gap-5 border-b border-black/10 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-7">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
@@ -803,7 +805,7 @@ export default function AdminDashboard({
                   JPG or JPEG · Maximum 1 MB per photo
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap">
                 <label className={`${secondaryButtonClass} cursor-pointer ${
                   isUploadingImages ? "pointer-events-none opacity-60" : ""
                 }`}>
@@ -911,9 +913,96 @@ export default function AdminDashboard({
           </section>
         </main>
       ) : (
-        <div className="grid min-h-[calc(100vh-93px)] lg:grid-cols-[21rem_minmax(0,1fr)]">
-          <aside className="border-b border-black/10 bg-[#eee4d3] lg:sticky lg:top-[93px] lg:h-[calc(100vh-93px)] lg:overflow-y-auto lg:border-b-0 lg:border-r">
-            <div className="p-4 sm:p-5">
+        <div className="grid min-h-[calc(100vh-93px)] min-w-0 grid-cols-[minmax(0,1fr)] lg:grid-cols-[21rem_minmax(0,1fr)]">
+          <aside className="min-w-0 max-w-full border-b border-black/10 bg-[#eee4d3] lg:sticky lg:top-[93px] lg:h-[calc(100vh-93px)] lg:overflow-y-auto lg:border-b-0 lg:border-r">
+            <div className="p-4 lg:hidden">
+              {activeTab === "shows" ? (
+                <div className="space-y-3">
+                  <label>
+                    <span className={labelClass}>Editing show</span>
+                    <select
+                      value={selectedKey ?? ""}
+                      onChange={(event) => {
+                        if (event.target.value) {
+                          selectShow(event.target.value);
+                        }
+                      }}
+                      className={fieldClass}
+                    >
+                      {shows.length === 0 ? (
+                        <option value="">No shows yet</option>
+                      ) : null}
+                      <optgroup label="Upcoming">
+                        {upcomingShows.map((show) => (
+                          <option key={show.clientKey} value={show.clientKey}>
+                            {show.date || "No date"} — {show.venue || "Untitled show"}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Past">
+                        {pastShows.map((show) => (
+                          <option key={show.clientKey} value={show.clientKey}>
+                            {show.date || "No date"} — {show.venue || "Untitled show"}
+                          </option>
+                        ))}
+                      </optgroup>
+                    </select>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => addShow("upcoming")}
+                      className={primaryButtonClass}
+                    >
+                      <Plus aria-hidden="true" size={16} />
+                      Upcoming
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => addShow("past")}
+                      className={primaryButtonClass}
+                    >
+                      <Plus aria-hidden="true" size={16} />
+                      Past
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <label>
+                    <span className={labelClass}>Editing video</span>
+                    <select
+                      value={selectedVideoKey ?? ""}
+                      onChange={(event) => {
+                        if (event.target.value) {
+                          selectVideo(event.target.value);
+                        }
+                      }}
+                      className={fieldClass}
+                    >
+                      {videos.length === 0 ? (
+                        <option value="">No videos yet</option>
+                      ) : null}
+                      {videos.map((video) => (
+                        <option key={video.clientKey} value={video.clientKey}>
+                          {video.title || "Untitled video"}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={addVideo}
+                    className={`${primaryButtonClass} w-full`}
+                  >
+                    <Plus aria-hidden="true" size={16} />
+                    Add video
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="hidden p-5 lg:block">
               {activeTab === "shows" ? (
                 <div className="space-y-6">
                   <section>
@@ -974,7 +1063,7 @@ export default function AdminDashboard({
                       <button
                         type="button"
                         onClick={() => addShow("past")}
-                        className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-black/15 bg-white px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-700 transition hover:border-accent hover:text-accent"
+                        className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-accent px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-[#df5d40]"
                       >
                         <Plus aria-hidden="true" size={15} />
                         Add
@@ -1052,21 +1141,21 @@ export default function AdminDashboard({
             </div>
           </aside>
 
-          <main className="min-w-0 p-4 sm:p-6 xl:p-8">
+          <main className="min-w-0 max-w-full p-3 sm:p-6 xl:p-8">
             {activeTab === "videos" ? (
-              <section className="overflow-hidden rounded-3xl border border-black/10 bg-[#fffdf8] shadow-sm">
+              <section className="overflow-hidden rounded-2xl border border-black/10 bg-[#fffdf8] shadow-sm sm:rounded-3xl">
                 <div className="flex flex-col gap-5 border-b border-black/10 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-7">
                   <div className="min-w-0">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
                       Video details
                     </p>
-                    <h2 className="mt-2 truncate text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
+                    <h2 className="mt-2 break-words text-3xl uppercase leading-tight text-ink-900 sm:truncate sm:text-5xl sm:leading-none">
                       {selectedVideo
                         ? selectedVideo.title || "New video"
                         : "Choose a video"}
                     </h2>
                   </div>
-                  <div className="flex shrink-0 flex-wrap gap-2">
+                  <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:shrink-0 sm:flex-wrap">
                     <button
                       type="button"
                       onClick={deleteSelectedVideo}
@@ -1212,13 +1301,13 @@ export default function AdminDashboard({
                 )}
               </section>
             ) : (
-              <section className="overflow-hidden rounded-3xl border border-black/10 bg-[#fffdf8] shadow-sm">
+              <section className="overflow-hidden rounded-2xl border border-black/10 bg-[#fffdf8] shadow-sm sm:rounded-3xl">
                 <div className="flex flex-col gap-5 border-b border-black/10 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-7">
                   <div className="min-w-0">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
                       Show details
                     </p>
-                    <h2 className="mt-2 truncate text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
+                    <h2 className="mt-2 break-words text-3xl uppercase leading-tight text-ink-900 sm:truncate sm:text-5xl sm:leading-none">
                       {selectedShow
                         ? selectedShow.venue || "New show"
                         : "Choose a show"}
@@ -1229,7 +1318,7 @@ export default function AdminDashboard({
                       </p>
                     ) : null}
                   </div>
-                  <div className="flex shrink-0 flex-wrap gap-2">
+                  <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:shrink-0 sm:flex-wrap">
                     <button
                       type="button"
                       onClick={deleteSelectedShow}
