@@ -722,7 +722,7 @@ export default function AdminDashboard({
                 type="button"
                 onClick={() => selectTab(id)}
                 aria-pressed={activeTab === id}
-                className={`flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-xs font-semibold transition ${
+                className={`flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${
                   activeTab === id
                     ? "bg-white text-ink-900 shadow-sm"
                     : "text-ink-600 hover:bg-white/60 hover:text-ink-900"
