@@ -39,4 +39,21 @@
   .section {
     @apply py-16 md:py-24;
   }
+
+  .admin-ui,
+  .admin-ui button,
+  .admin-ui input,
+  .admin-ui select,
+  .admin-ui textarea {
+    font-family: var(--font-body), system-ui, sans-serif;
+  }
+
+  .admin-ui h1,
+  .admin-ui h2,
+  .admin-ui h3,
+  .admin-ui h4 {
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
 }

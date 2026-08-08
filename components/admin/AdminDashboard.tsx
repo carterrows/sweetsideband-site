@@ -703,7 +703,7 @@ export default function AdminDashboard({
               <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-accent">
                 Sweetside
               </p>
-              <h1 className="mt-1 font-display text-3xl uppercase leading-none text-ink-900">
+              <h1 className="mt-1 text-3xl uppercase leading-none text-ink-900">
                 Website manager
               </h1>
             </div>
@@ -762,7 +762,7 @@ export default function AdminDashboard({
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
                   Photo gallery
                 </p>
-                <h2 className="mt-2 font-display text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
+                <h2 className="mt-2 text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
                   Manage photos
                 </h2>
                 <p className="mt-3 text-sm text-ink-600">
@@ -855,7 +855,7 @@ export default function AdminDashboard({
             ) : (
               <div className="m-5 flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-black/15 bg-white/50 px-6 text-center sm:m-7">
                 <ImagesIcon aria-hidden="true" size={34} className="text-accent" />
-                <h3 className="mt-4 font-display text-3xl uppercase text-ink-900">
+                <h3 className="mt-4 text-3xl uppercase text-ink-900">
                   No photos yet
                 </h3>
                 <p className="mt-2 max-w-sm text-sm text-ink-600">
@@ -1015,7 +1015,7 @@ export default function AdminDashboard({
                     <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
                       Video details
                     </p>
-                    <h2 className="mt-2 truncate font-display text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
+                    <h2 className="mt-2 truncate text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
                       {selectedVideo
                         ? selectedVideo.title || "New video"
                         : "Choose a video"}
@@ -1061,7 +1061,7 @@ export default function AdminDashboard({
                 {selectedVideo ? (
                   <div className="grid gap-5 p-5 sm:p-7 xl:grid-cols-[minmax(0,1fr)_22rem] 2xl:grid-cols-[minmax(0,1fr)_26rem]">
                     <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
-                      <h3 className="font-display text-2xl uppercase text-ink-900">
+                      <h3 className="text-2xl uppercase text-ink-900">
                         Video information
                       </h3>
                       <div className="mt-5 grid gap-5">
@@ -1102,7 +1102,7 @@ export default function AdminDashboard({
                     <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <h3 className="font-display text-2xl uppercase text-ink-900">
+                          <h3 className="text-2xl uppercase text-ink-900">
                             Thumbnail
                           </h3>
                           <p className="mt-1 text-xs leading-relaxed text-ink-600">
@@ -1157,7 +1157,7 @@ export default function AdminDashboard({
                 ) : (
                   <div className="flex min-h-80 flex-col items-center justify-center px-6 text-center">
                     <Video aria-hidden="true" size={34} className="text-accent" />
-                    <h3 className="mt-4 font-display text-3xl uppercase text-ink-900">
+                    <h3 className="mt-4 text-3xl uppercase text-ink-900">
                       Choose a video
                     </h3>
                     <p className="mt-2 text-sm text-ink-600">
@@ -1173,7 +1173,7 @@ export default function AdminDashboard({
                     <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
                       Show details
                     </p>
-                    <h2 className="mt-2 truncate font-display text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
+                    <h2 className="mt-2 truncate text-4xl uppercase leading-none text-ink-900 sm:text-5xl">
                       {selectedShow
                         ? selectedShow.venue || "New show"
                         : "Choose a show"}
@@ -1224,7 +1224,7 @@ export default function AdminDashboard({
                 {selectedShow ? (
                   <div className="grid gap-5 p-5 sm:p-7 2xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)_22rem]">
                     <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
-                      <h3 className="font-display text-2xl uppercase text-ink-900">
+                      <h3 className="text-2xl uppercase text-ink-900">
                         Event basics
                       </h3>
                       <div className="mt-5 grid gap-5">
@@ -1293,7 +1293,7 @@ export default function AdminDashboard({
                     </div>
 
                     <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
-                      <h3 className="font-display text-2xl uppercase text-ink-900">
+                      <h3 className="text-2xl uppercase text-ink-900">
                         {selectedShow.bucket === "upcoming"
                           ? "Timing & tickets"
                           : "Past show"}
@@ -1404,7 +1404,7 @@ export default function AdminDashboard({
                     <div className="rounded-2xl border border-black/10 bg-white p-5 sm:p-6">
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <h3 className="font-display text-2xl uppercase text-ink-900">
+                          <h3 className="text-2xl uppercase text-ink-900">
                             Poster
                           </h3>
                           <p className="mt-1 text-xs leading-relaxed text-ink-600">
@@ -1463,7 +1463,7 @@ export default function AdminDashboard({
                       size={34}
                       className="text-accent"
                     />
-                    <h3 className="mt-4 font-display text-3xl uppercase text-ink-900">
+                    <h3 className="mt-4 text-3xl uppercase text-ink-900">
                       Choose a show
                     </h3>
                     <p className="mt-2 text-sm text-ink-600">

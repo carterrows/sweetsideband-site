@@ -15,7 +15,7 @@ export default async function AdminLoginPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
             Sweetside
           </p>
-          <h1 className="mt-6 max-w-xl font-display text-7xl uppercase leading-[0.88] xl:text-8xl">
+          <h1 className="mt-6 max-w-xl text-7xl uppercase leading-[0.88] xl:text-8xl">
             Keep the site in tune.
           </h1>
           <p className="mt-8 max-w-md text-lg leading-relaxed text-white/65">
@@ -31,7 +31,7 @@ export default async function AdminLoginPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
               Sweetside
             </p>
-            <h1 className="mt-3 font-display text-5xl uppercase leading-none text-ink-900">
+            <h1 className="mt-3 text-5xl uppercase leading-none text-ink-900">
               Website manager
             </h1>
           </div>
@@ -40,7 +40,7 @@ export default async function AdminLoginPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
               Welcome back
             </p>
-            <h2 className="mt-3 font-display text-5xl uppercase leading-none text-ink-900">
+            <h2 className="mt-3 text-5xl uppercase leading-none text-ink-900">
               Log in
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-ink-600">
