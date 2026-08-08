@@ -718,7 +718,11 @@ export default function AdminDashboard({
   ];
 
   const fieldClass =
-    "w-full rounded-xl border border-black/15 bg-white px-4 py-3 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-600/45 focus:border-accent focus:ring-4 focus:ring-accent/10";
+    "w-full min-w-0 max-w-full rounded-xl border border-black/15 bg-white px-4 py-3 text-[15px] text-ink-900 outline-none transition placeholder:text-ink-600/45 focus:border-accent focus:ring-4 focus:ring-accent/10";
+  const dateFieldClass =
+    "flex w-full min-w-0 max-w-full items-center rounded-xl border border-black/15 bg-white px-4 py-3 transition focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10";
+  const dateInputClass =
+    "block min-w-0 max-w-full flex-1 border-0 bg-transparent p-0 text-[15px] text-ink-900 outline-none";
   const labelClass =
     "mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-600";
   const primaryButtonClass =
@@ -1380,18 +1384,20 @@ export default function AdminDashboard({
                         </label>
                         <label>
                           <span className={labelClass}>Date</span>
-                          <input
-                            type="date"
-                            value={selectedShow.date}
-                            onChange={(event) =>
-                              updateShow(
-                                selectedShow.clientKey,
-                                "date",
-                                event.target.value
-                              )
-                            }
-                            className={fieldClass}
-                          />
+                          <span className={dateFieldClass}>
+                            <input
+                              type="date"
+                              value={selectedShow.date}
+                              onChange={(event) =>
+                                updateShow(
+                                  selectedShow.clientKey,
+                                  "date",
+                                  event.target.value
+                                )
+                              }
+                              className={dateInputClass}
+                            />
+                          </span>
                         </label>
                         <label>
                           <span className={labelClass}>Venue</span>
