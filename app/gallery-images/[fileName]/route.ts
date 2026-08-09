@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import {
+  getGalleryImageContentType,
   readGalleryImageFile,
   sanitizeGalleryImageFileName
 } from "@/lib/gallery-image-files";
@@ -21,7 +22,7 @@ export async function GET(
 
     return new NextResponse(galleryImage, {
       headers: {
-        "Content-Type": "image/jpeg",
+        "Content-Type": getGalleryImageContentType(normalizedFileName),
         "Cache-Control": "public, max-age=31536000, immutable"
       }
     });

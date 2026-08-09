@@ -101,7 +101,8 @@ Shows load through `lib/shows-db.ts`.
 - Uploaded gallery images are stored in runtime storage.
 - Local gallery image storage defaults to `storage/gallery-images/`.
 - Docker gallery image storage lives beside the database inside the mounted `/app/storage` volume.
-- Gallery images are served through `/gallery-images/:fileName` with immutable cache headers.
+- Original gallery JPEGs and generated WebP previews are served through `/gallery-images/:fileName` with immutable cache headers.
+- Uploads generate a WebP preview up to 1,200 px wide at 80% quality; both files live in the same gallery image storage directory and Docker volume.
 - Uploaded video thumbnails are stored in runtime storage.
 - Local video thumbnail storage defaults to `storage/video-thumbnails/`.
 - Docker video thumbnail storage lives beside the database inside the mounted `/app/storage` volume.
@@ -135,4 +136,5 @@ Admin API protection:
 - logout clears the admin session cookie server-side and the client navigates directly to `/admin/login`
 - sync validates poster extension, PNG file signature, upload size limits, and show writes in the same request
 - gallery image uploads validate extension, JPEG file signature, and upload size before storing files on disk and metadata in SQLite
+- opening the admin dashboard or using Images → Save changes idempotently backfills missing WebP previews for existing photos
 - video sync validates YouTube links, thumbnail extension, image file signature, and upload size before storing files on disk and metadata in SQLite

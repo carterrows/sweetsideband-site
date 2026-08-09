@@ -676,6 +676,8 @@ export default function AdminDashboard({
         const result = (await response.json()) as {
           error?: string;
           images?: GalleryImage[];
+          generatedPreviewCount?: number;
+          failedPreviewCount?: number;
         };
 
         if (!response.ok || !result.images) {
@@ -684,7 +686,15 @@ export default function AdminDashboard({
         }
 
         setImages(result.images);
-        setImageFeedback("Photo changes saved successfully.");
+        const generatedCount = result.generatedPreviewCount ?? 0;
+        const failedCount = result.failedPreviewCount ?? 0;
+        setImageFeedback(
+          failedCount > 0
+            ? `Saved changes and generated ${generatedCount} previews; ${failedCount} photos could not be processed.`
+            : generatedCount > 0
+              ? `Saved changes and generated ${generatedCount} photo previews.`
+              : "Photo changes saved successfully."
+        );
         startTransition(() => {
           router.refresh();
         });
@@ -867,9 +877,9 @@ export default function AdminDashboard({
                     key={image.id}
                     className="group overflow-hidden rounded-2xl border border-black/10 bg-white transition hover:-translate-y-0.5 hover:shadow-lg"
                   >
-                    {image.src ? (
+                    {image.previewSrc || image.src ? (
                       <Image
-                        src={image.src}
+                        src={image.previewSrc ?? image.src!}
                         alt={image.title}
                         width={900}
                         height={700}
@@ -887,7 +897,9 @@ export default function AdminDashboard({
                           {image.title}
                         </h3>
                         <p className="mt-1 text-[11px] uppercase tracking-[0.14em] text-ink-500">
-                          {formatByteSize(image.byteSize)}
+                          {image.previewByteSize
+                            ? `${formatByteSize(image.previewByteSize)} preview · ${formatByteSize(image.byteSize)} original`
+                            : `${formatByteSize(image.byteSize)} original`}
                         </p>
                       </div>
                       <button

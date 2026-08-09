@@ -68,11 +68,21 @@ export function sanitizeGalleryImageFileName(fileName: string) {
   const normalizedFileName = normalizeGalleryImageFileName(fileName);
   const extension = path.extname(normalizedFileName).toLowerCase();
 
-  if (extension !== ".jpg" && extension !== ".jpeg") {
-    throw new Error("Gallery images must use the .jpg or .jpeg extension.");
+  if (
+    extension !== ".jpg" &&
+    extension !== ".jpeg" &&
+    extension !== ".webp"
+  ) {
+    throw new Error("Unsupported gallery image extension.");
   }
 
   return normalizedFileName;
+}
+
+export function getGalleryImageContentType(fileName: string) {
+  return path.extname(fileName).toLowerCase() === ".webp"
+    ? "image/webp"
+    : "image/jpeg";
 }
 
 export function readGalleryImageFile(fileName: string) {
