@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AdminThemeShell from "@/components/admin/AdminThemeShell";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -13,5 +14,5 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="admin-ui font-body antialiased">{children}</div>;
+  return <AdminThemeShell>{children}</AdminThemeShell>;
 }
