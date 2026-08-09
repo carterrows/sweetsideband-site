@@ -68,6 +68,9 @@ export type GalleryImage = {
   title: string;
   src?: string;
   byteSize: number;
+  previewFileName?: string;
+  previewSrc?: string;
+  previewByteSize?: number;
   createdAt: string;
 };
 

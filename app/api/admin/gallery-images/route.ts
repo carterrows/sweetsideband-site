@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { ADMIN_COOKIE_NAME, verifyAdminSessionToken } from "@/lib/admin-auth";
 import {
+  backfillGalleryImagePreviews,
   removeGalleryImage,
   saveGalleryImageUploads
 } from "@/lib/admin-gallery-images";
@@ -123,11 +124,29 @@ export async function PUT(request: Request) {
     return unauthorized(rateLimit);
   }
 
-  revalidatePath("/video/photos");
-  revalidatePath("/admin");
+  try {
+    const backfill = await backfillGalleryImagePreviews();
 
-  return applyRateLimitHeaders(
-    NextResponse.json({ images: getManagedGalleryImages() }),
-    rateLimit.result
-  );
+    revalidatePath("/video/photos");
+    revalidatePath("/admin");
+
+    return applyRateLimitHeaders(
+      NextResponse.json({
+        images: getManagedGalleryImages(),
+        generatedPreviewCount: backfill.generatedCount,
+        failedPreviewCount: backfill.failedCount
+      }),
+      rateLimit.result
+    );
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Unable to process gallery image previews.";
+
+    return applyRateLimitHeaders(
+      NextResponse.json({ error: message }, { status: 400 }),
+      rateLimit.result
+    );
+  }
 }

@@ -51,7 +51,7 @@ export default function PhotoMasonryGrid({ items }: { items: MediaItem[] }) {
   }, [activeItem]);
 
   useEffect(() => {
-    if (!activeItem?.src) {
+    if (!activeItem?.link) {
       return;
     }
 
@@ -75,12 +75,12 @@ export default function PhotoMasonryGrid({ items }: { items: MediaItem[] }) {
       setActiveImageSize(null);
     };
 
-    image.src = activeItem.src;
+    image.src = activeItem.link;
 
     return () => {
       isMounted = false;
     };
-  }, [activeItem?.src]);
+  }, [activeItem?.link]);
 
   const handleLightboxContentClick = (event: MouseEvent<HTMLDivElement>) => {
     if (!activeImageSize || activeImageSize.width === 0 || activeImageSize.height === 0) {
@@ -169,7 +169,7 @@ export default function PhotoMasonryGrid({ items }: { items: MediaItem[] }) {
             onClick={handleLightboxContentClick}
           >
             <Image
-              src={activeItem.src}
+              src={activeItem.link}
               alt={activeItem.alt ?? activeItem.title}
               fill
               sizes="95vw"

@@ -35,6 +35,8 @@ type GalleryImageRow = {
   file_name: string;
   title: string;
   byte_size: number;
+  preview_file_name: string | null;
+  preview_byte_size: number | null;
   created_at: string;
 };
 
@@ -51,7 +53,10 @@ type GalleryVideoRow = {
 
 const dataDir = path.join(process.cwd(), "data");
 const databasePath = process.env.SHOWS_DB_PATH?.trim()
-  ? path.resolve(process.cwd(), process.env.SHOWS_DB_PATH.trim())
+  ? path.resolve(
+      /* turbopackIgnore: true */ process.cwd(),
+      process.env.SHOWS_DB_PATH.trim()
+    )
   : path.join(dataDir, "shows.sqlite");
 
 let database: Database.Database | null = null;
@@ -188,12 +193,35 @@ function migrateShowIds(db: Database.Database) {
   }
 }
 
+function migrateGalleryImagePreviews(db: Database.Database) {
+  const columns = db
+    .prepare("PRAGMA table_info(gallery_images);")
+    .all() as { name: string }[];
+  const columnNames = new Set(columns.map((column) => column.name));
+
+  if (!columnNames.has("preview_file_name")) {
+    db.exec("ALTER TABLE gallery_images ADD COLUMN preview_file_name TEXT;");
+  }
+
+  if (!columnNames.has("preview_byte_size")) {
+    db.exec("ALTER TABLE gallery_images ADD COLUMN preview_byte_size INTEGER;");
+  }
+
+  db.exec(`
+    CREATE UNIQUE INDEX IF NOT EXISTS gallery_images_preview_file_name
+    ON gallery_images(preview_file_name)
+    WHERE preview_file_name IS NOT NULL;
+  `);
+}
+
 function getDatabase() {
   if (database) {
     return database;
   }
 
-  fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+  fs.mkdirSync(/* turbopackIgnore: true */ path.dirname(databasePath), {
+    recursive: true
+  });
   const db = new Database(databasePath);
   db.exec("PRAGMA journal_mode = WAL;");
   db.exec("PRAGMA synchronous = NORMAL;");
@@ -205,9 +233,12 @@ function getDatabase() {
       file_name TEXT NOT NULL UNIQUE,
       title TEXT NOT NULL,
       byte_size INTEGER NOT NULL,
+      preview_file_name TEXT,
+      preview_byte_size INTEGER,
       created_at TEXT NOT NULL
     );
   `);
+  migrateGalleryImagePreviews(db);
   db.exec(`
     CREATE TABLE IF NOT EXISTS gallery_videos (
       id TEXT PRIMARY KEY,
@@ -232,6 +263,9 @@ function mapGalleryImageRow(row: GalleryImageRow): GalleryImage {
     title: row.title,
     src: getGalleryImageSrc(row.file_name),
     byteSize: row.byte_size,
+    previewFileName: row.preview_file_name ?? undefined,
+    previewSrc: getGalleryImageSrc(row.preview_file_name ?? undefined),
+    previewByteSize: row.preview_byte_size ?? undefined,
     createdAt: row.created_at
   };
 }
@@ -382,6 +416,8 @@ export function getManagedGalleryImages(): GalleryImage[] {
           file_name,
           title,
           byte_size,
+          preview_file_name,
+          preview_byte_size,
           created_at
         FROM gallery_images
         ORDER BY created_at DESC, file_name ASC;
@@ -425,6 +461,8 @@ export function getManagedGalleryImageById(id: string): GalleryImage | null {
           file_name,
           title,
           byte_size,
+          preview_file_name,
+          preview_byte_size,
           created_at
         FROM gallery_images
         WHERE id = ?;
@@ -455,7 +493,7 @@ export function getGalleryPhotosFromDatabase(): MediaItem[] {
         id: image.id,
         type: "image" as const,
         title: image.title,
-        src: image.src,
+        src: image.previewSrc ?? image.src,
         link: image.src,
         alt: image.title
       }))
@@ -483,12 +521,16 @@ export function insertGalleryImage({
   fileName,
   title,
   byteSize,
+  previewFileName,
+  previewByteSize,
   createdAt
 }: {
   id: string;
   fileName: string;
   title: string;
   byteSize: number;
+  previewFileName: string;
+  previewByteSize: number;
   createdAt: string;
 }) {
   const db = getDatabase();
@@ -500,10 +542,39 @@ export function insertGalleryImage({
         file_name,
         title,
         byte_size,
+        preview_file_name,
+        preview_byte_size,
         created_at
-      ) VALUES (?, ?, ?, ?, ?);
+      ) VALUES (?, ?, ?, ?, ?, ?, ?);
     `
-  ).run(id, fileName, title, byteSize, createdAt);
+  ).run(
+    id,
+    fileName,
+    title,
+    byteSize,
+    previewFileName,
+    previewByteSize,
+    createdAt
+  );
+}
+
+export function updateGalleryImagePreview(
+  id: string,
+  previewFileName: string,
+  previewByteSize: number
+) {
+  const db = getDatabase();
+  const result = db
+    .prepare(
+      `
+        UPDATE gallery_images
+        SET preview_file_name = ?, preview_byte_size = ?
+        WHERE id = ?;
+      `
+    )
+    .run(previewFileName, previewByteSize, id.trim());
+
+  return result.changes > 0;
 }
 
 export function deleteGalleryImage(id: string) {

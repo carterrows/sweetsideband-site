@@ -6,17 +6,26 @@ function getGalleryImagesDir() {
 
   if (configuredDatabasePath) {
     const absoluteDatabasePath = path.resolve(
-      process.cwd(),
+      /* turbopackIgnore: true */ process.cwd(),
       configuredDatabasePath
     );
-    return path.join(path.dirname(absoluteDatabasePath), "gallery-images");
+    return path.join(
+      /* turbopackIgnore: true */ path.dirname(absoluteDatabasePath),
+      "gallery-images"
+    );
   }
 
-  return path.join(process.cwd(), "storage", "gallery-images");
+  return path.join(
+    /* turbopackIgnore: true */ process.cwd(),
+    "storage",
+    "gallery-images"
+  );
 }
 
 function ensureGalleryImagesDir() {
-  fs.mkdirSync(getGalleryImagesDir(), { recursive: true });
+  fs.mkdirSync(/* turbopackIgnore: true */ getGalleryImagesDir(), {
+    recursive: true
+  });
 }
 
 function normalizeGalleryImageFileName(fileName: string) {
@@ -25,7 +34,7 @@ function normalizeGalleryImageFileName(fileName: string) {
 
 function getGalleryImagePath(fileName: string) {
   return path.join(
-    getGalleryImagesDir(),
+    /* turbopackIgnore: true */ getGalleryImagesDir(),
     normalizeGalleryImageFileName(fileName)
   );
 }
@@ -38,7 +47,7 @@ export function getGalleryImageSrc(fileName?: string): string | undefined {
   const normalizedFileName = normalizeGalleryImageFileName(fileName);
   const filePath = getGalleryImagePath(normalizedFileName);
 
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(/* turbopackIgnore: true */ filePath)) {
     return undefined;
   }
 
@@ -50,7 +59,10 @@ export async function saveGalleryImageFile(
   bytes: Uint8Array
 ) {
   ensureGalleryImagesDir();
-  await fs.promises.writeFile(getGalleryImagePath(fileName), bytes);
+  await fs.promises.writeFile(
+    /* turbopackIgnore: true */ getGalleryImagePath(fileName),
+    bytes
+  );
 }
 
 export async function deleteGalleryImageFile(fileName?: string) {
@@ -59,8 +71,8 @@ export async function deleteGalleryImageFile(fileName?: string) {
   }
 
   const filePath = getGalleryImagePath(fileName);
-  if (fs.existsSync(filePath)) {
-    await fs.promises.unlink(filePath);
+  if (fs.existsSync(/* turbopackIgnore: true */ filePath)) {
+    await fs.promises.unlink(/* turbopackIgnore: true */ filePath);
   }
 }
 
@@ -68,20 +80,30 @@ export function sanitizeGalleryImageFileName(fileName: string) {
   const normalizedFileName = normalizeGalleryImageFileName(fileName);
   const extension = path.extname(normalizedFileName).toLowerCase();
 
-  if (extension !== ".jpg" && extension !== ".jpeg") {
-    throw new Error("Gallery images must use the .jpg or .jpeg extension.");
+  if (
+    extension !== ".jpg" &&
+    extension !== ".jpeg" &&
+    extension !== ".webp"
+  ) {
+    throw new Error("Unsupported gallery image extension.");
   }
 
   return normalizedFileName;
+}
+
+export function getGalleryImageContentType(fileName: string) {
+  return path.extname(fileName).toLowerCase() === ".webp"
+    ? "image/webp"
+    : "image/jpeg";
 }
 
 export function readGalleryImageFile(fileName: string) {
   const normalizedFileName = sanitizeGalleryImageFileName(fileName);
   const filePath = getGalleryImagePath(normalizedFileName);
 
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(/* turbopackIgnore: true */ filePath)) {
     return null;
   }
 
-  return fs.readFileSync(filePath);
+  return fs.readFileSync(/* turbopackIgnore: true */ filePath);
 }
