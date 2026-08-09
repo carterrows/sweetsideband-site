@@ -53,7 +53,10 @@ type GalleryVideoRow = {
 
 const dataDir = path.join(process.cwd(), "data");
 const databasePath = process.env.SHOWS_DB_PATH?.trim()
-  ? path.resolve(process.cwd(), process.env.SHOWS_DB_PATH.trim())
+  ? path.resolve(
+      /* turbopackIgnore: true */ process.cwd(),
+      process.env.SHOWS_DB_PATH.trim()
+    )
   : path.join(dataDir, "shows.sqlite");
 
 let database: Database.Database | null = null;
@@ -216,7 +219,9 @@ function getDatabase() {
     return database;
   }
 
-  fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+  fs.mkdirSync(/* turbopackIgnore: true */ path.dirname(databasePath), {
+    recursive: true
+  });
   const db = new Database(databasePath);
   db.exec("PRAGMA journal_mode = WAL;");
   db.exec("PRAGMA synchronous = NORMAL;");

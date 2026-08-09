@@ -6,17 +6,26 @@ function getVideoThumbnailsDir() {
 
   if (configuredDatabasePath) {
     const absoluteDatabasePath = path.resolve(
-      process.cwd(),
+      /* turbopackIgnore: true */ process.cwd(),
       configuredDatabasePath
     );
-    return path.join(path.dirname(absoluteDatabasePath), "video-thumbnails");
+    return path.join(
+      /* turbopackIgnore: true */ path.dirname(absoluteDatabasePath),
+      "video-thumbnails"
+    );
   }
 
-  return path.join(process.cwd(), "storage", "video-thumbnails");
+  return path.join(
+    /* turbopackIgnore: true */ process.cwd(),
+    "storage",
+    "video-thumbnails"
+  );
 }
 
 function ensureVideoThumbnailsDir() {
-  fs.mkdirSync(getVideoThumbnailsDir(), { recursive: true });
+  fs.mkdirSync(/* turbopackIgnore: true */ getVideoThumbnailsDir(), {
+    recursive: true
+  });
 }
 
 function normalizeVideoThumbnailFileName(fileName: string) {
@@ -25,7 +34,7 @@ function normalizeVideoThumbnailFileName(fileName: string) {
 
 function getVideoThumbnailPath(fileName: string) {
   return path.join(
-    getVideoThumbnailsDir(),
+    /* turbopackIgnore: true */ getVideoThumbnailsDir(),
     normalizeVideoThumbnailFileName(fileName)
   );
 }
@@ -38,7 +47,7 @@ export function getVideoThumbnailSrc(fileName?: string): string | undefined {
   const normalizedFileName = normalizeVideoThumbnailFileName(fileName);
   const filePath = getVideoThumbnailPath(normalizedFileName);
 
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(/* turbopackIgnore: true */ filePath)) {
     return undefined;
   }
 
@@ -50,7 +59,10 @@ export async function saveVideoThumbnailFile(
   bytes: Uint8Array
 ) {
   ensureVideoThumbnailsDir();
-  await fs.promises.writeFile(getVideoThumbnailPath(fileName), bytes);
+  await fs.promises.writeFile(
+    /* turbopackIgnore: true */ getVideoThumbnailPath(fileName),
+    bytes
+  );
 }
 
 export async function deleteVideoThumbnailFile(fileName?: string) {
@@ -59,8 +71,8 @@ export async function deleteVideoThumbnailFile(fileName?: string) {
   }
 
   const filePath = getVideoThumbnailPath(fileName);
-  if (fs.existsSync(filePath)) {
-    await fs.promises.unlink(filePath);
+  if (fs.existsSync(/* turbopackIgnore: true */ filePath)) {
+    await fs.promises.unlink(/* turbopackIgnore: true */ filePath);
   }
 }
 
@@ -86,9 +98,9 @@ export function readVideoThumbnailFile(fileName: string) {
   const normalizedFileName = sanitizeVideoThumbnailFileName(fileName);
   const filePath = getVideoThumbnailPath(normalizedFileName);
 
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(/* turbopackIgnore: true */ filePath)) {
     return null;
   }
 
-  return fs.readFileSync(filePath);
+  return fs.readFileSync(/* turbopackIgnore: true */ filePath);
 }

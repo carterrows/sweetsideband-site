@@ -6,17 +6,26 @@ function getShowPostersDir() {
 
   if (configuredDatabasePath) {
     const absoluteDatabasePath = path.resolve(
-      process.cwd(),
+      /* turbopackIgnore: true */ process.cwd(),
       configuredDatabasePath
     );
-    return path.join(path.dirname(absoluteDatabasePath), "posters");
+    return path.join(
+      /* turbopackIgnore: true */ path.dirname(absoluteDatabasePath),
+      "posters"
+    );
   }
 
-  return path.join(process.cwd(), "storage", "posters");
+  return path.join(
+    /* turbopackIgnore: true */ process.cwd(),
+    "storage",
+    "posters"
+  );
 }
 
 function ensurePosterDir() {
-  fs.mkdirSync(getShowPostersDir(), { recursive: true });
+  fs.mkdirSync(/* turbopackIgnore: true */ getShowPostersDir(), {
+    recursive: true
+  });
 }
 
 function normalizePosterFileName(fileName: string) {
@@ -24,7 +33,10 @@ function normalizePosterFileName(fileName: string) {
 }
 
 function getPosterPath(fileName: string) {
-  return path.join(getShowPostersDir(), normalizePosterFileName(fileName));
+  return path.join(
+    /* turbopackIgnore: true */ getShowPostersDir(),
+    normalizePosterFileName(fileName)
+  );
 }
 
 export function getShowPosterSrc(fileName?: string): string | undefined {
@@ -35,7 +47,7 @@ export function getShowPosterSrc(fileName?: string): string | undefined {
   const normalizedFileName = normalizePosterFileName(fileName);
   const filePath = getPosterPath(normalizedFileName);
 
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(/* turbopackIgnore: true */ filePath)) {
     return undefined;
   }
 
@@ -44,7 +56,10 @@ export function getShowPosterSrc(fileName?: string): string | undefined {
 
 export async function saveShowPoster(fileName: string, bytes: Uint8Array) {
   ensurePosterDir();
-  await fs.promises.writeFile(getPosterPath(fileName), bytes);
+  await fs.promises.writeFile(
+    /* turbopackIgnore: true */ getPosterPath(fileName),
+    bytes
+  );
 }
 
 export async function deleteShowPoster(fileName?: string) {
@@ -53,8 +68,8 @@ export async function deleteShowPoster(fileName?: string) {
   }
 
   const filePath = getPosterPath(fileName);
-  if (fs.existsSync(filePath)) {
-    await fs.promises.unlink(filePath);
+  if (fs.existsSync(/* turbopackIgnore: true */ filePath)) {
+    await fs.promises.unlink(/* turbopackIgnore: true */ filePath);
   }
 }
 
@@ -72,9 +87,9 @@ export function readShowPoster(fileName: string) {
   const normalizedFileName = sanitizePosterFileName(fileName);
   const filePath = getPosterPath(normalizedFileName);
 
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(/* turbopackIgnore: true */ filePath)) {
     return null;
   }
 
-  return fs.readFileSync(filePath);
+  return fs.readFileSync(/* turbopackIgnore: true */ filePath);
 }
