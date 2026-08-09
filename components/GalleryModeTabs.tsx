@@ -5,19 +5,19 @@ type GalleryModeTabsProps = {
 };
 
 const baseTabClassName =
-  "rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2";
+  "inline-flex min-h-12 items-center justify-center rounded-sm border border-accent px-4 py-2 text-base uppercase transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper sm:text-lg";
 
 export default function GalleryModeTabs({ active }: GalleryModeTabsProps) {
   return (
     <div className="flex justify-center">
-      <div className="inline-flex items-center gap-1 rounded-full border border-black/10 bg-paper p-1 shadow-sm">
+      <div className="grid w-full max-w-[332px] grid-cols-2 gap-3">
         <Link
           href="/video"
           aria-current={active === "video" ? "page" : undefined}
           className={`${baseTabClassName} ${
             active === "video"
-              ? "bg-accent text-paper"
-              : "text-ink-700 hover:text-ink-900"
+              ? "bg-accent text-white"
+              : "text-accent hover:bg-accent hover:text-white"
           }`}
         >
           Video
@@ -27,8 +27,8 @@ export default function GalleryModeTabs({ active }: GalleryModeTabsProps) {
           aria-current={active === "photo" ? "page" : undefined}
           className={`${baseTabClassName} ${
             active === "photo"
-              ? "bg-accent text-paper"
-              : "text-ink-700 hover:text-ink-900"
+              ? "bg-accent text-white"
+              : "text-accent hover:bg-accent hover:text-white"
           }`}
         >
           Photo
