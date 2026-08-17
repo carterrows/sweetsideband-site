@@ -773,7 +773,7 @@ export default function AdminDashboard({
                 className={`flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${
                   activeTab === id
                     ? "bg-white text-ink-900 shadow-sm"
-                    : "text-ink-600 hover:bg-white/60 hover:text-ink-900"
+                    : "text-ink-600 hover:bg-white/60 hover:text-accent"
                 }`}
               >
                 <Icon
