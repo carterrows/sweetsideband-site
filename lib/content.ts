@@ -4,6 +4,7 @@ import type { Band, ShowsData, Member, MediaItem } from "./types";
 import {
   getGalleryPhotosFromDatabase,
   getGalleryVideosFromDatabase,
+  getManagedGalleryImages,
   getShowsFromDatabase
 } from "./shows-db";
 
@@ -37,4 +38,23 @@ export function getMedia(): MediaItem[] {
 
 export function getShowPhotos(): MediaItem[] {
   return getGalleryPhotosFromDatabase();
+}
+
+export function getFeaturedShowPhoto(): MediaItem | undefined {
+  const image = getManagedGalleryImages().find(
+    (candidate) => typeof candidate.src === "string"
+  );
+
+  if (!image?.src) {
+    return undefined;
+  }
+
+  return {
+    id: image.id,
+    type: "image",
+    title: image.title,
+    src: image.previewSrc ?? image.src,
+    link: image.src,
+    alt: image.title
+  };
 }

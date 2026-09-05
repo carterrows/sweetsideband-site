@@ -60,6 +60,7 @@ export async function POST(request: Request) {
     const images = await saveGalleryImageUploads(uploads);
 
     revalidatePath("/video/photos");
+    revalidatePath("/");
     revalidatePath("/admin");
 
     return applyRateLimitHeaders(
@@ -97,6 +98,7 @@ export async function DELETE(request: Request) {
     const images = await removeGalleryImage(payload.id);
 
     revalidatePath("/video/photos");
+    revalidatePath("/");
     revalidatePath("/admin");
 
     return applyRateLimitHeaders(
@@ -128,6 +130,7 @@ export async function PUT(request: Request) {
     const backfill = await backfillGalleryImagePreviews();
 
     revalidatePath("/video/photos");
+    revalidatePath("/");
     revalidatePath("/admin");
 
     return applyRateLimitHeaders(

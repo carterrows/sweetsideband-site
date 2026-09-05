@@ -1,7 +1,12 @@
 import Image from "next/image";
 import type { Metadata } from "next";
 import { ChevronDown } from "lucide-react";
-import { getBand, getMembers, getShows } from "@/lib/content";
+import {
+  getBand,
+  getFeaturedShowPhoto,
+  getMembers,
+  getShows
+} from "@/lib/content";
 import SectionHeading from "@/components/SectionHeading";
 import ShowsList from "@/components/ShowsList";
 import StreamingLinks from "@/components/StreamingLinks";
@@ -21,6 +26,7 @@ export default function HomePage() {
   const band = getBand();
   const members = getMembers();
   const shows = getShows();
+  const featuredPhoto = getFeaturedShowPhoto();
   const upcoming = shows.upcoming.slice(0, 3);
   const spotifyLink = band.streaming.spotify;
   const isSpotifyUrl = (link: typeof spotifyLink): link is string =>
@@ -108,11 +114,35 @@ export default function HomePage() {
 
       <section className="section py-12 md:py-16 relative z-10 bg-paper">
         <div className="mx-auto w-full max-w-6xl px-6">
-          <div>
-            <SectionHeading title="Bio" subtitle="Who we are" />
-            <p className="mt-6 text-base leading-relaxed text-ink-700 text-justify whitespace-pre-line md:text-lg">
-              {band.bio}
-            </p>
+          <div
+            className={`grid items-center gap-10 md:gap-12 ${
+              featuredPhoto ? "lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]" : ""
+            }`}
+          >
+            <div className="max-w-xl">
+              <SectionHeading title="Bio" subtitle="Who we are" />
+              <p className="mt-6 whitespace-pre-line text-left text-base leading-relaxed text-ink-700 md:text-lg">
+                {band.bio}
+              </p>
+            </div>
+            {featuredPhoto?.src && (
+              <div className="relative ml-2 mt-2 sm:ml-3 sm:mt-3">
+                <div
+                  aria-hidden="true"
+                  className="absolute -bottom-2 -left-2 h-full w-full bg-accent sm:-bottom-3 sm:-left-3"
+                />
+                <div className="relative aspect-[4/3] overflow-hidden bg-haze shadow-sm">
+                  <Image
+                    src={featuredPhoto.src}
+                    alt={featuredPhoto.alt ?? featuredPhoto.title}
+                    fill
+                    sizes="(max-width: 1023px) calc(100vw - 48px), 52vw"
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
