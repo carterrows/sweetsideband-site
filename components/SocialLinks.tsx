@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { Facebook, Instagram, Youtube } from "lucide-react";
 import {
   AppleMusicIcon,
+  FacebookIcon,
+  InstagramIcon,
   SpotifyIcon,
-  TikTokIcon
+  TikTokIcon,
+  YouTubeIcon
 } from "@/components/icons/BrandIcons";
 import type { Band } from "@/lib/types";
 
@@ -37,7 +39,7 @@ export default function SocialLinks({
           aria-label="Instagram"
           className={linkClassName}
         >
-          <Instagram className={iconClassName} aria-hidden="true" />
+          <InstagramIcon className={iconClassName} />
         </Link>
       )}
       {social.tiktok && (
@@ -59,7 +61,7 @@ export default function SocialLinks({
           aria-label="YouTube"
           className={linkClassName}
         >
-          <Youtube className={iconClassName} aria-hidden="true" />
+          <YouTubeIcon className={iconClassName} />
         </Link>
       )}
       {spotifyUrl && (
@@ -92,7 +94,7 @@ export default function SocialLinks({
           aria-label="Facebook"
           className={linkClassName}
         >
-          <Facebook className={iconClassName} aria-hidden="true" />
+          <FacebookIcon className={iconClassName} />
         </Link>
       )}
     </>

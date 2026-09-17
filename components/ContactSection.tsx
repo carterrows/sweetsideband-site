@@ -2,7 +2,10 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { Instagram, Youtube } from "lucide-react";
+import {
+  InstagramIcon,
+  YouTubeIcon
+} from "@/components/icons/BrandIcons";
 import type { Band } from "@/lib/types";
 
 export default function ContactSection({ band }: { band: Band }) {
@@ -52,7 +55,7 @@ export default function ContactSection({ band }: { band: Band }) {
                 aria-label="Instagram"
                 className="inline-flex items-center justify-center transition hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                <Instagram className="h-5 w-5" aria-hidden="true" />
+                <InstagramIcon className="h-5 w-5" />
               </Link>
             )}
             {band.social.youtube && (
@@ -63,7 +66,7 @@ export default function ContactSection({ band }: { band: Band }) {
                 aria-label="YouTube"
                 className="inline-flex items-center justify-center transition hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                <Youtube className="h-5 w-5" aria-hidden="true" />
+                <YouTubeIcon className="h-5 w-5" />
               </Link>
             )}
           </div>
