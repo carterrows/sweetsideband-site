@@ -6,8 +6,8 @@
 - Band/member content is file-driven, while shows, video gallery metadata, and photo gallery metadata are stored in SQLite.
 
 ## Tech Stack
-- **Next.js 16** (App Router) + **React 18** + **TypeScript (strict)**.
-- **Tailwind CSS 3** for styling.
+- **Next.js 16** (App Router) + **React 19** + **TypeScript (strict)**.
+- **Tailwind CSS 4** for styling, with the JavaScript theme loaded through `@config`.
 - **lucide-react** + custom SVG icons for social/streaming brands.
 - Deployed via Node runtime or Docker (multi-stage image).
 
@@ -162,7 +162,7 @@
 
 ## Docker
 - `docker compose up --build` runs production container on `127.0.0.1:3000`.
-- Dockerfile uses multi-stage Node 24 bookworm-slim build:
+- Dockerfile uses a multi-stage Node 24.21.0 bookworm-slim build:
   - install deps (`npm ci`)
   - install native build tools for `better-sqlite3`
   - build Next app
