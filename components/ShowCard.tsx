@@ -120,7 +120,7 @@ export default function ShowCard({
                             href={show.venueUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`${infoButtonClassName} justify-start`}
+                            className={infoButtonClassName}
                           >
                             Venue
                           </Link>
