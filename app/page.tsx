@@ -68,12 +68,12 @@ export default function HomePage() {
                 href={spotifyLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 min-w-40 items-center justify-center rounded-none border border-accent bg-transparent px-6 text-xs font-semibold uppercase tracking-[0.2em] text-paper shadow-[0_0_16px_rgba(238,108,77,0.28),0_3px_14px_rgba(0,0,0,0.28)] backdrop-blur-[2px] [text-shadow:0_1px_6px_rgba(0,0,0,0.8)] transition hover:border-paper hover:shadow-[0_0_20px_rgba(238,108,77,0.38),0_3px_14px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="inline-flex h-12 w-40 items-center justify-center rounded-none border border-accent bg-transparent px-6 text-base uppercase text-accent shadow-[0_0_16px_rgba(238,108,77,0.28),0_3px_14px_rgba(0,0,0,0.28)] backdrop-blur-[2px] [text-shadow:0_1px_6px_rgba(0,0,0,0.8)] transition hover:bg-accent hover:text-white hover:shadow-[0_0_20px_rgba(238,108,77,0.38),0_3px_14px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:text-lg"
               >
                 Listen
               </a>
             ) : (
-              <span className="inline-flex h-12 min-w-40 items-center justify-center rounded-none border border-accent bg-transparent px-6 text-xs font-semibold uppercase tracking-[0.2em] text-paper shadow-[0_0_16px_rgba(238,108,77,0.28),0_3px_14px_rgba(0,0,0,0.28)] backdrop-blur-[2px] [text-shadow:0_1px_6px_rgba(0,0,0,0.8)]">
+              <span className="inline-flex h-12 w-40 items-center justify-center rounded-none border border-accent bg-transparent px-6 text-base uppercase text-accent shadow-[0_0_16px_rgba(238,108,77,0.28),0_3px_14px_rgba(0,0,0,0.28)] backdrop-blur-[2px] [text-shadow:0_1px_6px_rgba(0,0,0,0.8)] sm:text-lg">
                 Coming Soon
               </span>
             )}
@@ -105,7 +105,6 @@ export default function HomePage() {
           <SpotifyPreview spotify={band.streaming.spotify} />
           <div className="mt-5">
             <StreamingLinks
-              spotify={band.streaming.spotify}
               appleMusic={band.streaming.appleMusic}
             />
           </div>
