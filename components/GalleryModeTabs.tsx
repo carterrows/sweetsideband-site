@@ -5,7 +5,7 @@ type GalleryModeTabsProps = {
 };
 
 const baseTabClassName =
-  "inline-flex min-h-12 items-center justify-center rounded-sm border border-accent px-4 py-2 text-base uppercase transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper sm:text-lg";
+  "inline-flex h-12 w-40 items-center justify-center rounded-none border border-accent px-6 text-base uppercase transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper sm:text-lg";
 
 export default function GalleryModeTabs({ active }: GalleryModeTabsProps) {
   return (
