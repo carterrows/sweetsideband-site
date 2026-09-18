@@ -15,10 +15,10 @@ export default function MemberCard({ member }: { member: Member }) {
         />
       </div>
       <div className="text-center">
-        <h3 className="text-lg font-bold tracking-[0.06em] text-accent">
+        <h3 className="font-body text-lg font-bold text-accent">
           {member.name}
         </h3>
-        <p className="text-xs font-semibold tracking-[0.18em] text-ink-900">
+        <p className="text-base font-normal text-ink-900">
           {member.role}
         </p>
         <p className="mt-3 text-sm text-ink-600">{member.bio}</p>

@@ -7,7 +7,7 @@ import type { Show } from "@/lib/types";
 import { formatShowDate } from "@/lib/format";
 
 const infoButtonClassName =
-  "inline-flex min-w-40 items-center justify-center self-start rounded-sm border border-accent px-6 py-2 text-base uppercase text-accent transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:text-lg";
+  "inline-flex h-12 w-40 items-center justify-center self-start rounded-none border border-accent px-6 text-base uppercase text-accent transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:text-lg";
 
 export default function ShowCard({
   show,

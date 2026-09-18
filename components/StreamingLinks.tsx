@@ -1,60 +1,40 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import type { StreamingLink } from "@/lib/types";
-import { AppleMusicIcon, SpotifyIcon } from "@/components/icons/BrandIcons";
 
 export default function StreamingLinks({
-  spotify,
   appleMusic
 }: {
-  spotify: StreamingLink;
   appleMusic: StreamingLink;
 }) {
   const isUrl = (link: StreamingLink): link is string =>
     typeof link === "string" && link.trim().toLowerCase() !== "coming soon";
-  const spotifyUrl = isUrl(spotify) ? spotify : null;
   const appleUrl = isUrl(appleMusic) ? appleMusic : null;
 
   return (
-    <div className="flex flex-wrap gap-4">
-      {spotifyUrl ? (
-        <Link
-          href={spotifyUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Spotify"
-          className="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-white transition hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        >
-          <SpotifyIcon className="h-5 w-5" />
-        </Link>
-      ) : (
-        <button
-          type="button"
-          disabled
-          className="inline-flex cursor-not-allowed items-center justify-center rounded-full border border-accent bg-accent px-6 py-3 text-white opacity-40"
-        >
-          <SpotifyIcon aria-hidden="true" className="h-5 w-5" />
-          <span className="sr-only">Spotify (Coming soon)</span>
-        </button>
-      )}
+    <div>
       {appleUrl ? (
         <Link
           href={appleUrl}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Apple Music"
-          className="inline-flex items-center justify-center rounded-full border border-black/10 px-6 py-3 text-ink-800 transition hover:border-black/20 hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="group inline-flex items-start gap-1 text-lg uppercase text-accent transition hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-paper sm:text-xl"
         >
-          <AppleMusicIcon className="h-5 w-5" />
+          <span>Apple Music</span>
+          <ArrowUpRight
+            aria-hidden="true"
+            className="h-5 w-5 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            strokeWidth={1.75}
+          />
         </Link>
       ) : (
-        <button
-          type="button"
-          disabled
-          className="inline-flex cursor-not-allowed items-center justify-center rounded-full border border-black/10 px-6 py-3 text-ink-800 opacity-40"
+        <span
+          aria-label="Apple Music (Coming soon)"
+          className="inline-flex items-start gap-1 text-lg uppercase text-accent opacity-40 sm:text-xl"
         >
-          <AppleMusicIcon aria-hidden="true" className="h-5 w-5" />
-          <span className="sr-only">Apple Music (Coming soon)</span>
-        </button>
+          <span>Apple Music</span>
+          <ArrowUpRight aria-hidden="true" className="h-5 w-5 shrink-0" strokeWidth={1.75} />
+        </span>
       )}
     </div>
   );
