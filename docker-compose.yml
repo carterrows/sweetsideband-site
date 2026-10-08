@@ -21,3 +21,5 @@ services:
 
 volumes:
   shows-db:
+    external: true
+    name: sweetsideband-site_shows-db
