@@ -119,6 +119,7 @@ export async function POST(request: Request) {
 
     revalidatePath("/");
     revalidatePath("/shows");
+    revalidatePath("/epk");
     revalidatePath("/admin");
 
     return applyRateLimitHeaders(

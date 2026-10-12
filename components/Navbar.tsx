@@ -29,7 +29,7 @@ export default function Navbar({ band }: { band: Band }) {
   const shouldForceTopOnPathChangeRef = useRef(false);
   const isHome = !pathname || pathname === "/";
   const { isHeroActive } = useNavbarHero();
-  const heroActive = isHome && isHeroActive;
+  const heroActive = (isHome || pathname === "/epk") && isHeroActive;
 
   const focusRingClass = heroActive
     ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper/80 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"

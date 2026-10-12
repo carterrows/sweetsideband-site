@@ -41,7 +41,12 @@
   - Masonry-style photo gallery (mixed aspect ratios, spaced grid).
   - In-page lightbox with blur backdrop, close button, and click-outside close.
 - `/merch`:
-  - “Coming Soon” placeholder page.
+  - Large T-shirt and sticker images, available exclusively at shows.
+  - Clicking the T-shirt switches between front and back views.
+- `/epk`:
+  - Electronic press kit linked only from the home page's Who we are section, outside the main navigation.
+  - Fixed band-photo hero, long bio, music, video, live highlights, photos, shows, booking contact, and downloadable stage plot.
+  - Show syncs revalidate this page alongside the other public pages.
 - `/contact`:
   - Redirects to `/#contact`.
 - Metadata routes:
@@ -61,6 +66,7 @@
 ## Data Files: What They Drive
 - `data/band.json`:
   - band name, location, booking email, socials, streaming links.
+  - `bio` is the short home-page biography; `longBio` is the EPK biography.
 - `data/members.json`:
   - member cards shown on home page.
 - `data/shows.sqlite`:

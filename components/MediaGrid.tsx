@@ -1,4 +1,4 @@
-import Image from "next/image";
+import VideoThumbnail from "@/components/VideoThumbnail";
 import type { MediaItem } from "@/lib/types";
 
 export default function MediaGrid({ items }: { items: MediaItem[] }) {
@@ -18,29 +18,7 @@ export default function MediaGrid({ items }: { items: MediaItem[] }) {
             rel="noopener noreferrer"
             className="group flex flex-col gap-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent/70 focus-visible:outline-offset-4"
           >
-            <div className="relative w-full overflow-hidden bg-haze aspect-[16/9]">
-              {imgSrc ? (
-                <Image
-                  src={imgSrc}
-                  alt={item.alt ?? item.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
-                  unoptimized
-                />
-              ) : (
-                <div className="h-full w-full bg-haze" />
-              )}
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                <Image
-                  src="/play.svg"
-                  alt=""
-                  width={88}
-                  height={88}
-                  className="translate-x-[1px] opacity-80 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
-                />
-              </div>
-            </div>
+            <VideoThumbnail src={imgSrc} alt={item.alt ?? item.title} />
             <div className="flex flex-col gap-1 text-center">
               <p className="text-lg font-bold text-accent md:text-xl">{item.title}</p>
               <span className="text-sm font-semibold tracking-[0.18em] text-ink-900 transition-opacity duration-200 group-hover:opacity-70 group-focus-visible:opacity-70">

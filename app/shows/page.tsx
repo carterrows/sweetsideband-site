@@ -28,7 +28,7 @@ export default function ShowsPage() {
               Book the band →
             </Link>
           </div>
-          <ShowsList shows={shows.upcoming} showDetails />
+          <ShowsList shows={shows.upcoming} showDetails emptyMessage="More shows on the way. Check back soon." />
           <div className="rounded-2xl border border-black/10 bg-paper p-6 text-sm text-ink-600 shadow-sm">
             Can&apos;t make a date? Email {band.email} for booking/collaborations.
           </div>

@@ -33,6 +33,12 @@ Edit the JSON files under `data/`:
 - `data/band.json` - name, location, socials, streaming
 - `data/members.json` - band member cards
 
+`band.json` includes `bio` for the home page and `longBio` for `/epk` (separate paragraphs with `\n\n`). The EPK is linked from the home page's Who we are section, outside the primary navigation. It reuses the Spotify player and show data alongside the supplied band portrait; show syncs also refresh `/epk`.
+
+The latest single's links and image paths live in `lib/latest-release.ts`. Its WebP cover art and video thumbnail live in `public/images/releases/`. Member portraits, merch, and the EPK hero use WebP assets in their respective folders under `public/images/`. Merch is available at shows; clicking the shirt switches between its front and back. The downloadable stage plot lives at `public/downloads/sweetside-stage-plot-and-input-list.pdf`.
+
+Original supplied images and bio text are retained locally in `storage/source-assets/` (ignored by Git and excluded from deployment). The resized WebP versions are the production assets.
+
 Shows and gallery media are managed through `/admin`, not JSON.
 
 ### Streaming links (Spotify / Apple Music)

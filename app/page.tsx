@@ -1,6 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Metadata } from "next";
-import { ChevronDown } from "lucide-react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import {
   getBand,
   getFeaturedShowPhoto,
@@ -14,6 +15,7 @@ import SpotifyPreview from "@/components/SpotifyPreview";
 import ContactSection from "@/components/ContactSection";
 import MemberCard from "@/components/MemberCard";
 import HomeHeroObserver from "@/components/HomeHeroObserver";
+import LatestRelease from "@/components/LatestRelease";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -88,13 +90,15 @@ export default function HomePage() {
         <HomeHeroObserver />
       </section>
 
+      <LatestRelease />
+
       <section className="section py-12 md:py-16 relative z-10 bg-paper">
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <SectionHeading title="Upcoming" subtitle="Next shows" />
             </div>
-            <ShowsList shows={upcoming} showDetails />
+            <ShowsList shows={upcoming} showDetails emptyMessage="More shows on the way. Check back soon." />
           </div>
         </div>
       </section>
@@ -123,6 +127,13 @@ export default function HomePage() {
               <p className="mt-6 whitespace-pre-line text-left text-base leading-relaxed text-ink-700 md:text-lg">
                 {band.bio}
               </p>
+              <Link
+                href="/epk"
+                className="group mt-5 inline-flex items-start gap-1 text-lg uppercase text-accent transition hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-paper sm:text-xl"
+              >
+                <span>EPK</span>
+                <ArrowUpRight aria-hidden="true" className="h-5 w-5 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
+              </Link>
             </div>
             {featuredPhoto?.src && (
               <div className="relative ml-2 mt-2 sm:ml-3 sm:mt-3">

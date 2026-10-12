@@ -22,5 +22,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: new URL("/video/photos", baseUrl).toString(),
       lastModified,
     },
+    {
+      url: new URL("/merch", baseUrl).toString(),
+      lastModified,
+    },
+    {
+      url: new URL("/epk", baseUrl).toString(),
+      lastModified,
+    },
   ];
 }
