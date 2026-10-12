@@ -1,4 +1,6 @@
 import Image from "next/image";
+import SectionHeading from "@/components/SectionHeading";
+import StreamingLinks from "@/components/StreamingLinks";
 import VideoThumbnail from "@/components/VideoThumbnail";
 import { latestRelease } from "@/lib/latest-release";
 
@@ -6,7 +8,8 @@ export default function LatestRelease() {
   return (
     <section aria-label="Latest release" className="section relative z-10 bg-paper py-12 md:py-16">
       <div className="mx-auto w-full max-w-6xl px-6">
-        <div className="grid items-center gap-8 md:grid-cols-[1fr_1.5fr] md:gap-10">
+        <SectionHeading title="Latest Release" />
+        <div className="mt-8 grid items-center gap-8 md:grid-cols-[1fr_1.5fr] md:gap-10">
           <a
             href={latestRelease.spotifyUrl}
             target="_blank"
@@ -33,6 +36,9 @@ export default function LatestRelease() {
           >
             <VideoThumbnail src={latestRelease.thumbnail} alt="Not My Type official music video" aspect="photo" />
           </a>
+        </div>
+        <div className="mt-5">
+          <StreamingLinks appleMusic={latestRelease.appleMusicUrl} />
         </div>
       </div>
     </section>
