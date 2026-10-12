@@ -93,10 +93,10 @@ export default function EpkPage() {
               <div>
                 <SectionHeading title="Live highlights" />
                 <ul className="mt-6 space-y-4 border-l-2 border-accent pl-5 text-base text-ink-700 md:text-lg">
-                  <li>Horseshoe Tavern & the Rivoli</li>
-                  <li>NXNE & the CNE</li>
-                  <li>Debut single “Dimes” — May 2026</li>
-                  <li>“Not My Type” — new single & first official music video</li>
+                  <li>NXNE Music Festival - Toronto 2026</li>
+                  <li>NXNE @ The CNE - Toronto 2026</li>
+                  <li>The Canadian National Exhibition - Toronto 2026</li>
+                  <li>Breaking Sound @ The Rivoli - Toronto 2026</li>
                 </ul>
               </div>
             </div>
