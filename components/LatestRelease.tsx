@@ -68,12 +68,12 @@ export default function LatestRelease() {
           >
             <Image src={latestRelease.cover} alt="Not My Type single cover art" width={1200} height={1200} sizes="(max-width: 639px) 176px, (max-width: 767px) 208px, 288px" className="h-auto w-full" unoptimized />
           </a>
-          <h2 className="mt-5 text-4xl tracking-wide text-accent md:mt-6">{latestRelease.title}</h2>
+          <h2 className="mt-5 text-4xl tracking-wide md:mt-6">{latestRelease.title}</h2>
           <a
             href={latestRelease.spotifyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex min-h-12 w-full items-center justify-center border border-accent px-6 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-accent transition-colors hover:bg-accent hover:text-ink-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            className="mt-5 inline-flex min-h-12 w-full items-center justify-center border border-white px-6 py-3 text-sm font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white hover:text-ink-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
             Listen now
           </a>
@@ -81,7 +81,7 @@ export default function LatestRelease() {
             href={latestRelease.appleMusicUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mt-4 inline-flex items-center gap-1 text-sm uppercase tracking-wide text-accent hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            className="group mt-4 inline-flex items-center gap-1 text-sm uppercase tracking-wide text-white/90 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
             Apple Music
             <ArrowUpRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none" />
