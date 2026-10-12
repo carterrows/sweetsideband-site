@@ -47,7 +47,6 @@ export default function EpkPage() {
 
       <section className="relative z-10 flex min-h-[calc(100svh-var(--nav-height,0px))] flex-col px-6 pb-12 pt-12 md:justify-center md:py-20">
         <div className="mx-auto w-full max-w-6xl">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-white/90">Electronic press kit</p>
           <h1 className="max-w-[15rem] text-6xl font-semibold leading-[0.95] tracking-wide text-white drop-shadow-md sm:max-w-sm sm:text-7xl lg:text-8xl">
             Sweetside<br />Press Kit
           </h1>
@@ -118,7 +117,7 @@ export default function EpkPage() {
             <div>
               <SectionHeading title="Photos" />
               <div className="relative mt-6 aspect-[3/2] overflow-hidden bg-haze">
-                <Image src="/images/epk/sweetside-band-wall.webp" alt="Sweetside band portrait" fill sizes="(max-width: 767px) calc(100vw - 48px), 520px" className="object-cover" unoptimized />
+                <Image src="/images/epk/epk-image.webp" alt="Sweetside band portrait" fill sizes="(max-width: 767px) calc(100vw - 48px), 520px" className="object-cover" unoptimized />
               </div>
               <Link href="/video/photos" className={`${textLinkClass} mt-5`}>View gallery<ArrowUpRight aria-hidden="true" className="h-5 w-5" /></Link>
             </div>

@@ -14,7 +14,7 @@ export default function MerchPage() {
           Merch
         </h1>
         <MerchItems />
-        <p className="text-sm text-ink-600">
+        <p className="text-xl font-semibold text-black md:text-2xl">
           Exclusive to our shows.
         </p>
       </div>
