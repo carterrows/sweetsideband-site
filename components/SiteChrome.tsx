@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useLayoutEffect } from "react";
 import type { Band } from "@/lib/types";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -15,6 +16,12 @@ export default function SiteChrome({
 }) {
   const pathname = usePathname();
   const isAdminRoute = pathname?.startsWith("/admin");
+
+  useLayoutEffect(() => {
+    if (!isAdminRoute && !window.location.hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }, [pathname, isAdminRoute]);
 
   if (isAdminRoute) {
     return <>{children}</>;

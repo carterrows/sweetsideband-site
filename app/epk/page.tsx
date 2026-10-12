@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import PageLink from "@/components/PageLink";
 import type { Metadata } from "next";
 import { ArrowDown, ArrowUpRight, Download } from "lucide-react";
 import { getBand, getShows } from "@/lib/content";
@@ -119,7 +119,7 @@ export default function EpkPage() {
               <div className="relative mt-6 aspect-[3/2] overflow-hidden bg-haze">
                 <Image src="/images/epk/epk-image.webp" alt="Sweetside band portrait" fill sizes="(max-width: 767px) calc(100vw - 48px), 520px" className="object-cover" unoptimized />
               </div>
-              <Link href="/video/photos" className={`${textLinkClass} mt-5`}>View gallery<ArrowUpRight aria-hidden="true" className="h-5 w-5" /></Link>
+              <PageLink href="/video/photos" className={`${textLinkClass} mt-5`}>View gallery<ArrowUpRight aria-hidden="true" className="h-5 w-5" /></PageLink>
             </div>
           </div>
         </section>
@@ -129,7 +129,7 @@ export default function EpkPage() {
             <div>
               <SectionHeading title="Next shows" />
               <div className="mt-6"><ShowsList shows={shows.upcoming.slice(0, 3)} emptyMessage="More shows on the way. Check back soon." /></div>
-              <Link href="/shows" className={`${textLinkClass} mt-6`}>All shows<ArrowUpRight aria-hidden="true" className="h-5 w-5" /></Link>
+              <PageLink href="/shows" className={`${textLinkClass} mt-6`}>All shows<ArrowUpRight aria-hidden="true" className="h-5 w-5" /></PageLink>
             </div>
             <div>
               <SectionHeading title="Downloadables" />

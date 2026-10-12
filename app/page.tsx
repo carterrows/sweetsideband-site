@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import PageLink from "@/components/PageLink";
 import type { Metadata } from "next";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import {
@@ -127,13 +127,13 @@ export default function HomePage() {
               <p className="mt-6 whitespace-pre-line text-left text-base leading-relaxed text-ink-700 md:text-lg">
                 {band.bio}
               </p>
-              <Link
+              <PageLink
                 href="/epk"
                 className="group mt-5 inline-flex items-start gap-1 text-lg uppercase text-accent transition hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-paper sm:text-xl"
               >
                 <span>EPK</span>
                 <ArrowUpRight aria-hidden="true" className="h-5 w-5 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
-              </Link>
+              </PageLink>
             </div>
             {featuredPhoto?.src && (
               <div className="relative ml-2 mt-2 sm:ml-3 sm:mt-3">

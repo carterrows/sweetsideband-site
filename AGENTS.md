@@ -112,6 +112,11 @@
   - Navbar appearance changes over home hero (transparent/white on hero, paper/accent elsewhere).
   - Handles route navigation, top scroll behavior, and contact-anchor behavior.
   - On mobile, contact click scrolls to center-ish position of contact card.
+- `components/PageLink.tsx` + `SiteChrome.tsx`:
+  - Public page links navigate directly to the top without smooth scrolling, including EPK, gallery tabs, and navbar links.
+  - Contact and in-page anchors jump directly to their sections.
+- `components/SiteNotice.tsx`:
+  - Shared bordered note used on the shows and merch pages.
 - `components/GalleryModeTabs.tsx`:
   - Pill-style `Video`/`Photo` selector shared by gallery subpages.
 - `components/PhotoMasonryGrid.tsx`:

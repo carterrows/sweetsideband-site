@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getBand, getShows } from "@/lib/content";
 import SectionHeading from "@/components/SectionHeading";
 import ShowsList from "@/components/ShowsList";
+import SiteNotice from "@/components/SiteNotice";
 
 export const metadata: Metadata = {
   title: "Shows",
@@ -29,9 +30,9 @@ export default function ShowsPage() {
             </Link>
           </div>
           <ShowsList shows={shows.upcoming} showDetails emptyMessage="More shows on the way. Check back soon." />
-          <div className="rounded-2xl border border-black/10 bg-paper p-6 text-sm text-ink-600 shadow-sm">
+          <SiteNotice>
             Can&apos;t make a date? Email {band.email} for booking/collaborations.
-          </div>
+          </SiteNotice>
           <div className="flex flex-col gap-12 pt-6">
             <div className="flex flex-col gap-4">
               <SectionHeading title="Past Shows" subtitle="Where we've played" />

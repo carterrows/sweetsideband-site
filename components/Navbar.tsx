@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { MouseEvent } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import type { Band } from "@/lib/types";
 import SocialLinks from "@/components/SocialLinks";
+import PageLink from "@/components/PageLink";
 import { useNavbarHero } from "@/components/NavbarHeroContext";
 
 const navItems = [
@@ -26,7 +27,6 @@ export default function Navbar({ band }: { band: Band }) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const shouldForceTopOnPathChangeRef = useRef(false);
   const isHome = !pathname || pathname === "/";
   const { isHeroActive } = useNavbarHero();
   const heroActive = (isHome || pathname === "/epk") && isHeroActive;
@@ -50,20 +50,6 @@ export default function Navbar({ band }: { band: Band }) {
   const menuButtonClassName = `inline-flex h-10 w-10 items-center justify-center bg-transparent transition ${heroActive ? "text-paper" : "text-ink-900"} ${focusRingClass} md:hidden`;
   const menuLineClassName = `transition-colors duration-300 ${heroActive ? "bg-paper" : "bg-ink-900"}`;
   const logoSrc = heroActive ? "/sweetside_white.svg" : "/sweetside.svg";
-  const scrollToTop = (behavior: ScrollBehavior) => {
-    window.scrollTo({ top: 0, left: 0, behavior });
-  };
-
-  useEffect(() => {
-    if (!shouldForceTopOnPathChangeRef.current || typeof window === "undefined") {
-      return;
-    }
-
-    shouldForceTopOnPathChangeRef.current = false;
-    window.requestAnimationFrame(() => {
-      scrollToTop("instant");
-    });
-  }, [pathname]);
 
   const scrollToContactCard = () => {
     const contactCard = document.getElementById("contact");
@@ -73,7 +59,7 @@ export default function Navbar({ band }: { band: Band }) {
 
     const isMobile = window.innerWidth < MOBILE_MAX_WIDTH;
     if (!isMobile) {
-      contactCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      contactCard.scrollIntoView({ behavior: "instant", block: "start" });
       return;
     }
 
@@ -87,29 +73,13 @@ export default function Navbar({ band }: { band: Band }) {
       cardTop - viewportHeight / 2 + cardHeight / 2;
     const clampedScrollY = Math.min(Math.max(0, targetScrollY), maxScroll);
 
-    window.scrollTo({ top: clampedScrollY, behavior: "smooth" });
-  };
-
-  const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    setOpen(false);
-    if (isHome) {
-      event.preventDefault();
-      if (typeof window !== "undefined") {
-        scrollToTop("smooth");
-        if (window.location.hash) {
-          window.history.replaceState(null, "", "/");
-        }
-      }
-      return;
-    }
-    event.preventDefault();
-    if (typeof window !== "undefined") {
-      shouldForceTopOnPathChangeRef.current = true;
-    }
-    router.push("/", { scroll: true });
+    window.scrollTo({ top: clampedScrollY, behavior: "instant" });
   };
 
   const handleContactClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
     setOpen(false);
     if (isHome) {
       event.preventDefault();
@@ -125,31 +95,6 @@ export default function Navbar({ band }: { band: Band }) {
     router.push("/#contact");
   };
 
-  const handlePageClick = (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
-    setOpen(false);
-
-    const targetPath = href.split("#")[0] || "/";
-    const currentPath = pathname || "/";
-    const isSamePath = currentPath === targetPath;
-
-    if (isSamePath) {
-      event.preventDefault();
-      if (typeof window !== "undefined") {
-        scrollToTop("smooth");
-        if (window.location.hash) {
-          window.history.replaceState(null, "", targetPath);
-        }
-      }
-      return;
-    }
-
-    event.preventDefault();
-    if (typeof window !== "undefined") {
-      shouldForceTopOnPathChangeRef.current = true;
-    }
-    router.push(targetPath, { scroll: true });
-  };
-
   return (
     <header
       className={`sticky top-0 z-50 relative border-b transition-colors duration-300 ${
@@ -163,10 +108,10 @@ export default function Navbar({ band }: { band: Band }) {
         className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 py-4"
       >
         <div className="flex items-center gap-4">
-          <Link
+          <PageLink
             href="/"
             className={logoLinkClassName}
-            onClick={handleHomeClick}
+            onClick={() => setOpen(false)}
           >
             <Image
               src={logoSrc}
@@ -175,7 +120,7 @@ export default function Navbar({ band }: { band: Band }) {
               height={92}
               className="h-8 w-auto -mt-1.5"
             />
-          </Link>
+          </PageLink>
         </div>
         <div className="hidden items-center gap-4 text-sm uppercase tracking-[0.2em] md:flex md:absolute md:left-1/2 md:-translate-x-1/2">
           {navItems.map((item) => {
@@ -194,15 +139,15 @@ export default function Navbar({ band }: { band: Band }) {
               );
             }
             return (
-              <Link
+              <PageLink
                 key={item.href}
                 href={item.href}
-                onClick={handlePageClick(item.href)}
+                onClick={() => setOpen(false)}
                 className={navLinkClassName}
                 aria-current={active ? "page" : undefined}
               >
                 {item.label}
-              </Link>
+              </PageLink>
             );
           })}
         </div>
@@ -255,15 +200,15 @@ export default function Navbar({ band }: { band: Band }) {
                 );
               }
               return (
-                <Link
+                <PageLink
                   key={item.href}
                   href={item.href}
-                  onClick={handlePageClick(item.href)}
+                  onClick={() => setOpen(false)}
                   className={navLinkClassName}
                   aria-current={active ? "page" : undefined}
                 >
                   {item.label}
-                </Link>
+                </PageLink>
               );
             })}
             <div className="mt-2 flex items-center gap-4 pt-3 md:hidden">

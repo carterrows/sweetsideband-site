@@ -1,4 +1,4 @@
-import Link from "next/link";
+import PageLink from "@/components/PageLink";
 
 type GalleryModeTabsProps = {
   active: "photo" | "video";
@@ -11,7 +11,7 @@ export default function GalleryModeTabs({ active }: GalleryModeTabsProps) {
   return (
     <div className="flex justify-center">
       <div className="grid w-full max-w-[332px] grid-cols-2 gap-3">
-        <Link
+        <PageLink
           href="/video"
           aria-current={active === "video" ? "page" : undefined}
           className={`${baseTabClassName} ${
@@ -21,8 +21,8 @@ export default function GalleryModeTabs({ active }: GalleryModeTabsProps) {
           }`}
         >
           Video
-        </Link>
-        <Link
+        </PageLink>
+        <PageLink
           href="/video/photos"
           aria-current={active === "photo" ? "page" : undefined}
           className={`${baseTabClassName} ${
@@ -32,7 +32,7 @@ export default function GalleryModeTabs({ active }: GalleryModeTabsProps) {
           }`}
         >
           Photo
-        </Link>
+        </PageLink>
       </div>
     </div>
   );
