@@ -39,6 +39,8 @@ The latest single's links and image paths live in `lib/latest-release.ts`. Its W
 
 Original supplied images and bio text are retained locally in `storage/source-assets/` (ignored by Git and excluded from deployment). The resized WebP versions are the production assets.
 
+The home page release section plays the muted H.264 MP4 at `public/videos/not-my-type-loop.mp4`, with cover art and streaming links overlaid. Its still-image poster lives in `public/images/releases/`; both paths are configured in `lib/latest-release.ts`. The loop loads and plays when visible, pauses offscreen or in a hidden tab, and shows the still image for reduced motion or unavailable playback.
+
 Shows and gallery media are managed through `/admin`, not JSON.
 
 ### Streaming links (Spotify / Apple Music)

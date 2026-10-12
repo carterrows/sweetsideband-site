@@ -108,6 +108,10 @@
   - Home hero CTA in `app/page.tsx`
 
 ## Key UI/Interaction Components
+- `components/LatestRelease.tsx` + `lib/latest-release.ts`:
+  - Home-page background video loop below the landing hero, with cover art and streaming links overlaid.
+  - Uses the MP4 in `public/videos/` and a WebP poster; playback pauses offscreen, in hidden tabs, or for reduced motion.
+  - Desktop content sits on the left; mobile content is centered over a shaded lower panel.
 - `components/Navbar.tsx` + `NavbarHeroContext.tsx` + `HomeHeroObserver.tsx`:
   - Navbar appearance changes over home hero (transparent/white on hero, paper/accent elsewhere).
   - Handles route navigation, top scroll behavior, and contact-anchor behavior.
