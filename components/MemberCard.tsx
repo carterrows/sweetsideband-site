@@ -21,7 +21,7 @@ export default function MemberCard({ member }: { member: Member }) {
         <p className="text-base font-normal text-ink-900">
           {member.role}
         </p>
-        <p className="mt-3 text-sm text-ink-600">{member.bio}</p>
+        {member.bio && <p className="mt-3 text-sm text-ink-600">{member.bio}</p>}
       </div>
     </article>
   );

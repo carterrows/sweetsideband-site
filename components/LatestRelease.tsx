@@ -65,10 +65,10 @@ export default function LatestRelease() {
             href={latestRelease.spotifyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Listen to Not My Type on Spotify"
+            aria-label={`Listen to ${latestRelease.title} on Spotify`}
             className="block w-44 shadow-xl transition-transform duration-300 hover:scale-[1.03] focus-visible:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transform-none sm:w-52 md:w-full"
           >
-            <Image src={latestRelease.cover} alt="Not My Type single cover art" width={1200} height={1200} sizes="(max-width: 639px) 176px, (max-width: 767px) 208px, 288px" className="h-auto w-full" unoptimized />
+            <Image src={latestRelease.cover} alt={`${latestRelease.title} single cover art`} width={1200} height={1200} sizes="(max-width: 639px) 176px, (max-width: 767px) 208px, 288px" className="h-auto w-full" unoptimized />
           </a>
           <h2 className="mt-5 text-4xl tracking-wide md:mt-6">{latestRelease.title}</h2>
           <a

@@ -2,7 +2,7 @@
 
 ## Project Purpose
 - This repository powers the public website for the band **Sweetside**.
-- Primary goals: show upcoming/past shows, media gallery, streaming links, merch placeholder, and booking contact.
+- Primary goals: show upcoming/past shows, media gallery, streaming links, merch, press kit, and booking contact.
 - Band/member content is file-driven, while shows, video gallery metadata, and photo gallery metadata are stored in SQLite.
 
 ## Tech Stack
@@ -16,14 +16,14 @@
 - `components/`: UI and interaction components.
 - `data/`: Editable site content and the local SQLite file for shows.
 - `lib/`: Typed models and content loading helpers.
-- `public/`: Static assets (backgrounds, logos, member photos, show photos, icons).
+- `public/`: Static assets (backgrounds, logos, band/member photos, release media, merch, downloads, icons).
 - `Dockerfile`, `docker-compose.yml`: Production container build/run.
 - `next.config.js`: security headers + image formats.
 
 ## Routing and Page Behavior
 - `/` (`app/page.tsx`):
   - Hero with background image and CTA from Spotify status.
-  - Sections: upcoming shows (first 3 from the SQLite-backed upcoming list), streaming links, members, contact form.
+  - Sections: latest release, upcoming shows (first 3 from the SQLite-backed upcoming list), streaming links, biography, members, contact form.
 - `/shows`:
   - Full upcoming + past show listings.
   - Booking mailto link.

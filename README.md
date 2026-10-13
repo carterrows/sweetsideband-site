@@ -80,8 +80,8 @@ Videos on `/video` and photos on `/video/photos` are loaded from admin gallery m
 
 Place other images in `public/images/` and reference them by absolute path in JSON, e.g.
 
-- `/images/members/avery.svg`
-- `/images/logos/sweetside-logo.png`
+- `/images/members/nathan-bugiardini.webp`
+- `/sweetside.svg`
 
 Video thumbnails are uploaded through `/admin` and served from runtime storage through `/video-thumbnails/:fileName`. Thumbnails must be `.jpg`, `.jpeg`, or `.png` files up to 250 KB.
 

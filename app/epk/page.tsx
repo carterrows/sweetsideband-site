@@ -106,9 +106,9 @@ export default function EpkPage() {
         <section className="section bg-haze/40">
           <div className="mx-auto grid w-full max-w-6xl gap-12 px-6 md:grid-cols-2 md:gap-16">
             <div>
-              <SectionHeading title="Not My Type" />
-              <a href={latestRelease.videoUrl} target="_blank" rel="noopener noreferrer" aria-label="Watch the Not My Type official music video on YouTube" className="group mt-6 block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
-                <VideoThumbnail src={latestRelease.thumbnail} alt="Not My Type official music video" aspect="photo" />
+              <SectionHeading title={latestRelease.title} />
+              <a href={latestRelease.videoUrl} target="_blank" rel="noopener noreferrer" aria-label={`Watch the ${latestRelease.title} official music video on YouTube`} className="group mt-6 block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
+                <VideoThumbnail src={latestRelease.thumbnail} alt={`${latestRelease.title} official music video`} aspect="photo" />
               </a>
               <a href={latestRelease.spotifyUrl} target="_blank" rel="noopener noreferrer" className={`${textLinkClass} mt-5`}>
                 Listen on Spotify<ArrowUpRight aria-hidden="true" className="h-5 w-5" />
