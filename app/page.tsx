@@ -1,13 +1,7 @@
 import Image from "next/image";
-import PageLink from "@/components/PageLink";
 import type { Metadata } from "next";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
-import {
-  getBand,
-  getFeaturedShowPhoto,
-  getMembers,
-  getShows
-} from "@/lib/content";
+import { ChevronDown } from "lucide-react";
+import { getBand, getMembers, getShows } from "@/lib/content";
 import SectionHeading from "@/components/SectionHeading";
 import ShowsList from "@/components/ShowsList";
 import StreamingLinks from "@/components/StreamingLinks";
@@ -16,6 +10,7 @@ import ContactSection from "@/components/ContactSection";
 import MemberCard from "@/components/MemberCard";
 import HomeHeroObserver from "@/components/HomeHeroObserver";
 import LatestRelease from "@/components/LatestRelease";
+import AboutSection from "@/components/AboutSection";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -28,7 +23,6 @@ export default function HomePage() {
   const band = getBand();
   const members = getMembers();
   const shows = getShows();
-  const featuredPhoto = getFeaturedShowPhoto();
   const upcoming = shows.upcoming.slice(0, 3);
   const spotifyLink = band.streaming.spotify;
   const isSpotifyUrl = (link: typeof spotifyLink): link is string =>
@@ -115,47 +109,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section py-12 md:py-16 relative z-10 bg-paper">
-        <div className="mx-auto w-full max-w-6xl px-6">
-          <div
-            className={`grid items-center gap-10 md:gap-12 ${
-              featuredPhoto ? "lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]" : ""
-            }`}
-          >
-            <div className="max-w-xl">
-              <SectionHeading title="Bio" subtitle="Who we are" />
-              <p className="mt-6 whitespace-pre-line text-left text-base leading-relaxed text-ink-700 md:text-lg">
-                {band.bio}
-              </p>
-              <PageLink
-                href="/epk"
-                className="group mt-5 inline-flex items-start gap-1 text-lg uppercase text-accent transition hover:text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-paper sm:text-xl"
-              >
-                <span>EPK</span>
-                <ArrowUpRight aria-hidden="true" className="h-5 w-5 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
-              </PageLink>
-            </div>
-            {featuredPhoto?.src && (
-              <div className="relative ml-2 mt-2 sm:ml-3 sm:mt-3">
-                <div
-                  aria-hidden="true"
-                  className="absolute -bottom-2 -left-2 h-full w-full bg-accent sm:-bottom-3 sm:-left-3"
-                />
-                <div className="relative aspect-[4/3] overflow-hidden bg-haze shadow-sm">
-                  <Image
-                    src={featuredPhoto.src}
-                    alt={featuredPhoto.alt ?? featuredPhoto.title}
-                    fill
-                    sizes="(max-width: 1023px) calc(100vw - 48px), 52vw"
-                    className="object-cover"
-                    unoptimized
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
+      <AboutSection bio={band.bio} />
 
       <section className="section py-12 md:py-16 relative z-10 bg-paper">
         <div className="mx-auto w-full max-w-6xl px-6">

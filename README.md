@@ -35,11 +35,13 @@ Edit the JSON files under `data/`:
 
 `band.json` includes `bio` for the home page and `longBio` for `/epk` (separate paragraphs with `\n\n`). The EPK is linked from the home page's Who we are section, outside the primary navigation. It reuses the Spotify player and show data alongside the supplied band portrait; show syncs also refresh `/epk`.
 
+The home-page Who we are section uses the fixed background photo at `public/images/about/sweetside-band-wall.webp`, with white biography text and an EPK link on the left. Its original JPG is archived in `storage/source-assets/about/`. The background is clipped to this section and becomes static for reduced motion; it does not select a photo from the gallery.
+
 The latest single's links and image paths live in `lib/latest-release.ts`. Its WebP cover art and video thumbnail live in `public/images/releases/`. Member portraits, merch, and the EPK hero use WebP assets in their respective folders under `public/images/`. Merch is available at shows; clicking the shirt switches between its front and back. The downloadable stage plot lives at `public/downloads/sweetside-stage-plot-and-input-list.pdf`.
 
 Original supplied images and bio text are retained locally in `storage/source-assets/` (ignored by Git and excluded from deployment). The resized WebP versions are the production assets.
 
-The home page release section plays the muted H.264 MP4 at `public/videos/not-my-type-loop.mp4`, with cover art and streaming links overlaid. Its still-image poster lives in `public/images/releases/`; both paths are configured in `lib/latest-release.ts`. The loop loads and plays when visible, pauses offscreen or in a hidden tab, and shows the still image for reduced motion or unavailable playback.
+The home page release section fills at least the viewport height and plays the muted H.264 MP4 at `public/videos/not-my-type-loop.mp4`, with cover art and streaming links overlaid. The background stays fixed while the following content scrolls over it, clipped to the release section so it never covers the landing hero or other pages. Its still-image poster lives in `public/images/releases/`; both paths are configured in `lib/latest-release.ts`. The loop loads and plays when visible, pauses offscreen or in a hidden tab, and shows the still image for reduced motion or unavailable playback. Reduced motion also disables the fixed-background effect.
 
 Shows and gallery media are managed through `/admin`, not JSON.
 

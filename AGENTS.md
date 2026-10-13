@@ -108,8 +108,11 @@
   - Home hero CTA in `app/page.tsx`
 
 ## Key UI/Interaction Components
+- `components/AboutSection.tsx`:
+  - Home-page Who we are section uses `public/images/about/sweetside-band-wall.webp` as a fixed, clipped background with white bio text and an EPK link.
+  - This section no longer selects a candidate image from the photo gallery.
 - `components/LatestRelease.tsx` + `lib/latest-release.ts`:
-  - Home-page background video loop below the landing hero, with cover art and streaming links overlaid.
+  - Home-page background video loop below the landing hero, filling at least the viewport height, with cover art and streaming links overlaid.
   - Uses the MP4 in `public/videos/` and a WebP poster; playback pauses offscreen, in hidden tabs, or for reduced motion.
   - Desktop content sits on the left; mobile content is centered over a shaded lower panel.
 - `components/Navbar.tsx` + `NavbarHeroContext.tsx` + `HomeHeroObserver.tsx`:

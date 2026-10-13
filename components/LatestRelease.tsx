@@ -42,21 +42,23 @@ export default function LatestRelease() {
   }, []);
 
   return (
-    <section aria-label="Latest release" className="relative z-10 flex min-h-[800px] flex-col justify-end overflow-hidden bg-ink-900 text-white md:min-h-[640px] md:justify-center lg:h-[min(56.25vw,900px)]">
-      <Image src={latestRelease.poster} alt="" fill sizes="100vw" className="object-cover object-center" unoptimized />
-      <video
-        ref={videoRef}
-        muted
-        loop
-        playsInline
-        preload="none"
-        poster={latestRelease.poster}
-        aria-hidden="true"
-        tabIndex={-1}
-        onError={() => setVideoFailed(true)}
-        className={`pointer-events-none absolute inset-0 h-full w-full object-cover object-center motion-reduce:hidden ${videoFailed ? "hidden" : ""}`}
-      />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-black/60 via-black/15 to-transparent md:block" />
+    <section aria-label="Latest release" className="relative z-10 flex min-h-[max(800px,100svh)] flex-col justify-end overflow-hidden bg-ink-900 text-white [clip-path:inset(0)] md:justify-center">
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 motion-reduce:absolute">
+        <Image src={latestRelease.poster} alt="" fill sizes="100vw" className="object-cover object-center" unoptimized />
+        <video
+          ref={videoRef}
+          muted
+          loop
+          playsInline
+          preload="none"
+          poster={latestRelease.poster}
+          aria-hidden="true"
+          tabIndex={-1}
+          onError={() => setVideoFailed(true)}
+          className={`pointer-events-none absolute inset-0 h-full w-full object-cover object-center motion-reduce:hidden ${videoFailed ? "hidden" : ""}`}
+        />
+        <div className="absolute inset-0 hidden bg-gradient-to-r from-black/60 via-black/15 to-transparent md:block" />
+      </div>
       <div className="relative mx-auto w-full max-w-6xl pt-80 md:px-6 md:py-16">
         <div className="flex w-full flex-col items-center bg-black/50 px-6 pt-6 pb-16 text-center md:max-w-64 md:bg-transparent md:p-0 lg:max-w-72">
           <a
@@ -81,7 +83,7 @@ export default function LatestRelease() {
             href={latestRelease.appleMusicUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mt-4 inline-flex items-center gap-1 text-sm uppercase tracking-wide text-white/90 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+            className="group mt-4 inline-flex items-center gap-1 text-sm uppercase tracking-wide text-accent hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
           >
             Apple Music
             <ArrowUpRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none" />
