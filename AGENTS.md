@@ -109,7 +109,9 @@
 
 ## Key UI/Interaction Components
 - `components/AboutSection.tsx`:
-  - Home-page Who we are section uses `public/images/about/sweetside-band-wall.webp` as a fixed, clipped background with white bio text and an EPK link.
+  - Home-page Who we are section uses `public/images/about/sweetside-band-wall-responsive.webp` as a fixed, clipped desktop background in a shorter frame, with white bio text on the shaded left wall and an orange EPK link.
+  - Keep this taller rendition (original vertical area, About horizontal crop): the very wide crop caused fixed cover sizing to zoom in and put text over the band. No bottom fade or mask is used.
+  - Below 1024 px, `public/images/about/sweetside-band-mobile.webp` sits above the bio. Original JPGs live in `storage/source-assets/about/`.
   - This section no longer selects a candidate image from the photo gallery.
 - `components/LatestRelease.tsx` + `lib/latest-release.ts`:
   - Home-page background video loop below the landing hero, filling at least the viewport height, with cover art and streaming links overlaid.
