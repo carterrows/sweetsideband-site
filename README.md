@@ -33,6 +33,16 @@ Edit the JSON files under `data/`:
 - `data/band.json` - name, location, socials, streaming
 - `data/members.json` - band member cards
 
+`band.json` includes `bio` for the home page and `longBio` for `/epk` (separate paragraphs with `\n\n`). The EPK is linked from the home page's Who we are section, outside the primary navigation. It reuses the Spotify player and show data alongside the supplied band portrait; show syncs also refresh `/epk`.
+
+The home-page Who we are section uses `public/images/about/sweetside-band-wall-responsive.webp` as a fixed desktop background covering the viewport and clipped to the shorter section. This rendition retains the original EPK photo's vertical area and the About crop's horizontal framing: using the very wide crop with fixed `object-cover` previously zoomed into the members and removed the wall behind the bio. White biography text and an orange EPK link sit on the shaded left wall; there is no bottom fade or mask. The full source is archived at `storage/source-assets/epk/sweetside-band-wall.jpg`. Below 1024 px, `public/images/about/sweetside-band-mobile.webp` sits above the biography. Other original JPGs are archived in `storage/source-assets/about/`. Reduced motion disables the fixed effect; this section does not select a photo from the gallery.
+
+The latest single's links and image paths live in `lib/latest-release.ts`. Its WebP cover art and video thumbnail live in `public/images/releases/`. Member portraits, merch, and the EPK hero use WebP assets in their respective folders under `public/images/`. Merch is available at shows; clicking the shirt switches between its front and back. The downloadable stage plot lives at `public/downloads/sweetside-stage-plot-and-input-list.pdf`.
+
+Original supplied images and bio text are retained locally in `storage/source-assets/` (ignored by Git and excluded from deployment). The resized WebP versions are the production assets.
+
+The home page release section fills at least the viewport height and plays the muted H.264 MP4 at `public/videos/not-my-type-loop.mp4`, with cover art and streaming links overlaid. The background stays fixed while the following content scrolls over it, clipped to the release section so it never covers the landing hero or other pages. Its still-image poster lives in `public/images/releases/`; both paths are configured in `lib/latest-release.ts`. The loop loads and plays when visible, pauses offscreen or in a hidden tab, and shows the still image for reduced motion or unavailable playback. Reduced motion also disables the fixed-background effect.
+
 Shows and gallery media are managed through `/admin`, not JSON.
 
 ### Streaming links (Spotify / Apple Music)
@@ -70,8 +80,8 @@ Videos on `/video` and photos on `/video/photos` are loaded from admin gallery m
 
 Place other images in `public/images/` and reference them by absolute path in JSON, e.g.
 
-- `/images/members/avery.svg`
-- `/images/logos/sweetside-logo.png`
+- `/images/members/nathan-bugiardini.webp`
+- `/sweetside.svg`
 
 Video thumbnails are uploaded through `/admin` and served from runtime storage through `/video-thumbnails/:fileName`. Thumbnails must be `.jpg`, `.jpeg`, or `.png` files up to 250 KB.
 

@@ -2,7 +2,7 @@
 
 ## Project Purpose
 - This repository powers the public website for the band **Sweetside**.
-- Primary goals: show upcoming/past shows, media gallery, streaming links, merch placeholder, and booking contact.
+- Primary goals: show upcoming/past shows, media gallery, streaming links, merch, press kit, and booking contact.
 - Band/member content is file-driven, while shows, video gallery metadata, and photo gallery metadata are stored in SQLite.
 
 ## Tech Stack
@@ -16,14 +16,14 @@
 - `components/`: UI and interaction components.
 - `data/`: Editable site content and the local SQLite file for shows.
 - `lib/`: Typed models and content loading helpers.
-- `public/`: Static assets (backgrounds, logos, member photos, show photos, icons).
+- `public/`: Static assets (backgrounds, logos, band/member photos, release media, merch, downloads, icons).
 - `Dockerfile`, `docker-compose.yml`: Production container build/run.
 - `next.config.js`: security headers + image formats.
 
 ## Routing and Page Behavior
 - `/` (`app/page.tsx`):
   - Hero with background image and CTA from Spotify status.
-  - Sections: upcoming shows (first 3 from the SQLite-backed upcoming list), streaming links, members, contact form.
+  - Sections: latest release, upcoming shows (first 3 from the SQLite-backed upcoming list), streaming links, biography, members, contact form.
 - `/shows`:
   - Full upcoming + past show listings.
   - Booking mailto link.
@@ -41,7 +41,12 @@
   - Masonry-style photo gallery (mixed aspect ratios, spaced grid).
   - In-page lightbox with blur backdrop, close button, and click-outside close.
 - `/merch`:
-  - “Coming Soon” placeholder page.
+  - Large T-shirt and sticker images, available exclusively at shows.
+  - Clicking the T-shirt switches between front and back views.
+- `/epk`:
+  - Electronic press kit linked only from the home page's Who we are section, outside the main navigation.
+  - Fixed band-photo hero, long bio, music, video, live highlights, photos, shows, booking contact, and downloadable stage plot.
+  - Show syncs revalidate this page alongside the other public pages.
 - `/contact`:
   - Redirects to `/#contact`.
 - Metadata routes:
@@ -61,6 +66,7 @@
 ## Data Files: What They Drive
 - `data/band.json`:
   - band name, location, booking email, socials, streaming links.
+  - `bio` is the short home-page biography; `longBio` is the EPK biography.
 - `data/members.json`:
   - member cards shown on home page.
 - `data/shows.sqlite`:
@@ -102,10 +108,24 @@
   - Home hero CTA in `app/page.tsx`
 
 ## Key UI/Interaction Components
+- `components/AboutSection.tsx`:
+  - Home-page Who we are section uses `public/images/about/sweetside-band-wall-responsive.webp` as a fixed, clipped desktop background in a shorter frame, with white bio text on the shaded left wall and an orange EPK link.
+  - Keep this taller rendition (original vertical area, About horizontal crop): the very wide crop caused fixed cover sizing to zoom in and put text over the band. No bottom fade or mask is used.
+  - Below 1024 px, `public/images/about/sweetside-band-mobile.webp` sits above the bio. Original JPGs live in `storage/source-assets/about/`.
+  - This section no longer selects a candidate image from the photo gallery.
+- `components/LatestRelease.tsx` + `lib/latest-release.ts`:
+  - Home-page background video loop below the landing hero, filling at least the viewport height, with cover art and streaming links overlaid.
+  - Uses the MP4 in `public/videos/` and a WebP poster; playback pauses offscreen, in hidden tabs, or for reduced motion.
+  - Desktop content sits on the left; mobile content is centered over a shaded lower panel.
 - `components/Navbar.tsx` + `NavbarHeroContext.tsx` + `HomeHeroObserver.tsx`:
   - Navbar appearance changes over home hero (transparent/white on hero, paper/accent elsewhere).
   - Handles route navigation, top scroll behavior, and contact-anchor behavior.
   - On mobile, contact click scrolls to center-ish position of contact card.
+- `components/PageLink.tsx` + `SiteChrome.tsx`:
+  - Public page links navigate directly to the top without smooth scrolling, including EPK, gallery tabs, and navbar links.
+  - Contact and in-page anchors jump directly to their sections.
+- `components/SiteNotice.tsx`:
+  - Shared bordered note used on the shows and merch pages.
 - `components/GalleryModeTabs.tsx`:
   - Pill-style `Video`/`Photo` selector shared by gallery subpages.
 - `components/PhotoMasonryGrid.tsx`:

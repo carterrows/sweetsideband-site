@@ -6,10 +6,6 @@
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
     @apply bg-paper text-ink-900 font-body;
     overflow-y: scroll;

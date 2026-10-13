@@ -152,13 +152,6 @@ export const ADMIN_LOGIN_RATE_LIMIT: RateLimitPolicy = {
   message: "Too many login attempts."
 };
 
-export const ADMIN_LOGOUT_RATE_LIMIT: RateLimitPolicy = {
-  id: "admin-logout",
-  limit: 30,
-  windowMs: 5 * 60 * 1000,
-  message: "Too many logout requests."
-};
-
 export const ADMIN_SYNC_RATE_LIMIT: RateLimitPolicy = {
   id: "admin-sync",
   limit: 12,
