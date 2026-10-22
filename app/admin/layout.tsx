@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import AdminThemeShell from "@/components/admin/AdminThemeShell";
 
@@ -14,5 +15,11 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <AdminThemeShell>{children}</AdminThemeShell>;
+  return (
+    <AdminThemeShell>
+      <Suspense fallback={<main className="grid min-h-screen place-items-center bg-[#f7f2e8]" role="status">Loading website manager…</main>}>
+        {children}
+      </Suspense>
+    </AdminThemeShell>
+  );
 }

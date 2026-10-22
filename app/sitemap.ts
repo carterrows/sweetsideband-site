@@ -1,7 +1,10 @@
+import { cacheLife } from "next/cache";
 import type { MetadataRoute } from "next";
 import { getSiteUrl } from "@/lib/site-url";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  "use cache";
+  cacheLife("max");
   const baseUrl = getSiteUrl();
   const lastModified = new Date();
 

@@ -1,3 +1,5 @@
+import { cacheLife, cacheTag } from "next/cache";
+import { CONTENT_CACHE_TAGS } from "./content-cache";
 import fs from "fs";
 import path from "path";
 import type { Band, ShowsData, Member, MediaItem } from "./types";
@@ -19,22 +21,35 @@ function readJson<T>(fileName: string): T {
   return JSON.parse(raw) as T;
 }
 
-export function getBand(): Band {
+export async function getBand(): Promise<Band> {
+  "use cache";
+  cacheLife("max");
   return readJson<Band>("band.json");
 }
 
-export function getShows(): ShowsData {
+export async function getShows(): Promise<ShowsData> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(CONTENT_CACHE_TAGS.shows);
   return getShowsFromDatabase();
 }
 
-export function getMembers(): Member[] {
+export async function getMembers(): Promise<Member[]> {
+  "use cache";
+  cacheLife("max");
   return readJson<Member[]>("members.json");
 }
 
-export function getMedia(): MediaItem[] {
+export async function getMedia(): Promise<MediaItem[]> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(CONTENT_CACHE_TAGS.videos);
   return getGalleryVideosFromDatabase();
 }
 
-export function getShowPhotos(): MediaItem[] {
+export async function getShowPhotos(): Promise<MediaItem[]> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(CONTENT_CACHE_TAGS.photos);
   return getGalleryPhotosFromDatabase();
 }

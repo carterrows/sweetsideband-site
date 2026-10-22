@@ -119,6 +119,25 @@ Shows load through `lib/shows-db.ts`.
 - Video thumbnails are served through `/video-thumbnails/:fileName` with immutable cache headers.
 - Upcoming shows may also store an optional `tickets_url` value in SQLite for the public Tickets button.
 
+## Public page caching (Next.js 16.4)
+
+Cache Components and partial prefetching are enabled. Public pages use
+`ensureStatic = "navigation"` so builds reject accidental request-time work on
+those pages. Band/member JSON and SQLite-backed public content use explicit
+`use cache` readers with the long-lived `max` cache profile, sharing show data
+across the home page, shows page, and EPK. Photo order is shuffled when its cached
+snapshot is generated, rather than on every visit.
+
+Admin show/video sync and image upload/delete/save immediately expire the relevant
+shared cache tag and revalidate the affected public pages. External database edits
+must be followed by the corresponding admin sync/save (or a rebuild) to publish
+them; they do not invalidate an existing public snapshot automatically. Existing
+open browser pages update on a subsequent visit or reload.
+
+Admin authentication/data stay request-time behind a streamed loading boundary.
+Uploaded media handlers explicitly wait for a request and retain their existing
+HTTP cache policies and Docker volume paths.
+
 ## Admin
 
 The admin UI lives at `/admin`.

@@ -1,4 +1,5 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { CONTENT_CACHE_TAGS } from "@/lib/content-cache";
 import { NextResponse } from "next/server";
 import { ADMIN_COOKIE_NAME, verifyAdminSessionToken } from "@/lib/admin-auth";
 import {
@@ -12,8 +13,6 @@ import {
   enforceRateLimit
 } from "@/lib/rate-limit";
 import { getManagedGalleryImages } from "@/lib/shows-db";
-
-export const runtime = "nodejs";
 
 function isAuthenticated(request: Request) {
   const tokenMatch = request.headers
@@ -59,6 +58,7 @@ export async function POST(request: Request) {
 
     const images = await saveGalleryImageUploads(uploads);
 
+    revalidateTag(CONTENT_CACHE_TAGS.photos, { expire: 0 });
     revalidatePath("/video/photos");
     revalidatePath("/");
     revalidatePath("/admin");
@@ -97,6 +97,7 @@ export async function DELETE(request: Request) {
 
     const images = await removeGalleryImage(payload.id);
 
+    revalidateTag(CONTENT_CACHE_TAGS.photos, { expire: 0 });
     revalidatePath("/video/photos");
     revalidatePath("/");
     revalidatePath("/admin");
@@ -129,6 +130,7 @@ export async function PUT(request: Request) {
   try {
     const backfill = await backfillGalleryImagePreviews();
 
+    revalidateTag(CONTENT_CACHE_TAGS.photos, { expire: 0 });
     revalidatePath("/video/photos");
     revalidatePath("/");
     revalidatePath("/admin");

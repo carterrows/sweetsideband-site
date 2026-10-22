@@ -42,12 +42,12 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
-  const band = getBand();
+  const band = await getBand();
 
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>

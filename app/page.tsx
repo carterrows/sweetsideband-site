@@ -17,12 +17,12 @@ export const metadata: Metadata = {
   description: "Official Sweetside site: upcoming shows, live video, merch, and contact/booking. Catch the next date and stream the latest."
 };
 
-export const dynamic = "force-static";
+export const ensureStatic = "navigation";
 
-export default function HomePage() {
-  const band = getBand();
-  const members = getMembers();
-  const shows = getShows();
+export default async function HomePage() {
+  const band = await getBand();
+  const members = await getMembers();
+  const shows = await getShows();
   const upcoming = shows.upcoming.slice(0, 3);
   const spotifyLink = band.streaming.spotify;
   const isSpotifyUrl = (link: typeof spotifyLink): link is string =>

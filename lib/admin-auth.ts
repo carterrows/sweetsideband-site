@@ -1,5 +1,6 @@
 import { createHmac, scryptSync, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
 
 const ADMIN_USERNAME = "admin";
@@ -125,6 +126,8 @@ export function getAdminSessionCookieOptions() {
 }
 
 export async function isAdminAuthenticated() {
+  // Session expiry and admin reads must run at request time, including prefetches.
+  await connection();
   const cookieStore = await cookies();
   const token = cookieStore.get(ADMIN_COOKIE_NAME)?.value;
 
