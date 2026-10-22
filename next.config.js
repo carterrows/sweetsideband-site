@@ -42,6 +42,8 @@ const runtimeFileRouteTraceExcludes = [
 
 const nextConfig = {
   reactStrictMode: true,
+  cacheComponents: true,
+  partialPrefetching: true,
   serverExternalPackages: ["better-sqlite3"],
   outputFileTracingExcludes: {
     "/posters/\\[fileName\\]": runtimeFileRouteTraceExcludes,

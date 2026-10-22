@@ -8,10 +8,10 @@ export const metadata: Metadata = {
   description: "Live photos from Sweetside shows."
 };
 
-export const dynamic = "force-static";
+export const ensureStatic = "navigation";
 
-export default function PhotoGalleryPage() {
-  const media = getShowPhotos();
+export default async function PhotoGalleryPage() {
+  const media = await getShowPhotos();
 
   return (
     <section className="pb-16 pt-6 md:pb-24 md:pt-10">

@@ -8,8 +8,10 @@ export const metadata: Metadata = {
   description: "Live clips and music videos from Sweetside."
 };
 
-export default function VideoGalleryPage() {
-  const media = getMedia();
+export const ensureStatic = "navigation";
+
+export default async function VideoGalleryPage() {
+  const media = await getMedia();
 
   return (
     <section className="pb-16 pt-6 md:pb-24 md:pt-10">

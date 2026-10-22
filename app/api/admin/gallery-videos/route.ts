@@ -1,4 +1,5 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { CONTENT_CACHE_TAGS } from "@/lib/content-cache";
 import { NextResponse } from "next/server";
 import { ADMIN_COOKIE_NAME, verifyAdminSessionToken } from "@/lib/admin-auth";
 import {
@@ -12,8 +13,6 @@ import {
   applyRateLimitHeaders,
   enforceRateLimit
 } from "@/lib/rate-limit";
-
-export const runtime = "nodejs";
 
 function isAuthenticated(request: Request) {
   const tokenMatch = request.headers
@@ -86,6 +85,7 @@ export async function POST(request: Request) {
     const uploadsByClientKey = await extractThumbnailUploads(formData);
     const syncedVideos = await syncGalleryVideos(videos, uploadsByClientKey);
 
+    revalidateTag(CONTENT_CACHE_TAGS.videos, { expire: 0 });
     revalidatePath("/video");
     revalidatePath("/admin");
 

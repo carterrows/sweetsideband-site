@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Sweetside T-shirts and stickers. Exclusive to our shows."
 };
 
+export const ensureStatic = "navigation";
+
 export default function MerchPage() {
   return (
     <section aria-label="Merch" className="section">

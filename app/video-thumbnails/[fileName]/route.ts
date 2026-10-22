@@ -1,16 +1,17 @@
-import { NextResponse } from "next/server";
+import { connection, NextResponse } from "next/server";
 import {
   getVideoThumbnailContentType,
   readVideoThumbnailFile,
   sanitizeVideoThumbnailFileName
 } from "@/lib/video-thumbnail-files";
 
-export const runtime = "nodejs";
-
 export async function GET(
   _request: Request,
   context: { params: Promise<{ fileName: string }> }
 ) {
+  // Uploaded files live in writable runtime storage, including files added after build.
+  await connection();
+
   try {
     const { fileName } = await context.params;
     const normalizedFileName = sanitizeVideoThumbnailFileName(fileName);

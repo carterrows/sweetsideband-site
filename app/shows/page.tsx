@@ -10,11 +10,11 @@ export const metadata: Metadata = {
   description: "Upcoming Sweetside shows with venue details and posters, plus past tour dates."
 };
 
-export const dynamic = "force-static";
+export const ensureStatic = "navigation";
 
-export default function ShowsPage() {
-  const band = getBand();
-  const shows = getShows();
+export default async function ShowsPage() {
+  const band = await getBand();
+  const shows = await getShows();
 
   return (
     <section className="section">

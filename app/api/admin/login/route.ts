@@ -11,8 +11,6 @@ import {
   enforceRateLimit
 } from "@/lib/rate-limit";
 
-export const runtime = "nodejs";
-
 export async function POST(request: Request) {
   const rateLimit = enforceRateLimit(ADMIN_LOGIN_RATE_LIMIT);
   if (rateLimit.limited) {

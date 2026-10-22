@@ -1,4 +1,5 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { CONTENT_CACHE_TAGS } from "@/lib/content-cache";
 import { NextResponse } from "next/server";
 import { ADMIN_COOKIE_NAME, verifyAdminSessionToken } from "@/lib/admin-auth";
 import { syncShows, validateShowSyncPayload } from "@/lib/admin-shows";
@@ -7,8 +8,6 @@ import {
   applyRateLimitHeaders,
   enforceRateLimit
 } from "@/lib/rate-limit";
-
-export const runtime = "nodejs";
 
 const MAX_POSTER_UPLOAD_BYTES = 5 * 1024 * 1024;
 const MAX_TOTAL_POSTER_UPLOAD_BYTES = 20 * 1024 * 1024;
@@ -117,6 +116,7 @@ export async function POST(request: Request) {
       uploadsByClientKey
     );
 
+    revalidateTag(CONTENT_CACHE_TAGS.shows, { expire: 0 });
     revalidatePath("/");
     revalidatePath("/shows");
     revalidatePath("/epk");

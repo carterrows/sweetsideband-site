@@ -22,13 +22,13 @@ export const metadata: Metadata = {
   }
 };
 
-export const dynamic = "force-static";
+export const ensureStatic = "navigation";
 
 const textLinkClass = "group inline-flex items-center gap-2 text-base font-semibold text-accent transition hover:text-ink-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent";
 
-export default function EpkPage() {
-  const band = getBand();
-  const shows = getShows();
+export default async function EpkPage() {
+  const band = await getBand();
+  const shows = await getShows();
 
   return (
     <div className="relative">
