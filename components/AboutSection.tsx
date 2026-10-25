@@ -5,6 +5,19 @@ import PageLink from "@/components/PageLink";
 export default function AboutSection({ bio }: { bio: string }) {
   return (
     <div className="relative z-10 overflow-hidden [clip-path:inset(0)] [--about-height:max(520px,min(80svh,50vw))]">
+      {/* Fetch the visible rendition on page load, before this section scrolls into view. */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/about/sweetside-band-wall-responsive.webp"
+        media="(min-width: 1024px)"
+      />
+      <link
+        rel="preload"
+        as="image"
+        href="/images/about/sweetside-band-mobile.webp"
+        media="(max-width: 1023px)"
+      />
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 hidden lg:block lg:motion-reduce:absolute">
         {/* Retain the original vertical area so fixed cover sizing preserves the left wall. */}
         <Image
