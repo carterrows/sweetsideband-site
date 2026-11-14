@@ -18,6 +18,7 @@ services:
       SHOWS_DB_PATH: /app/storage/shows.sqlite
     volumes:
       - shows-db:/app/storage
+    restart: unless-stopped
 
 volumes:
   shows-db:
