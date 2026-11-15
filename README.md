@@ -85,6 +85,12 @@ Place other images in `public/images/` and reference them by absolute path in JS
 
 Video thumbnails are uploaded through `/admin` and served from runtime storage through `/video-thumbnails/:fileName`. Thumbnails must be `.jpg`, `.jpeg`, or `.png` files up to 250 KB.
 
+## Health check
+
+`GET /api/health` returns HTTP 200 with `{"status":"ok"}` and
+`Cache-Control: no-store`. It checks that the application can respond without
+querying the database, calling external services, or writing data.
+
 ## Environment config
 
 Copy `.env.example` to `.env` or `.env.local`.
